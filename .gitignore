@@ -24,3 +24,8 @@ coverage/
 .vscode/
 data/
 tmp/
+*.db
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+.claude/
