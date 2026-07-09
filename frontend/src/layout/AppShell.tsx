@@ -1,6 +1,8 @@
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import DescriptionIcon from '@mui/icons-material/Description';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
+import GavelIcon from '@mui/icons-material/Gavel';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ShieldIcon from '@mui/icons-material/Shield';
 import {
@@ -28,6 +30,8 @@ const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', icon: <DashboardIcon /> },
   { to: '/risks', label: 'Risk register', icon: <AssessmentIcon /> },
   { to: '/controls', label: 'Controls', icon: <FactCheckIcon /> },
+  { to: '/audits', label: 'Audits', icon: <GavelIcon /> },
+  { to: '/documents', label: 'Documents', icon: <DescriptionIcon /> },
 ];
 
 export function AppShell() {
@@ -64,7 +68,9 @@ export function AppShell() {
               key={item.to}
               component={RouterLink}
               to={item.to}
-              selected={location.pathname === item.to}
+              selected={
+                item.to === '/' ? location.pathname === '/' : location.pathname.startsWith(item.to)
+              }
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.label} />

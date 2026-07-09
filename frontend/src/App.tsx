@@ -2,8 +2,12 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { RedirectIfAuthenticated } from './auth/RedirectIfAuthenticated';
 import { RequireAuth } from './auth/RequireAuth';
 import { AppShell } from './layout/AppShell';
+import { AuditDetailPage } from './pages/AuditDetailPage';
+import { AuditsPage } from './pages/AuditsPage';
 import { ControlsPage } from './pages/ControlsPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { DocumentDetailPage } from './pages/DocumentDetailPage';
+import { DocumentsPage } from './pages/DocumentsPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { RegisterOrganizationPage } from './pages/RegisterOrganizationPage';
@@ -22,6 +26,10 @@ export function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/risks" element={<RisksPage />} />
           <Route path="/controls" element={<ControlsPage />} />
+          <Route path="/audits" element={<AuditsPage />} />
+          <Route path="/audits/:auditId" element={<AuditDetailPage />} />
+          <Route path="/documents" element={<DocumentsPage />} />
+          <Route path="/documents/:documentId" element={<DocumentDetailPage />} />
         </Route>
       </Route>
 
