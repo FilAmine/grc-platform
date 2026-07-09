@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 
 from backend.app.core.config import settings
 from backend.app.database import get_db_session
+from backend.app.modules.assets.repository import SqlAlchemyAssetRepository
+from backend.app.modules.assets.service import AssetService
 from backend.app.modules.audits.repository import SqlAlchemyAuditRepository
 from backend.app.modules.audits.service import AuditService
 from backend.app.modules.auth.repository import SqlAlchemyRefreshTokenRepository
@@ -112,6 +114,10 @@ def get_audit_service(session: Session = Depends(get_session)) -> AuditService:
 
 def get_document_service(session: Session = Depends(get_session)) -> DocumentService:
     return DocumentService(SqlAlchemyDocumentRepository(session))
+
+
+def get_asset_service(session: Session = Depends(get_session)) -> AssetService:
+    return AssetService(SqlAlchemyAssetRepository(session))
 
 
 def get_permission_service(session: Session = Depends(get_session)) -> PermissionService:

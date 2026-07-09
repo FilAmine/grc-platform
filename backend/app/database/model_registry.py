@@ -11,6 +11,7 @@ from backend.app.modules.audits.models import (
     CorrectiveActionModel,
     FindingModel,
 )
+from backend.app.modules.assets.models import AssetModel
 from backend.app.modules.auth.models import RefreshTokenModel
 from backend.app.modules.compliance.models import (
     AssessmentModel,
@@ -38,6 +39,7 @@ from backend.app.modules.users.models import UserModel, user_roles
 __all__ = [
     "AssessmentModel",
     "AssessmentResultModel",
+    "AssetModel",
     "AuditModel",
     "ChecklistItemModel",
     "ComplianceScoreModel",
