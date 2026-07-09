@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Protocol
 from uuid import UUID
 
@@ -117,8 +117,12 @@ class UserService:
         user = self._users.get_by_email(email)
         if user is None:
             raise AccountLockedError("invalid credentials")
-        if user.locked_until is not None and user.locked_until > now:
-            raise AccountLockedError("account temporarily locked")
+        locked_until = user.locked_until
+        if locked_until is not None:
+            if locked_until.tzinfo is None:
+                locked_until = locked_until.replace(tzinfo=UTC)
+            if locked_until > now:
+                raise AccountLockedError("account temporarily locked")
         if not user.is_active or not verify_password(password, user.hashed_password):
             locked_until = None
             if user.failed_login_attempts + 1 >= MAX_FAILED_LOGIN_ATTEMPTS:
