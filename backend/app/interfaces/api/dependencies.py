@@ -31,6 +31,8 @@ from backend.app.modules.controls.repository import (
 )
 from backend.app.modules.controls.service import ControlService
 from backend.app.modules.dashboard.service import DashboardService
+from backend.app.modules.documents.repository import SqlAlchemyDocumentRepository
+from backend.app.modules.documents.service import DocumentService
 from backend.app.modules.organizations.repository import (
     SqlAlchemyOrganizationRepository,
 )
@@ -106,6 +108,10 @@ def get_compliance_scoring_service(
 
 def get_audit_service(session: Session = Depends(get_session)) -> AuditService:
     return AuditService(SqlAlchemyAuditRepository(session))
+
+
+def get_document_service(session: Session = Depends(get_session)) -> DocumentService:
+    return DocumentService(SqlAlchemyDocumentRepository(session))
 
 
 def get_permission_service(session: Session = Depends(get_session)) -> PermissionService:

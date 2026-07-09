@@ -24,6 +24,11 @@ from backend.app.modules.compliance.models import (
     RequirementModel,
 )
 from backend.app.modules.controls.models import ControlModel
+from backend.app.modules.documents.models import (
+    DocumentApprovalModel,
+    DocumentModel,
+    DocumentVersionModel,
+)
 from backend.app.modules.organizations.models import OrganizationModel
 from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.risks.models import RiskModel
@@ -37,6 +42,9 @@ __all__ = [
     "ChecklistItemModel",
     "ComplianceScoreModel",
     "CorrectiveActionModel",
+    "DocumentApprovalModel",
+    "DocumentModel",
+    "DocumentVersionModel",
     "FindingModel",
     "ControlCategoryModel",
     "ControlMappingModel",
