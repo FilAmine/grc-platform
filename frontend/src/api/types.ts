@@ -220,3 +220,36 @@ export type Approval = {
   decided_at: string | null;
   created_at: string;
 };
+
+// --- Assets / CMDB -------------------------------------------------------------
+
+export type AssetType = 'hardware' | 'software' | 'cloud_service' | 'application' | 'business_asset' | 'service';
+export type AssetLifecycleStage = 'planned' | 'in_use' | 'maintenance' | 'retired' | 'disposed';
+export type ClassificationLevel = 'low' | 'medium' | 'high';
+
+export type Asset = {
+  id: string;
+  organization_id: string;
+  name: string;
+  asset_type: AssetType;
+  description: string;
+  owner: string;
+  supplier: string;
+  lifecycle_stage: AssetLifecycleStage;
+  confidentiality: ClassificationLevel;
+  integrity: ClassificationLevel;
+  availability: ClassificationLevel;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AssetCreate = {
+  name: string;
+  asset_type: AssetType;
+  owner: string;
+  description?: string;
+  supplier?: string;
+  confidentiality?: ClassificationLevel;
+  integrity?: ClassificationLevel;
+  availability?: ClassificationLevel;
+};

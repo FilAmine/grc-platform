@@ -5,6 +5,7 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import GavelIcon from '@mui/icons-material/Gavel';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ShieldIcon from '@mui/icons-material/Shield';
+import StorageIcon from '@mui/icons-material/Storage';
 import {
   AppBar,
   Avatar,
@@ -32,6 +33,7 @@ const NAV_ITEMS = [
   { to: '/controls', label: 'Controls', icon: <FactCheckIcon /> },
   { to: '/audits', label: 'Audits', icon: <GavelIcon /> },
   { to: '/documents', label: 'Documents', icon: <DescriptionIcon /> },
+  { to: '/assets', label: 'Assets', icon: <StorageIcon /> },
 ];
 
 export function AppShell() {
