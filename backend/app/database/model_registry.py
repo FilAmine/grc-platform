@@ -6,6 +6,17 @@ models must be imported here, otherwise migrations silently ignore it.
 """
 
 from backend.app.modules.auth.models import RefreshTokenModel
+from backend.app.modules.compliance.models import (
+    AssessmentModel,
+    AssessmentResultModel,
+    ComplianceScoreModel,
+    ControlCategoryModel,
+    ControlMappingModel,
+    EvidenceModel,
+    FrameworkModel,
+    FrameworkVersionModel,
+    RequirementModel,
+)
 from backend.app.modules.controls.models import ControlModel
 from backend.app.modules.organizations.models import OrganizationModel
 from backend.app.modules.permissions.models import PermissionModel
@@ -14,10 +25,19 @@ from backend.app.modules.roles.models import RoleModel, role_permissions
 from backend.app.modules.users.models import UserModel, user_roles
 
 __all__ = [
+    "AssessmentModel",
+    "AssessmentResultModel",
+    "ComplianceScoreModel",
+    "ControlCategoryModel",
+    "ControlMappingModel",
     "ControlModel",
+    "EvidenceModel",
+    "FrameworkModel",
+    "FrameworkVersionModel",
     "OrganizationModel",
     "PermissionModel",
     "RefreshTokenModel",
+    "RequirementModel",
     "RiskModel",
     "RoleModel",
     "UserModel",

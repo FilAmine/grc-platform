@@ -9,7 +9,21 @@ from backend.app.core.config import settings
 from backend.app.database import get_db_session
 from backend.app.modules.auth.repository import SqlAlchemyRefreshTokenRepository
 from backend.app.modules.auth.service import AuthService
-from backend.app.modules.compliance.service import ComplianceService
+from backend.app.modules.compliance.repository import (
+    SqlAlchemyAssessmentRepository,
+    SqlAlchemyComplianceScoreRepository,
+    SqlAlchemyControlMappingRepository,
+    SqlAlchemyEvidenceRepository,
+    SqlAlchemyFrameworkRepository,
+)
+from backend.app.modules.compliance.service import (
+    AssessmentService,
+    ComplianceScoringService,
+    ComplianceService,
+    ControlMappingService,
+    EvidenceService,
+    FrameworkService,
+)
 from backend.app.modules.controls.repository import (
     SqlAlchemyControlRepository,
 )
@@ -61,6 +75,31 @@ def get_dashboard_service(
     compliance: ComplianceService = Depends(get_compliance_service),
 ) -> DashboardService:
     return DashboardService(compliance)
+
+
+def get_framework_service(session: Session = Depends(get_session)) -> FrameworkService:
+    return FrameworkService(SqlAlchemyFrameworkRepository(session))
+
+
+def get_control_mapping_service(session: Session = Depends(get_session)) -> ControlMappingService:
+    return ControlMappingService(SqlAlchemyControlMappingRepository(session))
+
+
+def get_assessment_service(session: Session = Depends(get_session)) -> AssessmentService:
+    return AssessmentService(
+        SqlAlchemyAssessmentRepository(session), SqlAlchemyFrameworkRepository(session)
+    )
+
+
+def get_evidence_service(session: Session = Depends(get_session)) -> EvidenceService:
+    return EvidenceService(SqlAlchemyEvidenceRepository(session))
+
+
+def get_compliance_scoring_service(
+    assessments: AssessmentService = Depends(get_assessment_service),
+    session: Session = Depends(get_session),
+) -> ComplianceScoringService:
+    return ComplianceScoringService(assessments, SqlAlchemyComplianceScoreRepository(session))
 
 
 def get_permission_service(session: Session = Depends(get_session)) -> PermissionService:

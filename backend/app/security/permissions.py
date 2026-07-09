@@ -25,6 +25,10 @@ RISKS_MANAGE = "risks:manage"
 CONTROLS_READ = "controls:read"
 CONTROLS_MANAGE = "controls:manage"
 COMPLIANCE_READ = "compliance:read"
+FRAMEWORKS_MANAGE = "frameworks:manage"
+ASSESSMENTS_READ = "assessments:read"
+ASSESSMENTS_MANAGE = "assessments:manage"
+EVIDENCE_MANAGE = "evidence:manage"
 AUDITS_READ = "audits:read"
 AUDITS_MANAGE = "audits:manage"
 DOCUMENTS_READ = "documents:read"
@@ -43,6 +47,10 @@ ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(CONTROLS_READ, "View controls"),
     PermissionDef(CONTROLS_MANAGE, "Create and update controls"),
     PermissionDef(COMPLIANCE_READ, "View compliance posture and scores"),
+    PermissionDef(FRAMEWORKS_MANAGE, "Create custom frameworks, versions, and requirements"),
+    PermissionDef(ASSESSMENTS_READ, "View assessments and their results"),
+    PermissionDef(ASSESSMENTS_MANAGE, "Create assessments and record results"),
+    PermissionDef(EVIDENCE_MANAGE, "Upload and attach evidence"),
     PermissionDef(AUDITS_READ, "View audits and findings"),
     PermissionDef(AUDITS_MANAGE, "Plan audits and record findings"),
     PermissionDef(DOCUMENTS_READ, "View policies and documents"),
@@ -62,6 +70,9 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         CONTROLS_READ,
         CONTROLS_MANAGE,
         COMPLIANCE_READ,
+        ASSESSMENTS_READ,
+        ASSESSMENTS_MANAGE,
+        EVIDENCE_MANAGE,
         AUDITS_READ,
         AUDITS_MANAGE,
         DOCUMENTS_READ,
@@ -75,6 +86,9 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         RISKS_READ,
         CONTROLS_READ,
         COMPLIANCE_READ,
+        ASSESSMENTS_READ,
+        ASSESSMENTS_MANAGE,
+        EVIDENCE_MANAGE,
         AUDITS_READ,
         AUDITS_MANAGE,
         DOCUMENTS_READ,
@@ -85,6 +99,7 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         RISKS_READ,
         CONTROLS_READ,
         COMPLIANCE_READ,
+        ASSESSMENTS_READ,
         AUDITS_READ,
         DOCUMENTS_READ,
         ASSETS_READ,
