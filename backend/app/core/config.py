@@ -17,6 +17,15 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://grc:grc_password@localhost:5432/grc_platform"
     redis_url: str = "redis://localhost:6379/0"
 
+    ai_provider: str = "echo"
+    openai_api_key: str | None = None
+    openai_model: str = "gpt-4o-mini"
+    azure_openai_endpoint: str | None = None
+    azure_openai_api_key: str | None = None
+    azure_openai_deployment: str | None = None
+    ollama_base_url: str = "http://localhost:11434"
+    ollama_model: str = "llama3"
+
     @field_validator("backend_cors_origins", mode="before")
     @classmethod
     def parse_cors_origins(cls, value: str | list[str]) -> list[str]:

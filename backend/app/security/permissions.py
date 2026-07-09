@@ -35,6 +35,8 @@ DOCUMENTS_READ = "documents:read"
 DOCUMENTS_MANAGE = "documents:manage"
 ASSETS_READ = "assets:read"
 ASSETS_MANAGE = "assets:manage"
+AI_USE = "ai:use"
+AI_MANAGE = "ai:manage"
 
 ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(ORGANIZATIONS_READ, "View organization settings"),
@@ -57,6 +59,8 @@ ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(DOCUMENTS_MANAGE, "Author and approve documents"),
     PermissionDef(ASSETS_READ, "View the CMDB"),
     PermissionDef(ASSETS_MANAGE, "Create and update CMDB assets"),
+    PermissionDef(AI_USE, "Use the AI chat assistant and prompt library"),
+    PermissionDef(AI_MANAGE, "Manage prompt templates and the AI knowledge base"),
 )
 
 # Default role -> permission-code mapping seeded for every new organization.
@@ -79,6 +83,8 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         DOCUMENTS_MANAGE,
         ASSETS_READ,
         ASSETS_MANAGE,
+        AI_USE,
+        AI_MANAGE,
     ),
     "Auditor": (
         ORGANIZATIONS_READ,
@@ -93,6 +99,7 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         AUDITS_MANAGE,
         DOCUMENTS_READ,
         ASSETS_READ,
+        AI_USE,
     ),
     "Viewer": (
         ORGANIZATIONS_READ,
@@ -103,5 +110,6 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         AUDITS_READ,
         DOCUMENTS_READ,
         ASSETS_READ,
+        AI_USE,
     ),
 }

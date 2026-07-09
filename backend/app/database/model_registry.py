@@ -11,6 +11,12 @@ from backend.app.modules.audits.models import (
     CorrectiveActionModel,
     FindingModel,
 )
+from backend.app.modules.ai.models import (
+    ChatMessageModel,
+    ChatSessionModel,
+    KnowledgeBaseDocumentModel,
+    PromptTemplateModel,
+)
 from backend.app.modules.assets.models import AssetModel
 from backend.app.modules.auth.models import RefreshTokenModel
 from backend.app.modules.compliance.models import (
@@ -41,6 +47,8 @@ __all__ = [
     "AssessmentResultModel",
     "AssetModel",
     "AuditModel",
+    "ChatMessageModel",
+    "ChatSessionModel",
     "ChecklistItemModel",
     "ComplianceScoreModel",
     "CorrectiveActionModel",
@@ -54,7 +62,9 @@ __all__ = [
     "EvidenceModel",
     "FrameworkModel",
     "FrameworkVersionModel",
+    "KnowledgeBaseDocumentModel",
     "OrganizationModel",
+    "PromptTemplateModel",
     "PermissionModel",
     "RefreshTokenModel",
     "RequirementModel",

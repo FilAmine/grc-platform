@@ -3,6 +3,16 @@
 Revision ID: 202607090001
 Revises: 202606250001
 Create Date: 2026-07-09 00:01:00
+
+Note on the permission seed at the bottom of upgrade(): it imports
+ALL_PERMISSIONS/SYSTEM_ROLES from backend.app.security.permissions at
+migration *run* time, not at the time this file was written, so a fresh
+`alembic upgrade head` always seeds whatever permission codes exist in that
+module today. But once this migration has actually been applied to a
+database, it will not run again -- any permission codes added to
+security/permissions.py *after* that point need their own follow-up
+migration to insert the delta (see how later modules such as compliance/
+audits/ai added permission codes without re-seeding here).
 """
 from collections.abc import Sequence
 from datetime import UTC, datetime

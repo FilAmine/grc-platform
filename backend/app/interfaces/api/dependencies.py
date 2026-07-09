@@ -7,6 +7,13 @@ from sqlalchemy.orm import Session
 
 from backend.app.core.config import settings
 from backend.app.database import get_db_session
+from backend.app.modules.ai.providers import get_ai_provider
+from backend.app.modules.ai.repository import (
+    SqlAlchemyChatRepository,
+    SqlAlchemyKnowledgeBaseRepository,
+    SqlAlchemyPromptRepository,
+)
+from backend.app.modules.ai.service import ChatService, KnowledgeBaseService, PromptLibraryService
 from backend.app.modules.assets.repository import SqlAlchemyAssetRepository
 from backend.app.modules.assets.service import AssetService
 from backend.app.modules.audits.repository import SqlAlchemyAuditRepository
@@ -118,6 +125,21 @@ def get_document_service(session: Session = Depends(get_session)) -> DocumentSer
 
 def get_asset_service(session: Session = Depends(get_session)) -> AssetService:
     return AssetService(SqlAlchemyAssetRepository(session))
+
+
+def get_prompt_library_service(session: Session = Depends(get_session)) -> PromptLibraryService:
+    return PromptLibraryService(SqlAlchemyPromptRepository(session))
+
+
+def get_knowledge_base_service(session: Session = Depends(get_session)) -> KnowledgeBaseService:
+    return KnowledgeBaseService(SqlAlchemyKnowledgeBaseRepository(session), get_ai_provider(settings))
+
+
+def get_chat_service(
+    session: Session = Depends(get_session),
+    knowledge_base: KnowledgeBaseService = Depends(get_knowledge_base_service),
+) -> ChatService:
+    return ChatService(SqlAlchemyChatRepository(session), knowledge_base, get_ai_provider(settings))
 
 
 def get_permission_service(session: Session = Depends(get_session)) -> PermissionService:
