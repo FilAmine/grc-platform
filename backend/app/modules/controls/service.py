@@ -29,6 +29,7 @@ class CreateControlCommand:
     name: str
     description: str
     framework: str
+    created_by_id: UUID | None = None
 
 
 class ControlStore(Protocol):
@@ -41,6 +42,7 @@ class ControlStore(Protocol):
         name: str,
         description: str,
         framework: str,
+        created_by_id: UUID | None = None,
     ) -> Control:
         raise NotImplementedError
 
@@ -58,4 +60,5 @@ class ControlService:
             name=command.name,
             description=command.description,
             framework=command.framework,
+            created_by_id=command.created_by_id,
         )

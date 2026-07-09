@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from uuid import UUID
 
 from backend.app.modules.compliance.repository import ControlReader, OrganizationReader, RiskReader
 from backend.app.modules.controls.service import ControlStatus
@@ -22,15 +23,15 @@ class ComplianceService:
         self._risks = risks
         self._controls = controls
 
-    def summary(self) -> dict[str, int | str]:
-        risk_items = self._risks.list_risks()
-        control_items = self._controls.list_controls()
+    def summary(self, organization_id: UUID) -> dict[str, int | str]:
+        risk_items = self._risks.list_risks(organization_id)
+        control_items = self._controls.list_controls(organization_id)
         open_risks = len([risk for risk in risk_items if risk.status != RiskStatus.CLOSED])
         active_controls = len(
             [control for control in control_items if control.status == ControlStatus.ACTIVE]
         )
         return {
-            "organizations": len(self._organizations.list_organizations()),
+            "organizations": 1,
             "risks_open": open_risks,
             "controls_active": active_controls,
             "posture": "attention_required" if open_risks else "healthy",

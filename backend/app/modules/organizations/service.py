@@ -23,6 +23,9 @@ class OrganizationStore(Protocol):
     def list(self) -> list[Organization]:
         raise NotImplementedError
 
+    def get_by_id(self, organization_id: UUID) -> Organization | None:
+        raise NotImplementedError
+
     def create(self, name: str, slug: str) -> Organization:
         raise NotImplementedError
 
@@ -33,6 +36,9 @@ class OrganizationService:
 
     def list_organizations(self) -> list[Organization]:
         return self._organizations.list()
+
+    def get_organization(self, organization_id: UUID) -> Organization | None:
+        return self._organizations.get_by_id(organization_id)
 
     def create_organization(self, command: CreateOrganizationCommand) -> Organization:
         return self._organizations.create(name=command.name, slug=command.slug)

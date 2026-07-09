@@ -39,6 +39,7 @@ class CreateRiskCommand:
     description: str
     severity: RiskSeverity
     owner: str
+    created_by_id: UUID | None = None
 
 
 class RiskStore(Protocol):
@@ -52,6 +53,7 @@ class RiskStore(Protocol):
         description: str,
         severity: RiskSeverity,
         owner: str,
+        created_by_id: UUID | None = None,
     ) -> Risk:
         raise NotImplementedError
 
@@ -70,4 +72,5 @@ class RiskService:
             description=command.description,
             severity=command.severity,
             owner=command.owner,
+            created_by_id=command.created_by_id,
         )

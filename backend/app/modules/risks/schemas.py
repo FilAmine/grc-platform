@@ -8,7 +8,6 @@ from backend.app.modules.risks.service import RiskSeverity, RiskStatus
 
 
 class RiskCreate(ReadSchema):
-    organization_id: UUID
     title: str = Field(min_length=3, max_length=255)
     description: str = Field(min_length=1)
     severity: RiskSeverity

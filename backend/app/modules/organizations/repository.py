@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from uuid import UUID as PyUUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -23,6 +24,10 @@ class OrganizationRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def get_by_id(self, organization_id: PyUUID) -> Organization | None:
+        raise NotImplementedError
+
+    @abstractmethod
     def create(self, name: str, slug: str) -> Organization:
         raise NotImplementedError
 
@@ -39,6 +44,12 @@ class SqlAlchemyOrganizationRepository(OrganizationRepository):
         )
         rows = self._session.scalars(statement).all()
         return [to_organization(row) for row in rows]
+
+    def get_by_id(self, organization_id: PyUUID) -> Organization | None:
+        model = self._session.get(OrganizationModel, organization_id)
+        if model is None or model.deleted_at is not None:
+            return None
+        return to_organization(model)
 
     def create(self, name: str, slug: str) -> Organization:
         model = OrganizationModel(name=name, slug=slug)

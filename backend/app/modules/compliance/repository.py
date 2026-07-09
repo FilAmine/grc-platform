@@ -1,4 +1,5 @@
 from typing import Protocol
+from uuid import UUID
 
 from backend.app.modules.controls.service import Control
 from backend.app.modules.organizations.service import Organization
@@ -11,10 +12,10 @@ class OrganizationReader(Protocol):
 
 
 class RiskReader(Protocol):
-    def list_risks(self) -> list[Risk]:
+    def list_risks(self, organization_id: UUID | None = None) -> list[Risk]:
         raise NotImplementedError
 
 
 class ControlReader(Protocol):
-    def list_controls(self) -> list[Control]:
+    def list_controls(self, organization_id: UUID | None = None) -> list[Control]:
         raise NotImplementedError

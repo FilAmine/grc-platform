@@ -33,6 +33,7 @@ class ControlRepository(ABC):
         name: str,
         description: str,
         framework: str,
+        created_by_id: UUID | None = None,
     ) -> Control:
         raise NotImplementedError
 
@@ -58,12 +59,15 @@ class SqlAlchemyControlRepository(ControlRepository):
         name: str,
         description: str,
         framework: str,
+        created_by_id: UUID | None = None,
     ) -> Control:
         model = ControlModel(
             organization_id=organization_id,
             name=name,
             description=description,
             framework=framework,
+            created_by_id=created_by_id,
+            updated_by_id=created_by_id,
         )
         self._session.add(model)
         self._session.commit()

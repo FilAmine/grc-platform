@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     api_v1_prefix: str = "/api/v1"
     secret_key: str = Field(default="change-me-in-production", min_length=16)
     access_token_expire_minutes: int = 30
+    refresh_token_expire_days: int = 30
     backend_cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
     database_url: str = "postgresql+psycopg://grc:grc_password@localhost:5432/grc_platform"
     redis_url: str = "redis://localhost:6379/0"

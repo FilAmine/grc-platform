@@ -35,6 +35,7 @@ class RiskRepository(ABC):
         description: str,
         severity: RiskSeverity,
         owner: str,
+        created_by_id: UUID | None = None,
     ) -> Risk:
         raise NotImplementedError
 
@@ -61,6 +62,7 @@ class SqlAlchemyRiskRepository(RiskRepository):
         description: str,
         severity: RiskSeverity,
         owner: str,
+        created_by_id: UUID | None = None,
     ) -> Risk:
         model = RiskModel(
             organization_id=organization_id,
@@ -69,6 +71,8 @@ class SqlAlchemyRiskRepository(RiskRepository):
             severity=severity,
             status=RiskStatus.OPEN,
             owner=owner,
+            created_by_id=created_by_id,
+            updated_by_id=created_by_id,
         )
         self._session.add(model)
         self._session.commit()
