@@ -30,5 +30,12 @@ api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboar
 api_router.include_router(ai.router, prefix="/ai", tags=["ai"])
 api_router.include_router(notifications.router, prefix="/notifications", tags=["notifications"])
 
-# Backward-compatible summary route for clients using the previous system namespace.
-api_router.include_router(compliance.router, prefix="/system", tags=["system"])
+# Backward-compatible alias for clients using the previous system namespace.
+# Deliberately just the one route, not the whole compliance router -- that
+# router has since grown far beyond a summary endpoint (frameworks, assessments,
+# evidence, ...), none of which the old /system namespace ever exposed.
+legacy_system_router = APIRouter()
+for route in compliance.router.routes:
+    if getattr(route, "path", None) == "/summary":
+        legacy_system_router.routes.append(route)
+api_router.include_router(legacy_system_router, prefix="/system", tags=["system"])
