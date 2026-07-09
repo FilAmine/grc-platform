@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.risks.models import RiskModel
 from backend.app.modules.risks.service import Risk, RiskSeverity, RiskStatus
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 
 def to_risk(model: RiskModel) -> Risk:

@@ -2,9 +2,6 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from sqlalchemy import or_, select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.ai.models import (
     ChatMessageModel,
     ChatSessionModel,
@@ -17,6 +14,8 @@ from backend.app.modules.ai.service import (
     KnowledgeBaseDocument,
     PromptTemplate,
 )
+from sqlalchemy import or_, select
+from sqlalchemy.orm import Session
 
 
 def to_prompt_template(model: PromptTemplateModel) -> PromptTemplate:

@@ -1,10 +1,13 @@
-from fastapi import APIRouter, Depends
-
-from backend.app.interfaces.api.dependencies import get_current_user, get_dashboard_service, require_permission
+from backend.app.interfaces.api.dependencies import (
+    get_current_user,
+    get_dashboard_service,
+    require_permission,
+)
 from backend.app.modules.dashboard.schemas import ComplianceSummary
 from backend.app.modules.dashboard.service import DashboardService
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import COMPLIANCE_READ
+from fastapi import APIRouter, Depends
 
 router = APIRouter()
 

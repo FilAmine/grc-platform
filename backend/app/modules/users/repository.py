@@ -2,13 +2,12 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import exists, select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.roles.models import RoleModel, role_permissions
 from backend.app.modules.users.models import UserModel, user_roles
 from backend.app.modules.users.service import User
+from sqlalchemy import exists, select
+from sqlalchemy.orm import Session
 
 
 def to_user(model: UserModel) -> User:

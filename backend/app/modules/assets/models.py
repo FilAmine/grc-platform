@@ -1,6 +1,3 @@
-from sqlalchemy import Enum, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
-
 from backend.app.common.models import (
     AuditColumnsMixin,
     SoftDeleteMixin,
@@ -10,6 +7,8 @@ from backend.app.common.models import (
 )
 from backend.app.database import Base
 from backend.app.modules.assets.service import AssetLifecycleStage, AssetType, ClassificationLevel
+from sqlalchemy import Enum, String, Text
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class AssetModel(

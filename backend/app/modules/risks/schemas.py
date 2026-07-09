@@ -1,10 +1,9 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import Field
-
 from backend.app.common.schemas import ReadSchema
 from backend.app.modules.risks.service import RiskSeverity, RiskStatus
+from pydantic import Field
 
 
 class RiskCreate(ReadSchema):

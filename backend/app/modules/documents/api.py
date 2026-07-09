@@ -1,9 +1,11 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
-from backend.app.interfaces.api.dependencies import get_current_user, get_document_service, require_permission
+from backend.app.interfaces.api.dependencies import (
+    get_current_user,
+    get_document_service,
+    require_permission,
+)
 from backend.app.modules.documents.schemas import (
     ApprovalDecision,
     ApprovalRead,
@@ -23,6 +25,7 @@ from backend.app.modules.documents.service import (
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import DOCUMENTS_MANAGE, DOCUMENTS_READ
 from backend.app.workflow.state_machine import IllegalTransitionError
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter()
 

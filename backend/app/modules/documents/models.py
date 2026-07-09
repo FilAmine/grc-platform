@@ -1,10 +1,6 @@
 from datetime import datetime
 from uuid import UUID as PyUUID
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String, Text
-from sqlalchemy.dialects.postgresql import UUID as PGUUID
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from backend.app.common.models import (
     AuditColumnsMixin,
     SoftDeleteMixin,
@@ -14,6 +10,9 @@ from backend.app.common.models import (
 )
 from backend.app.database import Base
 from backend.app.modules.documents.service import DocumentStatus, DocumentType, VersionStatus
+from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String, Text
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class DocumentModel(

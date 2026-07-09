@@ -3,9 +3,6 @@ from __future__ import annotations
 from datetime import date, datetime
 from uuid import UUID
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.audits.models import (
     AuditModel,
     ChecklistItemModel,
@@ -23,6 +20,8 @@ from backend.app.modules.audits.service import (
     FindingSeverity,
     FindingStatus,
 )
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 
 def to_audit(model: AuditModel) -> Audit:

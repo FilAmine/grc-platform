@@ -1,9 +1,8 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import Field
-
 from backend.app.common.schemas import ReadSchema
+from pydantic import Field
 
 
 class OrganizationCreate(ReadSchema):

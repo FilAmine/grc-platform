@@ -5,12 +5,6 @@ Alembic's ``env.py`` imports this module for its side effects so that
 models must be imported here, otherwise migrations silently ignore it.
 """
 
-from backend.app.modules.audits.models import (
-    AuditModel,
-    ChecklistItemModel,
-    CorrectiveActionModel,
-    FindingModel,
-)
 from backend.app.modules.ai.models import (
     ChatMessageModel,
     ChatSessionModel,
@@ -18,6 +12,12 @@ from backend.app.modules.ai.models import (
     PromptTemplateModel,
 )
 from backend.app.modules.assets.models import AssetModel
+from backend.app.modules.audits.models import (
+    AuditModel,
+    ChecklistItemModel,
+    CorrectiveActionModel,
+    FindingModel,
+)
 from backend.app.modules.auth.models import RefreshTokenModel
 from backend.app.modules.compliance.models import (
     AssessmentModel,

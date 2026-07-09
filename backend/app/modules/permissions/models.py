@@ -1,8 +1,7 @@
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
-
 from backend.app.common.models import TimestampMixin, UUIDPKMixin
 from backend.app.database import Base
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class PermissionModel(UUIDPKMixin, TimestampMixin, Base):

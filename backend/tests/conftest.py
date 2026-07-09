@@ -1,18 +1,19 @@
 from collections.abc import Generator
 
 import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy.pool import StaticPool
-
-from backend.app.database import Base
-from backend.app.database import model_registry  # noqa: F401  (registers all ORM models)
+from backend.app.database import (
+    Base,
+    model_registry,  # noqa: F401  (registers all ORM models)
+)
 from backend.app.interfaces.api import dependencies as deps
 from backend.app.main import app
 from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.roles.models import RoleModel
 from backend.app.security.permissions import ALL_PERMISSIONS, SYSTEM_ROLES
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import StaticPool
 
 
 @pytest.fixture()

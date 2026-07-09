@@ -1,11 +1,19 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
-from backend.app.interfaces.api.dependencies import get_current_user, get_user_service, require_permission
+from backend.app.interfaces.api.dependencies import (
+    get_current_user,
+    get_user_service,
+    require_permission,
+)
 from backend.app.modules.users.schemas import UserCreate, UserRead, UserUpdate
-from backend.app.modules.users.service import CreateUserCommand, EmailAlreadyRegisteredError, User, UserService
+from backend.app.modules.users.service import (
+    CreateUserCommand,
+    EmailAlreadyRegisteredError,
+    User,
+    UserService,
+)
 from backend.app.security.permissions import USERS_MANAGE, USERS_READ
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter()
 

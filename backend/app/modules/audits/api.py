@@ -1,9 +1,11 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
-from backend.app.interfaces.api.dependencies import get_audit_service, get_current_user, require_permission
+from backend.app.interfaces.api.dependencies import (
+    get_audit_service,
+    get_current_user,
+    require_permission,
+)
 from backend.app.modules.audits.schemas import (
     AuditCreate,
     AuditRead,
@@ -30,6 +32,7 @@ from backend.app.modules.audits.service import (
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import AUDITS_MANAGE, AUDITS_READ
 from backend.app.workflow.state_machine import IllegalTransitionError
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter()
 

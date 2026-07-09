@@ -3,9 +3,6 @@ from __future__ import annotations
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import func, select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.documents.models import (
     DocumentApprovalModel,
     DocumentModel,
@@ -19,6 +16,8 @@ from backend.app.modules.documents.service import (
     DocumentVersion,
     VersionStatus,
 )
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
 
 
 def to_document(model: DocumentModel) -> Document:

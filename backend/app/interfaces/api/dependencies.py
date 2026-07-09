@@ -1,10 +1,6 @@
 from collections.abc import Generator
 from uuid import UUID
 
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
-
 from backend.app.core.config import settings
 from backend.app.database import get_db_session
 from backend.app.modules.ai.providers import get_ai_provider
@@ -59,6 +55,9 @@ from backend.app.modules.roles.service import RoleService
 from backend.app.modules.users.repository import SqlAlchemyUserRepository
 from backend.app.modules.users.service import User, UserService
 from backend.app.security.tokens import InvalidTokenError, decode_access_token
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.api_v1_prefix}/auth/login")
 

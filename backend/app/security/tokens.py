@@ -3,10 +3,9 @@ import secrets
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
+from backend.app.core.config import settings
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-
-from backend.app.core.config import settings
 
 ALGORITHM = "HS256"
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")

@@ -1,12 +1,11 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
-
 from backend.app.interfaces.api.dependencies import get_current_user, get_notification_service
 from backend.app.modules.notifications.schemas import NotificationRead
 from backend.app.modules.notifications.service import NotificationService
 from backend.app.modules.users.service import User
+from fastapi import APIRouter, Depends
 
 router = APIRouter()
 

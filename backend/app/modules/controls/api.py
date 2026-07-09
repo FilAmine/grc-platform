@@ -1,10 +1,13 @@
-from fastapi import APIRouter, Depends, status
-
-from backend.app.interfaces.api.dependencies import get_control_service, get_current_user, require_permission
+from backend.app.interfaces.api.dependencies import (
+    get_control_service,
+    get_current_user,
+    require_permission,
+)
 from backend.app.modules.controls.schemas import ControlCreate, ControlRead
 from backend.app.modules.controls.service import ControlService, CreateControlCommand
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import CONTROLS_MANAGE, CONTROLS_READ
+from fastapi import APIRouter, Depends, status
 
 router = APIRouter()
 

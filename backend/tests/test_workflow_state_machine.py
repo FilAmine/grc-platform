@@ -1,5 +1,4 @@
 import pytest
-
 from backend.app.workflow.state_machine import IllegalTransitionError, StateMachine, Transition
 
 TRAFFIC_LIGHT = StateMachine(

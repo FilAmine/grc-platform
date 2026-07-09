@@ -1,5 +1,3 @@
-from fastapi import APIRouter
-
 from backend.app.modules.ai import api as ai
 from backend.app.modules.assets import api as assets
 from backend.app.modules.audits import api as audits
@@ -14,6 +12,7 @@ from backend.app.modules.permissions import api as permissions
 from backend.app.modules.risks import api as risks
 from backend.app.modules.roles import api as roles
 from backend.app.modules.users import api as users
+from fastapi import APIRouter
 
 api_router = APIRouter()
 api_router.include_router(auth.router, prefix="/auth", tags=["auth"])

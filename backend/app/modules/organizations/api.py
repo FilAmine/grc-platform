@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-
 from backend.app.interfaces.api.dependencies import get_current_user, get_organization_service
 from backend.app.modules.organizations.schemas import OrganizationCreate, OrganizationRead
 from backend.app.modules.organizations.service import CreateOrganizationCommand, OrganizationService
 from backend.app.modules.users.service import User
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter()
 

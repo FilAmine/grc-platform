@@ -1,6 +1,3 @@
-from sqlalchemy import Enum, String, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from backend.app.common.models import (
     AuditColumnsMixin,
     SoftDeleteMixin,
@@ -10,6 +7,8 @@ from backend.app.common.models import (
 )
 from backend.app.database import Base
 from backend.app.modules.risks.service import RiskSeverity, RiskStatus
+from sqlalchemy import Enum, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class RiskModel(
@@ -25,6 +24,6 @@ class RiskModel(
     )
     owner: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    organization: Mapped["OrganizationModel"] = relationship(
+    organization: Mapped["OrganizationModel"] = relationship(  # noqa: F821
         "OrganizationModel", back_populates="risks"
     )

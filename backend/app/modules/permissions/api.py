@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends
-
 from backend.app.interfaces.api.dependencies import get_permission_service, require_permission
 from backend.app.modules.permissions.schemas import PermissionRead
 from backend.app.modules.permissions.service import PermissionService
 from backend.app.security.permissions import ROLES_MANAGE
+from fastapi import APIRouter, Depends
 
 router = APIRouter()
 

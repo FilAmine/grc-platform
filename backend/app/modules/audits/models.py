@@ -1,10 +1,6 @@
 from datetime import date, datetime
 from uuid import UUID as PyUUID
 
-from sqlalchemy import Date, DateTime, Enum, ForeignKey, String, Text
-from sqlalchemy.dialects.postgresql import UUID as PGUUID
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from backend.app.common.models import (
     AuditColumnsMixin,
     SoftDeleteMixin,
@@ -20,6 +16,9 @@ from backend.app.modules.audits.service import (
     FindingSeverity,
     FindingStatus,
 )
+from sqlalchemy import Date, DateTime, Enum, ForeignKey, String, Text
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class AuditModel(

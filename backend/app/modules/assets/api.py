@@ -1,12 +1,15 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
-from backend.app.interfaces.api.dependencies import get_asset_service, get_current_user, require_permission
+from backend.app.interfaces.api.dependencies import (
+    get_asset_service,
+    get_current_user,
+    require_permission,
+)
 from backend.app.modules.assets.schemas import AssetCreate, AssetLifecycleUpdate, AssetRead
 from backend.app.modules.assets.service import AssetService, CreateAssetCommand
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import ASSETS_MANAGE, ASSETS_READ
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter()
 

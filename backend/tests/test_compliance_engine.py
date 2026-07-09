@@ -1,6 +1,5 @@
-from fastapi.testclient import TestClient
-
 from backend.tests.conftest import auth_headers, register_organization
+from fastapi.testclient import TestClient
 
 
 def _build_framework_with_requirements(client: TestClient, access_token: str) -> tuple[str, list[str]]:

@@ -1,12 +1,15 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
-from backend.app.interfaces.api.dependencies import get_current_user, get_role_service, require_permission
+from backend.app.interfaces.api.dependencies import (
+    get_current_user,
+    get_role_service,
+    require_permission,
+)
 from backend.app.modules.roles.schemas import RoleCreate, RolePermissionsUpdate, RoleRead
 from backend.app.modules.roles.service import CreateRoleCommand, RoleNotEditableError, RoleService
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import ROLES_MANAGE
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter()
 

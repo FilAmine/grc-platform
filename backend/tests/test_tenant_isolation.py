@@ -1,6 +1,5 @@
-from fastapi.testclient import TestClient
-
 from backend.tests.conftest import auth_headers, register_organization
+from fastapi.testclient import TestClient
 
 
 def _create_risk(client: TestClient, access_token: str, title: str = "A risk") -> dict:

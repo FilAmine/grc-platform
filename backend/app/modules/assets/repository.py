@@ -2,9 +2,6 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.assets.models import AssetModel
 from backend.app.modules.assets.service import (
     Asset,
@@ -12,6 +9,8 @@ from backend.app.modules.assets.service import (
     AssetType,
     ClassificationLevel,
 )
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 
 def to_asset(model: AssetModel) -> Asset:

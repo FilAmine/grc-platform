@@ -13,7 +13,6 @@ import math
 from typing import Protocol
 
 import httpx
-
 from backend.app.core.config import Settings
 
 
@@ -134,7 +133,10 @@ def get_ai_provider(settings: Settings) -> AIProvider:
     provider = settings.ai_provider.lower()
     if provider == "openai" and settings.openai_api_key:
         return OpenAIProvider(settings.openai_api_key, settings.openai_model)
-    if provider == "azure_openai" and settings.azure_openai_endpoint and settings.azure_openai_api_key and settings.azure_openai_deployment:
+    azure_configured = (
+        settings.azure_openai_endpoint and settings.azure_openai_api_key and settings.azure_openai_deployment
+    )
+    if provider == "azure_openai" and azure_configured:
         return AzureOpenAIProvider(
             settings.azure_openai_endpoint, settings.azure_openai_api_key, settings.azure_openai_deployment
         )

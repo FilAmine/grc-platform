@@ -2,9 +2,8 @@ import re
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import EmailStr, Field, field_validator
-
 from backend.app.common.schemas import ReadSchema
+from pydantic import EmailStr, Field, field_validator
 
 PASSWORD_MIN_LENGTH = 12
 

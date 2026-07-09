@@ -1,10 +1,9 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import Field
-
 from backend.app.common.schemas import ReadSchema
 from backend.app.modules.documents.service import DocumentStatus, DocumentType, VersionStatus
+from pydantic import Field
 
 
 class DocumentCreate(ReadSchema):

@@ -1,7 +1,5 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
 from backend.app.interfaces.api.dependencies import (
     get_chat_service,
     get_current_user,
@@ -28,6 +26,7 @@ from backend.app.modules.ai.service import (
 )
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import AI_MANAGE, AI_USE
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter()
 

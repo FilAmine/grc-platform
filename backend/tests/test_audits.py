@@ -1,6 +1,5 @@
-from fastapi.testclient import TestClient
-
 from backend.tests.conftest import auth_headers, register_organization
+from fastapi.testclient import TestClient
 
 
 def test_audit_lifecycle_findings_and_corrective_actions(client: TestClient) -> None:

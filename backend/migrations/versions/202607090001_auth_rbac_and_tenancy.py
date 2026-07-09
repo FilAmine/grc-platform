@@ -20,9 +20,8 @@ from uuid import uuid4
 
 import sqlalchemy as sa
 from alembic import op
-from sqlalchemy.dialects import postgresql
-
 from backend.app.security.permissions import ALL_PERMISSIONS, SYSTEM_ROLES
+from sqlalchemy.dialects import postgresql
 
 revision: str = "202607090001"
 down_revision: str | None = "202606250001"

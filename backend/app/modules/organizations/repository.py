@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
 from uuid import UUID as PyUUID
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.organizations.models import OrganizationModel
 from backend.app.modules.organizations.service import Organization
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 
 def to_organization(model: OrganizationModel) -> Organization:

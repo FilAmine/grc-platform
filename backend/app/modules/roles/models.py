@@ -1,11 +1,10 @@
 from uuid import UUID as PyUUID
 
+from backend.app.common.models import AuditColumnsMixin, TimestampMixin, UUIDPKMixin
+from backend.app.database import Base
 from sqlalchemy import Boolean, Column, ForeignKey, String, Table
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from backend.app.common.models import AuditColumnsMixin, TimestampMixin, UUIDPKMixin
-from backend.app.database import Base
 
 role_permissions = Table(
     "role_permissions",
@@ -33,6 +32,6 @@ class RoleModel(UUIDPKMixin, TimestampMixin, AuditColumnsMixin, Base):
     description: Mapped[str] = mapped_column(String(255), nullable=False, default="")
     is_system: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
-    permissions: Mapped[list["PermissionModel"]] = relationship(
+    permissions: Mapped[list["PermissionModel"]] = relationship(  # noqa: F821
         "PermissionModel", secondary=role_permissions
     )

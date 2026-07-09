@@ -3,11 +3,10 @@ from __future__ import annotations
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.notifications.models import NotificationModel
 from backend.app.modules.notifications.service import Notification
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 
 def to_notification(model: NotificationModel) -> Notification:

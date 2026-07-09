@@ -1,6 +1,5 @@
-from redis import Redis
-
 from backend.app.core.config import settings
+from redis import Redis
 
 
 def get_redis() -> Redis:

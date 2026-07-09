@@ -1,7 +1,6 @@
-from pydantic import EmailStr, Field, field_validator
-
 from backend.app.common.schemas import ReadSchema
 from backend.app.modules.users.schemas import validate_password_strength
+from pydantic import EmailStr, Field, field_validator
 
 
 class RegisterOrganizationRequest(ReadSchema):

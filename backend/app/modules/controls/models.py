@@ -1,6 +1,3 @@
-from sqlalchemy import Enum, String, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from backend.app.common.models import (
     AuditColumnsMixin,
     SoftDeleteMixin,
@@ -10,6 +7,8 @@ from backend.app.common.models import (
 )
 from backend.app.database import Base
 from backend.app.modules.controls.service import ControlStatus
+from sqlalchemy import Enum, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class ControlModel(
@@ -24,6 +23,6 @@ class ControlModel(
         Enum(ControlStatus), default=ControlStatus.DRAFT, nullable=False
     )
 
-    organization: Mapped["OrganizationModel"] = relationship(
+    organization: Mapped["OrganizationModel"] = relationship(  # noqa: F821
         "OrganizationModel", back_populates="controls"
     )

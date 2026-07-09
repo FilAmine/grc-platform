@@ -1,10 +1,9 @@
 from datetime import date, datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field
-
 from backend.app.common.schemas import ReadSchema
 from backend.app.modules.compliance.service import AssessmentStatus, RequirementResultStatus
+from pydantic import BaseModel, Field
 
 
 class ComplianceSummary(BaseModel):

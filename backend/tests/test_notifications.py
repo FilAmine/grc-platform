@@ -1,6 +1,5 @@
-from fastapi.testclient import TestClient
-
 from backend.tests.conftest import auth_headers, register_organization
+from fastapi.testclient import TestClient
 
 
 def test_document_approval_notifies_the_author(client: TestClient) -> None:

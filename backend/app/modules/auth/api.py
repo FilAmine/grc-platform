@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-
 from backend.app.interfaces.api.dependencies import get_auth_service, get_current_user
-from backend.app.modules.auth.schemas import RefreshRequest, RegisterOrganizationRequest, TokenResponse
+from backend.app.modules.auth.schemas import (
+    RefreshRequest,
+    RegisterOrganizationRequest,
+    TokenResponse,
+)
 from backend.app.modules.auth.service import (
     AuthService,
     InvalidCredentialsError,
@@ -11,6 +12,8 @@ from backend.app.modules.auth.service import (
 )
 from backend.app.modules.users.schemas import UserRead
 from backend.app.modules.users.service import EmailAlreadyRegisteredError, User
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter()
 

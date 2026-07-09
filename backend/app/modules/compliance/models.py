@@ -8,10 +8,6 @@ means loading rows, never touching this module.
 from datetime import date, datetime
 from uuid import UUID as PyUUID
 
-from sqlalchemy import Boolean, Date, DateTime, Enum, Float, ForeignKey, String, Text, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID as PGUUID
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from backend.app.common.models import (
     AuditColumnsMixin,
     SoftDeleteMixin,
@@ -21,6 +17,19 @@ from backend.app.common.models import (
 )
 from backend.app.database import Base
 from backend.app.modules.compliance.service import AssessmentStatus, RequirementResultStatus
+from sqlalchemy import (
+    Boolean,
+    Date,
+    DateTime,
+    Enum,
+    Float,
+    ForeignKey,
+    String,
+    Text,
+    UniqueConstraint,
+)
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class FrameworkModel(UUIDPKMixin, TimestampMixin, AuditColumnsMixin, Base):
@@ -101,7 +110,9 @@ class ControlMappingModel(UUIDPKMixin, TimestampMixin, Base):
     it is intended to satisfy."""
 
     __tablename__ = "control_mappings"
-    __table_args__ = (UniqueConstraint("control_id", "requirement_id", name="uq_control_mappings_control_id_requirement_id"),)
+    __table_args__ = (
+        UniqueConstraint("control_id", "requirement_id", name="uq_control_mappings_control_id_requirement_id"),
+    )
 
     control_id: Mapped[PyUUID] = mapped_column(
         PGUUID(as_uuid=True), ForeignKey("controls.id", ondelete="CASCADE"), index=True, nullable=False

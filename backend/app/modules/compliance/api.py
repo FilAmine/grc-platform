@@ -1,7 +1,5 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
 from backend.app.interfaces.api.dependencies import (
     get_assessment_service,
     get_compliance_scoring_service,
@@ -50,6 +48,7 @@ from backend.app.security.permissions import (
     FRAMEWORKS_MANAGE,
 )
 from backend.app.workflow.state_machine import IllegalTransitionError
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter()
 

@@ -3,12 +3,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from sqlalchemy import or_, select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.roles.models import RoleModel
 from backend.app.modules.roles.service import Role
+from sqlalchemy import or_, select
+from sqlalchemy.orm import Session
 
 
 def to_role(model: RoleModel) -> Role:

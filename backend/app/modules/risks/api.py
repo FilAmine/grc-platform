@@ -1,10 +1,13 @@
-from fastapi import APIRouter, Depends, status
-
-from backend.app.interfaces.api.dependencies import get_current_user, get_risk_service, require_permission
+from backend.app.interfaces.api.dependencies import (
+    get_current_user,
+    get_risk_service,
+    require_permission,
+)
 from backend.app.modules.risks.schemas import RiskCreate, RiskRead
 from backend.app.modules.risks.service import CreateRiskCommand, RiskService
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import RISKS_MANAGE, RISKS_READ
+from fastapi import APIRouter, Depends, status
 
 router = APIRouter()
 

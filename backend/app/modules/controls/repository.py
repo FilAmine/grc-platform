@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
+from backend.app.modules.controls.models import ControlModel
+from backend.app.modules.controls.service import Control
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-
-from backend.app.modules.controls.models import ControlModel
-from backend.app.modules.controls.service import Control, ControlStatus
 
 
 def to_control(model: ControlModel) -> Control:

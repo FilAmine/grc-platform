@@ -3,9 +3,6 @@ from __future__ import annotations
 from datetime import date, datetime
 from uuid import UUID
 
-from sqlalchemy import or_, select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.compliance.models import (
     AssessmentModel,
     AssessmentResultModel,
@@ -28,6 +25,8 @@ from backend.app.modules.compliance.service import (
     Requirement,
     RequirementResultStatus,
 )
+from sqlalchemy import or_, select
+from sqlalchemy.orm import Session
 
 
 def to_framework(model: FrameworkModel) -> Framework:

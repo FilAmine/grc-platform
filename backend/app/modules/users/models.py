@@ -1,11 +1,15 @@
 from datetime import datetime
 
+from backend.app.common.models import (
+    SoftDeleteMixin,
+    TenantScopedMixin,
+    TimestampMixin,
+    UUIDPKMixin,
+)
+from backend.app.database import Base
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Table
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from backend.app.common.models import SoftDeleteMixin, TenantScopedMixin, TimestampMixin, UUIDPKMixin
-from backend.app.database import Base
 
 user_roles = Table(
     "user_roles",
@@ -26,4 +30,4 @@ class UserModel(UUIDPKMixin, TenantScopedMixin, TimestampMixin, SoftDeleteMixin,
     failed_login_attempts: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    roles: Mapped[list["RoleModel"]] = relationship("RoleModel", secondary=user_roles)
+    roles: Mapped[list["RoleModel"]] = relationship("RoleModel", secondary=user_roles)  # noqa: F821

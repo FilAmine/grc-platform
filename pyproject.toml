@@ -35,13 +35,24 @@ dev = [
 ]
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py312"
 src = ["backend"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "S"]
 ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+# Migrations are verbose by construction (long sa.ForeignKeyConstraint(...) calls);
+# wrapping them for line-length doesn't improve readability.
+"backend/migrations/versions/*.py" = ["E501"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's DI convention is `param: T = Depends(...)` / `Query(...)` / `Body(...)` --
+# these are resolved once per request by FastAPI, not shared mutable state, so B008
+# ("function call in default argument") doesn't apply to them.
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Body", "fastapi.Path", "fastapi.Header"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

@@ -1,11 +1,10 @@
-from fastapi.testclient import TestClient
-
 from backend.tests.conftest import auth_headers, register_organization
+from fastapi.testclient import TestClient
 
 
 def test_register_organization_returns_tokens(client: TestClient) -> None:
     tokens = register_organization(client)
-    assert tokens["token_type"] == "bearer"
+    assert tokens["token_type"] == "bearer"  # noqa: S105
     assert tokens["access_token"]
     assert tokens["refresh_token"]
 

@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
 from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.permissions.service import Permission
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 
 def to_permission(model: PermissionModel) -> Permission:

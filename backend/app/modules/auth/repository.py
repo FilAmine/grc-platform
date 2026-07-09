@@ -2,10 +2,9 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from uuid import UUID
 
+from backend.app.modules.auth.models import RefreshTokenModel
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-
-from backend.app.modules.auth.models import RefreshTokenModel
 
 
 class RefreshTokenRepository(ABC):

@@ -1,12 +1,11 @@
 from datetime import datetime
 from uuid import UUID as PyUUID
 
+from backend.app.common.models import TenantScopedMixin, TimestampMixin, UUIDPKMixin
+from backend.app.database import Base
 from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
-
-from backend.app.common.models import TenantScopedMixin, TimestampMixin, UUIDPKMixin
-from backend.app.database import Base
 
 
 class NotificationModel(UUIDPKMixin, TenantScopedMixin, TimestampMixin, Base):

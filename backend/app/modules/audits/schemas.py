@@ -1,8 +1,6 @@
 from datetime import date, datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field
-
 from backend.app.common.schemas import ReadSchema
 from backend.app.modules.audits.service import (
     AuditStatus,
@@ -11,6 +9,7 @@ from backend.app.modules.audits.service import (
     FindingSeverity,
     FindingStatus,
 )
+from pydantic import BaseModel, Field
 
 
 class AuditCreate(ReadSchema):

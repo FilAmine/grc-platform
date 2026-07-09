@@ -1,9 +1,8 @@
 from collections.abc import Generator
 
+from backend.app.core.config import settings
 from sqlalchemy import MetaData, create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
-
-from backend.app.core.config import settings
 
 NAMING_CONVENTION = {
     "ix": "ix_%(table_name)s_%(column_0_N_name)s",
