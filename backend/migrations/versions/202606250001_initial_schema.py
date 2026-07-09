@@ -17,9 +17,12 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    riskseverity = postgresql.ENUM("LOW", "MEDIUM", "HIGH", "CRITICAL", name="riskseverity")
-    riskstatus = postgresql.ENUM("OPEN", "MITIGATING", "ACCEPTED", "CLOSED", name="riskstatus")
-    controlstatus = postgresql.ENUM("DRAFT", "ACTIVE", "RETIRED", name="controlstatus")
+    # create_type=False: we create/drop these types ourselves (below, and in
+    # downgrade()); without it, op.create_table()'s automatic before_create hook
+    # tries to CREATE TYPE a second time and fails with DuplicateObject.
+    riskseverity = postgresql.ENUM("LOW", "MEDIUM", "HIGH", "CRITICAL", name="riskseverity", create_type=False)
+    riskstatus = postgresql.ENUM("OPEN", "MITIGATING", "ACCEPTED", "CLOSED", name="riskstatus", create_type=False)
+    controlstatus = postgresql.ENUM("DRAFT", "ACTIVE", "RETIRED", name="controlstatus", create_type=False)
     riskseverity.create(op.get_bind(), checkfirst=True)
     riskstatus.create(op.get_bind(), checkfirst=True)
     controlstatus.create(op.get_bind(), checkfirst=True)

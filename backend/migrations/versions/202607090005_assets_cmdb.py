@@ -17,13 +17,15 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
+    # create_type=False: see 202606250001_initial_schema.py for why.
     assettype = postgresql.ENUM(
-        "HARDWARE", "SOFTWARE", "CLOUD_SERVICE", "APPLICATION", "BUSINESS_ASSET", "SERVICE", name="assettype"
+        "HARDWARE", "SOFTWARE", "CLOUD_SERVICE", "APPLICATION", "BUSINESS_ASSET", "SERVICE",
+        name="assettype", create_type=False,
     )
     lifecycle = postgresql.ENUM(
-        "PLANNED", "IN_USE", "MAINTENANCE", "RETIRED", "DISPOSED", name="assetlifecyclestage"
+        "PLANNED", "IN_USE", "MAINTENANCE", "RETIRED", "DISPOSED", name="assetlifecyclestage", create_type=False
     )
-    classification = postgresql.ENUM("LOW", "MEDIUM", "HIGH", name="classificationlevel")
+    classification = postgresql.ENUM("LOW", "MEDIUM", "HIGH", name="classificationlevel", create_type=False)
     for enum in (assettype, lifecycle, classification):
         enum.create(op.get_bind(), checkfirst=True)
 

@@ -17,9 +17,16 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    documenttype = postgresql.ENUM("POLICY", "PROCEDURE", "STANDARD", "GUIDELINE", "TEMPLATE", name="documenttype")
-    documentstatus = postgresql.ENUM("DRAFT", "IN_REVIEW", "PUBLISHED", "ARCHIVED", name="documentstatus")
-    versionstatus = postgresql.ENUM("DRAFT", "PENDING_APPROVAL", "APPROVED", "REJECTED", name="versionstatus")
+    # create_type=False: see 202606250001_initial_schema.py for why.
+    documenttype = postgresql.ENUM(
+        "POLICY", "PROCEDURE", "STANDARD", "GUIDELINE", "TEMPLATE", name="documenttype", create_type=False
+    )
+    documentstatus = postgresql.ENUM(
+        "DRAFT", "IN_REVIEW", "PUBLISHED", "ARCHIVED", name="documentstatus", create_type=False
+    )
+    versionstatus = postgresql.ENUM(
+        "DRAFT", "PENDING_APPROVAL", "APPROVED", "REJECTED", name="versionstatus", create_type=False
+    )
     for enum in (documenttype, documentstatus, versionstatus):
         enum.create(op.get_bind(), checkfirst=True)
 

@@ -17,11 +17,22 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    auditstatus = postgresql.ENUM("PLANNED", "IN_PROGRESS", "COMPLETED", "CLOSED", name="auditstatus")
-    checkliststatus = postgresql.ENUM("PENDING", "DONE", "NOT_APPLICABLE", name="checklistitemstatus")
-    findingseverity = postgresql.ENUM("MINOR", "MAJOR", "CRITICAL", name="findingseverity")
-    findingstatus = postgresql.ENUM("OPEN", "IN_REMEDIATION", "CLOSED", name="findingstatus")
-    correctiveactionstatus = postgresql.ENUM("OPEN", "IN_PROGRESS", "DONE", name="correctiveactionstatus")
+    # create_type=False: see 202606250001_initial_schema.py for why.
+    auditstatus = postgresql.ENUM(
+        "PLANNED", "IN_PROGRESS", "COMPLETED", "CLOSED", name="auditstatus", create_type=False
+    )
+    checkliststatus = postgresql.ENUM(
+        "PENDING", "DONE", "NOT_APPLICABLE", name="checklistitemstatus", create_type=False
+    )
+    findingseverity = postgresql.ENUM(
+        "MINOR", "MAJOR", "CRITICAL", name="findingseverity", create_type=False
+    )
+    findingstatus = postgresql.ENUM(
+        "OPEN", "IN_REMEDIATION", "CLOSED", name="findingstatus", create_type=False
+    )
+    correctiveactionstatus = postgresql.ENUM(
+        "OPEN", "IN_PROGRESS", "DONE", name="correctiveactionstatus", create_type=False
+    )
     for enum in (auditstatus, checkliststatus, findingseverity, findingstatus, correctiveactionstatus):
         enum.create(op.get_bind(), checkfirst=True)
 
