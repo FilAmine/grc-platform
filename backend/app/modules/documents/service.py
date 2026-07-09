@@ -6,6 +6,9 @@ from enum import StrEnum
 from typing import Protocol
 from uuid import UUID
 
+from backend.app.modules.notifications.service import NotificationSink
+from backend.app.workflow.state_machine import IllegalTransitionError, StateMachine, Transition
+
 
 class DocumentType(StrEnum):
     POLICY = "policy"
@@ -27,6 +30,25 @@ class VersionStatus(StrEnum):
     PENDING_APPROVAL = "pending_approval"
     APPROVED = "approved"
     REJECTED = "rejected"
+
+
+VERSION_STATUS_MACHINE: StateMachine[VersionStatus] = StateMachine(
+    [
+        Transition("submit", VersionStatus.DRAFT, VersionStatus.PENDING_APPROVAL),
+        Transition("resubmit", VersionStatus.REJECTED, VersionStatus.PENDING_APPROVAL),
+        Transition("approve", VersionStatus.PENDING_APPROVAL, VersionStatus.APPROVED),
+        Transition("reject", VersionStatus.PENDING_APPROVAL, VersionStatus.REJECTED),
+    ]
+)
+
+DOCUMENT_STATUS_MACHINE: StateMachine[DocumentStatus] = StateMachine(
+    [
+        Transition("publish", DocumentStatus.DRAFT, DocumentStatus.PUBLISHED),
+        Transition("republish", DocumentStatus.PUBLISHED, DocumentStatus.PUBLISHED),
+        Transition("archive_draft", DocumentStatus.DRAFT, DocumentStatus.ARCHIVED),
+        Transition("archive_published", DocumentStatus.PUBLISHED, DocumentStatus.ARCHIVED),
+    ]
+)
 
 
 @dataclass(frozen=True)
@@ -147,8 +169,9 @@ class InvalidApprovalDecisionError(Exception):
 
 
 class DocumentService:
-    def __init__(self, documents: DocumentStore) -> None:
+    def __init__(self, documents: DocumentStore, notifier: NotificationSink | None = None) -> None:
         self._documents = documents
+        self._notifier = notifier
 
     def list_documents(self, organization_id: UUID) -> list[Document]:
         return self._documents.list(organization_id)
@@ -180,6 +203,10 @@ class DocumentService:
         return self._documents.get_version(version_id)
 
     def submit_for_approval(self, version_id: UUID) -> DocumentVersion:
+        version = self._documents.get_version(version_id)
+        if version is None:
+            raise DocumentNotFoundError("document version not found")
+        VERSION_STATUS_MACHINE.transition_to(version.status, VersionStatus.PENDING_APPROVAL)
         return self._documents.set_version_status(version_id, VersionStatus.PENDING_APPROVAL)
 
     def decide_approval(
@@ -194,21 +221,41 @@ class DocumentService:
         version = self._documents.get_version(version_id)
         if version is None:
             raise DocumentNotFoundError("document version not found")
-        if version.status != VersionStatus.PENDING_APPROVAL:
-            raise InvalidApprovalDecisionError("version is not pending approval")
 
         decision = VersionStatus.APPROVED if approve else VersionStatus.REJECTED
+        try:
+            VERSION_STATUS_MACHINE.transition_to(version.status, decision)
+        except IllegalTransitionError as exc:
+            raise InvalidApprovalDecisionError("version is not pending approval") from exc
+
         approval = self._documents.record_approval(
             version_id, approver_id, decision, comment, signature_reference, now
         )
         self._documents.set_version_status(version_id, decision)
+
+        document = self._documents.get_by_id(version.document_id)
         if approve:
+            if document is not None:
+                DOCUMENT_STATUS_MACHINE.transition_to(document.status, DocumentStatus.PUBLISHED)
             self._documents.set_published_version(version.document_id, version_id)
             self._documents.set_status(version.document_id, DocumentStatus.PUBLISHED)
+
+        if self._notifier is not None and document is not None and version.created_by_id is not None:
+            outcome = "approved" if approve else "rejected"
+            self._notifier.notify(
+                document.organization_id,
+                version.created_by_id,
+                f"Document version {outcome}",
+                f'Version {version.version_number} of "{document.title}" was {outcome}.',
+            )
         return approval
 
     def list_approvals(self, document_version_id: UUID) -> list[DocumentApproval]:
         return self._documents.list_approvals(document_version_id)
 
     def archive_document(self, document_id: UUID) -> Document:
+        document = self._documents.get_by_id(document_id)
+        if document is None:
+            raise DocumentNotFoundError("document not found")
+        DOCUMENT_STATUS_MACHINE.transition_to(document.status, DocumentStatus.ARCHIVED)
         return self._documents.set_status(document_id, DocumentStatus.ARCHIVED)

@@ -6,12 +6,24 @@ from enum import StrEnum
 from typing import Protocol
 from uuid import UUID
 
+from backend.app.workflow.state_machine import StateMachine, Transition
+
 
 class AuditStatus(StrEnum):
     PLANNED = "planned"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     CLOSED = "closed"
+
+
+AUDIT_STATUS_MACHINE: StateMachine[AuditStatus] = StateMachine(
+    [
+        Transition("start", AuditStatus.PLANNED, AuditStatus.IN_PROGRESS),
+        Transition("complete", AuditStatus.IN_PROGRESS, AuditStatus.COMPLETED),
+        Transition("close", AuditStatus.COMPLETED, AuditStatus.CLOSED),
+        Transition("reopen", AuditStatus.COMPLETED, AuditStatus.IN_PROGRESS),
+    ]
+)
 
 
 class ChecklistItemStatus(StrEnum):
@@ -189,6 +201,10 @@ class AuditStore(Protocol):
         raise NotImplementedError
 
 
+class AuditNotFoundError(Exception):
+    pass
+
+
 @dataclass(frozen=True)
 class AuditReport:
     audit: Audit
@@ -225,6 +241,10 @@ class AuditService:
         )
 
     def set_status(self, audit_id: UUID, status: AuditStatus) -> Audit:
+        current = self._audits.get_by_id(audit_id)
+        if current is None:
+            raise AuditNotFoundError("audit not found")
+        AUDIT_STATUS_MACHINE.transition_to(current.status, status)
         return self._audits.set_status(audit_id, status)
 
     def add_checklist_item(self, command: CreateChecklistItemCommand) -> ChecklistItem:

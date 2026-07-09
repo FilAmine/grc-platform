@@ -87,6 +87,20 @@ def test_assessment_lifecycle_and_scoring(client: TestClient) -> None:
     assert latest.status_code == 200
     assert latest.json()["score"] == 50.0
 
+    illegal_jump = client.patch(
+        f"/api/v1/compliance/assessments/{assessment_id}/status",
+        headers=headers,
+        json={"status": "completed"},
+    )
+    assert illegal_jump.status_code == 409
+
+    started = client.patch(
+        f"/api/v1/compliance/assessments/{assessment_id}/status",
+        headers=headers,
+        json={"status": "in_progress"},
+    )
+    assert started.status_code == 200
+
     status_update = client.patch(
         f"/api/v1/compliance/assessments/{assessment_id}/status",
         headers=headers,

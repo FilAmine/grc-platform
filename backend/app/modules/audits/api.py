@@ -29,6 +29,7 @@ from backend.app.modules.audits.service import (
 )
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import AUDITS_MANAGE, AUDITS_READ
+from backend.app.workflow.state_machine import IllegalTransitionError
 
 router = APIRouter()
 
@@ -92,7 +93,11 @@ def update_audit_status(
     service: AuditService = Depends(get_audit_service),
 ) -> AuditRead:
     _owned_audit(audit_id, current_user, service)
-    return AuditRead.model_validate(service.set_status(audit_id, payload.status))
+    try:
+        audit = service.set_status(audit_id, payload.status)
+    except IllegalTransitionError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    return AuditRead.model_validate(audit)
 
 
 @router.get(

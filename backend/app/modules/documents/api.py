@@ -22,6 +22,7 @@ from backend.app.modules.documents.service import (
 )
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import DOCUMENTS_MANAGE, DOCUMENTS_READ
+from backend.app.workflow.state_machine import IllegalTransitionError
 
 router = APIRouter()
 
@@ -79,7 +80,11 @@ def archive_document(
     service: DocumentService = Depends(get_document_service),
 ) -> DocumentRead:
     _owned_document(document_id, current_user, service)
-    return DocumentRead.model_validate(service.archive_document(document_id))
+    try:
+        document = service.archive_document(document_id)
+    except IllegalTransitionError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    return DocumentRead.model_validate(document)
 
 
 @router.get(
@@ -130,7 +135,11 @@ def submit_for_approval(
     service: DocumentService = Depends(get_document_service),
 ) -> VersionRead:
     _owned_version(version_id, current_user, service)
-    return VersionRead.model_validate(service.submit_for_approval(version_id))
+    try:
+        version = service.submit_for_approval(version_id)
+    except IllegalTransitionError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    return VersionRead.model_validate(version)
 
 
 @router.post(

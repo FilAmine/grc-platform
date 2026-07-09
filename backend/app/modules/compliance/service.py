@@ -9,6 +9,7 @@ from uuid import UUID
 from backend.app.modules.controls.service import Control, ControlStatus
 from backend.app.modules.organizations.service import Organization
 from backend.app.modules.risks.service import Risk, RiskStatus
+from backend.app.workflow.state_machine import StateMachine, Transition
 
 
 class OrganizationReader(Protocol):
@@ -31,6 +32,16 @@ class AssessmentStatus(StrEnum):
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     ARCHIVED = "archived"
+
+
+ASSESSMENT_STATUS_MACHINE: StateMachine[AssessmentStatus] = StateMachine(
+    [
+        Transition("start", AssessmentStatus.DRAFT, AssessmentStatus.IN_PROGRESS),
+        Transition("complete", AssessmentStatus.IN_PROGRESS, AssessmentStatus.COMPLETED),
+        Transition("archive", AssessmentStatus.COMPLETED, AssessmentStatus.ARCHIVED),
+        Transition("reopen", AssessmentStatus.COMPLETED, AssessmentStatus.IN_PROGRESS),
+    ]
+)
 
 
 class RequirementResultStatus(StrEnum):
@@ -342,6 +353,10 @@ class AssessmentService:
         return self._assessments.upsert_result(assessment_id, requirement_id, status, notes)
 
     def set_status(self, assessment_id: UUID, status: AssessmentStatus) -> Assessment:
+        current = self._assessments.get_by_id(assessment_id)
+        if current is None:
+            raise AssessmentNotFoundError("assessment not found")
+        ASSESSMENT_STATUS_MACHINE.transition_to(current.status, status)
         return self._assessments.set_status(assessment_id, status)
 
     def compute_score(self, assessment_id: UUID) -> float:

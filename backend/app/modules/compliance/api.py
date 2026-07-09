@@ -49,6 +49,7 @@ from backend.app.security.permissions import (
     EVIDENCE_MANAGE,
     FRAMEWORKS_MANAGE,
 )
+from backend.app.workflow.state_machine import IllegalTransitionError
 
 router = APIRouter()
 
@@ -253,7 +254,11 @@ def update_assessment_status(
     service: AssessmentService = Depends(get_assessment_service),
 ) -> AssessmentRead:
     _get_owned_assessment(assessment_id, current_user, service)
-    return AssessmentRead.model_validate(service.set_status(assessment_id, payload.status))
+    try:
+        assessment = service.set_status(assessment_id, payload.status)
+    except IllegalTransitionError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    return AssessmentRead.model_validate(assessment)
 
 
 @router.get(

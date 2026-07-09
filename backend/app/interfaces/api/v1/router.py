@@ -8,6 +8,7 @@ from backend.app.modules.compliance import api as compliance
 from backend.app.modules.controls import api as controls
 from backend.app.modules.dashboard import api as dashboard
 from backend.app.modules.documents import api as documents
+from backend.app.modules.notifications import api as notifications
 from backend.app.modules.organizations import api as organizations
 from backend.app.modules.permissions import api as permissions
 from backend.app.modules.risks import api as risks
@@ -28,6 +29,7 @@ api_router.include_router(audits.router, prefix="/audits", tags=["audits"])
 api_router.include_router(documents.router, prefix="/documents", tags=["documents"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
 api_router.include_router(ai.router, prefix="/ai", tags=["ai"])
+api_router.include_router(notifications.router, prefix="/notifications", tags=["notifications"])
 
 # Backward-compatible summary route for clients using the previous system namespace.
 api_router.include_router(compliance.router, prefix="/system", tags=["system"])

@@ -36,6 +36,7 @@ from backend.app.modules.documents.models import (
     DocumentModel,
     DocumentVersionModel,
 )
+from backend.app.modules.notifications.models import NotificationModel
 from backend.app.modules.organizations.models import OrganizationModel
 from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.risks.models import RiskModel
@@ -63,6 +64,7 @@ __all__ = [
     "FrameworkModel",
     "FrameworkVersionModel",
     "KnowledgeBaseDocumentModel",
+    "NotificationModel",
     "OrganizationModel",
     "PromptTemplateModel",
     "PermissionModel",

@@ -72,6 +72,17 @@ def test_audit_lifecycle_findings_and_corrective_actions(client: TestClient) -> 
     assert body["corrective_actions_total"] == 1
     assert body["corrective_actions_done"] == 1
 
+    illegal_jump = client.patch(
+        f"/api/v1/audits/{audit_id}/status", headers=headers, json={"status": "completed"}
+    )
+    assert illegal_jump.status_code == 409
+
+    started = client.patch(
+        f"/api/v1/audits/{audit_id}/status", headers=headers, json={"status": "in_progress"}
+    )
+    assert started.status_code == 200
+    assert started.json()["status"] == "in_progress"
+
     status_update = client.patch(
         f"/api/v1/audits/{audit_id}/status", headers=headers, json={"status": "completed"}
     )
