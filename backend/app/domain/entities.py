@@ -1,58 +1,12 @@
-from dataclasses import dataclass
-from datetime import datetime
-from enum import StrEnum
-from uuid import UUID
+from backend.app.modules.controls.service import Control, ControlStatus
+from backend.app.modules.organizations.service import Organization
+from backend.app.modules.risks.service import Risk, RiskSeverity, RiskStatus
 
-
-class RiskStatus(StrEnum):
-    OPEN = "open"
-    MITIGATING = "mitigating"
-    ACCEPTED = "accepted"
-    CLOSED = "closed"
-
-
-class RiskSeverity(StrEnum):
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-    CRITICAL = "critical"
-
-
-class ControlStatus(StrEnum):
-    DRAFT = "draft"
-    ACTIVE = "active"
-    RETIRED = "retired"
-
-
-@dataclass(frozen=True)
-class Organization:
-    id: UUID
-    name: str
-    slug: str
-    created_at: datetime
-    updated_at: datetime
-
-
-@dataclass(frozen=True)
-class Risk:
-    id: UUID
-    organization_id: UUID
-    title: str
-    description: str
-    severity: RiskSeverity
-    status: RiskStatus
-    owner: str
-    created_at: datetime
-    updated_at: datetime
-
-
-@dataclass(frozen=True)
-class Control:
-    id: UUID
-    organization_id: UUID
-    name: str
-    description: str
-    framework: str
-    status: ControlStatus
-    created_at: datetime
-    updated_at: datetime
+__all__ = [
+    "Control",
+    "ControlStatus",
+    "Organization",
+    "Risk",
+    "RiskSeverity",
+    "RiskStatus",
+]
