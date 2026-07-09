@@ -44,7 +44,11 @@ class SqlAlchemyRiskRepository(RiskRepository):
         self._session = session
 
     def list(self, organization_id: UUID | None = None) -> list[Risk]:
-        statement = select(RiskModel).order_by(RiskModel.created_at.desc())
+        statement = (
+            select(RiskModel)
+            .where(RiskModel.deleted_at.is_(None))
+            .order_by(RiskModel.created_at.desc())
+        )
         if organization_id:
             statement = statement.where(RiskModel.organization_id == organization_id)
         rows = self._session.scalars(statement).all()

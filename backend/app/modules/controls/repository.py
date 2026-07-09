@@ -42,7 +42,11 @@ class SqlAlchemyControlRepository(ControlRepository):
         self._session = session
 
     def list(self, organization_id: UUID | None = None) -> list[Control]:
-        statement = select(ControlModel).order_by(ControlModel.name)
+        statement = (
+            select(ControlModel)
+            .where(ControlModel.deleted_at.is_(None))
+            .order_by(ControlModel.name)
+        )
         if organization_id:
             statement = statement.where(ControlModel.organization_id == organization_id)
         rows = self._session.scalars(statement).all()

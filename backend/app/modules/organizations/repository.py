@@ -32,7 +32,12 @@ class SqlAlchemyOrganizationRepository(OrganizationRepository):
         self._session = session
 
     def list(self) -> list[Organization]:
-        rows = self._session.scalars(select(OrganizationModel).order_by(OrganizationModel.name)).all()
+        statement = (
+            select(OrganizationModel)
+            .where(OrganizationModel.deleted_at.is_(None))
+            .order_by(OrganizationModel.name)
+        )
+        rows = self._session.scalars(statement).all()
         return [to_organization(row) for row in rows]
 
     def create(self, name: str, slug: str) -> Organization:
