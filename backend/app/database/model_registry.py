@@ -5,6 +5,12 @@ Alembic's ``env.py`` imports this module for its side effects so that
 models must be imported here, otherwise migrations silently ignore it.
 """
 
+from backend.app.modules.audits.models import (
+    AuditModel,
+    ChecklistItemModel,
+    CorrectiveActionModel,
+    FindingModel,
+)
 from backend.app.modules.auth.models import RefreshTokenModel
 from backend.app.modules.compliance.models import (
     AssessmentModel,
@@ -27,7 +33,11 @@ from backend.app.modules.users.models import UserModel, user_roles
 __all__ = [
     "AssessmentModel",
     "AssessmentResultModel",
+    "AuditModel",
+    "ChecklistItemModel",
     "ComplianceScoreModel",
+    "CorrectiveActionModel",
+    "FindingModel",
     "ControlCategoryModel",
     "ControlMappingModel",
     "ControlModel",

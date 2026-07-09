@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 
 from backend.app.core.config import settings
 from backend.app.database import get_db_session
+from backend.app.modules.audits.repository import SqlAlchemyAuditRepository
+from backend.app.modules.audits.service import AuditService
 from backend.app.modules.auth.repository import SqlAlchemyRefreshTokenRepository
 from backend.app.modules.auth.service import AuthService
 from backend.app.modules.compliance.repository import (
@@ -100,6 +102,10 @@ def get_compliance_scoring_service(
     session: Session = Depends(get_session),
 ) -> ComplianceScoringService:
     return ComplianceScoringService(assessments, SqlAlchemyComplianceScoreRepository(session))
+
+
+def get_audit_service(session: Session = Depends(get_session)) -> AuditService:
+    return AuditService(SqlAlchemyAuditRepository(session))
 
 
 def get_permission_service(session: Session = Depends(get_session)) -> PermissionService:
