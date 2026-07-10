@@ -52,6 +52,9 @@ from backend.app.modules.risks.repository import (
 from backend.app.modules.risks.service import RiskService
 from backend.app.modules.roles.repository import SqlAlchemyRoleRepository
 from backend.app.modules.roles.service import RoleService
+from backend.app.modules.sso.oidc_client import HttpxOidcClient, OidcClient
+from backend.app.modules.sso.repository import SqlAlchemySsoConnectionRepository
+from backend.app.modules.sso.service import SsoService
 from backend.app.modules.users.repository import SqlAlchemyUserRepository
 from backend.app.modules.users.service import User, UserService
 from backend.app.security.tokens import InvalidTokenError, decode_access_token
@@ -162,12 +165,26 @@ def get_user_service(session: Session = Depends(get_session)) -> UserService:
     return UserService(SqlAlchemyUserRepository(session))
 
 
-def get_auth_service(session: Session = Depends(get_session)) -> AuthService:
+def get_sso_service(session: Session = Depends(get_session)) -> SsoService:
+    return SsoService(SqlAlchemySsoConnectionRepository(session))
+
+
+def get_oidc_client() -> OidcClient:
+    return HttpxOidcClient()
+
+
+def get_auth_service(
+    session: Session = Depends(get_session),
+    sso: SsoService = Depends(get_sso_service),
+    oidc_client: OidcClient = Depends(get_oidc_client),
+) -> AuthService:
     return AuthService(
         organizations=get_organization_service(session),
         users=get_user_service(session),
         roles=get_role_service(session),
         refresh_tokens=SqlAlchemyRefreshTokenRepository(session),
+        sso=sso,
+        oidc_client=oidc_client,
     )
 
 

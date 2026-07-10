@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Box, Button, Link as MuiLink, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Collapse, Divider, Link as MuiLink, Paper, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
@@ -13,17 +13,32 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
+const ssoSlugSchema = z.object({
+  organization_slug: z.string().min(1, "Enter your organization's slug"),
+});
+
+type SsoSlugFormValues = z.infer<typeof ssoSlugSchema>;
+
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1';
+
 export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState<string | null>(null);
+  const [ssoOpen, setSsoOpen] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
+
+  const {
+    register: registerSsoSlug,
+    handleSubmit: handleSsoSlugSubmit,
+    formState: { errors: ssoSlugErrors },
+  } = useForm<SsoSlugFormValues>({ resolver: zodResolver(ssoSlugSchema) });
 
   const onSubmit = handleSubmit(async (values) => {
     setError(null);
@@ -34,6 +49,12 @@ export function LoginPage() {
     } catch {
       setError('Invalid email or password.');
     }
+  });
+
+  const onSsoSlugSubmit = handleSsoSlugSubmit((values) => {
+    // Real browser navigation, not an axios call -- this has to leave the SPA
+    // to trigger the identity provider's OAuth redirect.
+    window.location.href = `${apiBaseUrl}/auth/sso/${values.organization_slug}/login`;
   });
 
   return (
@@ -75,6 +96,34 @@ export function LoginPage() {
             </Typography>
           </Stack>
         </Box>
+
+        <Divider sx={{ my: 2 }} />
+
+        <MuiLink
+          component="button"
+          type="button"
+          variant="body2"
+          onClick={() => setSsoOpen((open) => !open)}
+          sx={{ display: 'block', textAlign: 'center', width: '100%' }}
+        >
+          Sign in with your organization's SSO
+        </MuiLink>
+        <Collapse in={ssoOpen}>
+          <Box component="form" onSubmit={onSsoSlugSubmit} noValidate sx={{ mt: 2 }}>
+            <Stack spacing={2}>
+              <TextField
+                label="Organization slug"
+                placeholder="acme-corp"
+                error={Boolean(ssoSlugErrors.organization_slug)}
+                helperText={ssoSlugErrors.organization_slug?.message}
+                {...registerSsoSlug('organization_slug')}
+              />
+              <Button type="submit" variant="outlined">
+                Continue
+              </Button>
+            </Stack>
+          </Box>
+        </Collapse>
       </Paper>
     </Box>
   );

@@ -1,3 +1,6 @@
+from urllib.parse import quote
+
+from backend.app.core.config import settings
 from backend.app.interfaces.api.dependencies import get_auth_service, get_current_user
 from backend.app.modules.auth.schemas import (
     RefreshRequest,
@@ -8,14 +11,22 @@ from backend.app.modules.auth.service import (
     AuthService,
     InvalidCredentialsError,
     InvalidRefreshTokenError,
+    InvalidSsoStateError,
     RegisterOrganizationCommand,
+    SsoLoginError,
+    SsoNotConfiguredError,
 )
 from backend.app.modules.users.schemas import UserRead
 from backend.app.modules.users.service import EmailAlreadyRegisteredError, User
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter()
+
+
+def _sso_redirect_uri() -> str:
+    return f"{settings.backend_base_url}{settings.api_v1_prefix}/auth/sso/callback"
 
 
 @router.post(
@@ -79,3 +90,39 @@ def logout(
 @router.get("/me", response_model=UserRead)
 def me(current_user: User = Depends(get_current_user)) -> UserRead:
     return UserRead.model_validate(current_user)
+
+
+@router.get("/sso/{organization_slug}/login")
+def sso_login(
+    organization_slug: str,
+    service: AuthService = Depends(get_auth_service),
+) -> RedirectResponse:
+    try:
+        authorization_url = service.build_sso_authorization_url(organization_slug, _sso_redirect_uri())
+    except SsoNotConfiguredError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="SSO is not configured for this organization"
+        ) from exc
+    except SsoLoginError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY, detail=f"could not reach the identity provider: {exc}"
+        ) from exc
+    return RedirectResponse(authorization_url, status_code=status.HTTP_307_TEMPORARY_REDIRECT)
+
+
+@router.get("/sso/callback")
+def sso_callback(
+    code: str,
+    state: str,
+    service: AuthService = Depends(get_auth_service),
+) -> RedirectResponse:
+    try:
+        tokens = service.complete_sso_login(state, code, _sso_redirect_uri())
+    except (InvalidSsoStateError, SsoNotConfiguredError, SsoLoginError) as exc:
+        target = f"{settings.frontend_base_url}/sso/callback#error={quote(str(exc))}"
+        return RedirectResponse(target, status_code=status.HTTP_307_TEMPORARY_REDIRECT)
+    target = (
+        f"{settings.frontend_base_url}/sso/callback"
+        f"#access_token={tokens.access_token}&refresh_token={tokens.refresh_token}"
+    )
+    return RedirectResponse(target, status_code=status.HTTP_307_TEMPORARY_REDIRECT)

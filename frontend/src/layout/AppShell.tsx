@@ -11,6 +11,7 @@ import SecurityIcon from '@mui/icons-material/Security';
 import ShieldIcon from '@mui/icons-material/Shield';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import StorageIcon from '@mui/icons-material/Storage';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import {
   AppBar,
   Avatar,
@@ -44,6 +45,7 @@ const NAV_ITEMS = [
   { to: '/roles', label: 'Roles', icon: <SecurityIcon /> },
   { to: '/ai', label: 'AI Assistant', icon: <SmartToyIcon /> },
   { to: '/notifications', label: 'Notifications', icon: <NotificationsIcon /> },
+  { to: '/settings/sso', label: 'SSO', icon: <VpnKeyIcon /> },
 ];
 
 export function AppShell() {

@@ -454,3 +454,24 @@ export type KnowledgeBaseDocumentCreate = {
   title: string;
   content: string;
 };
+
+// --- SSO (per-organization OIDC connection) --------------------------------------
+
+export type SsoConnection = {
+  id: string;
+  organization_id: string;
+  issuer: string;
+  client_id: string;
+  default_role_id: string | null;
+  is_enabled: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type SsoConnectionUpdate = {
+  issuer: string;
+  client_id: string;
+  client_secret: string;
+  default_role_id?: string | null;
+  is_enabled: boolean;
+};

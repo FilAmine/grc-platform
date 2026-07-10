@@ -32,13 +32,16 @@ real by reading every module. "Done" means: real persistence, a tested API, and
 - **CI**: lint (ruff, 0 errors), test (pytest, 89% coverage, `--cov-fail-under=80`
   gate), migrations exercised against a real Postgres service container,
   frontend typecheck + build, Docker image builds — all on every push/PR.
+- **SSO (OIDC)**: per-organization connections (an org optionally connects its
+  own Azure AD/Okta/Google Workspace/any OIDC IdP), standard
+  authorization-code flow with JWKS-verified `id_token`s, just-in-time user
+  provisioning with an optional default role, and an admin settings page to
+  configure it — see `docs/security.md`'s SSO/OIDC section for the full design
+  and its known limitations (OIDC only, no SAML/LDAP; `client_secret` stored
+  in plaintext).
 
 ## Not done — biggest gaps first
 
-- **SSO / enterprise identity.** No LDAP, Azure AD, OIDC, or OAuth2 integration.
-  No MFA. The auth module's structure (a pluggable provider behind a narrow
-  interface, as done for AI providers) would extend naturally to this, but
-  nothing is wired.
 - **Framework requirement catalogs are only loaded for the public-domain
   frameworks.** NIST CSF 2.0 (14 requirements), the HIPAA Security Rule (13),
   NIS2 (6), and DORA (5) have real requirement text — those sources are US
@@ -70,9 +73,12 @@ real by reading every module. "Done" means: real persistence, a tested API, and
 
 ## Suggested next milestone
 
-Frontend module coverage is complete (every backend module has a page), and
-the public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are
-loaded. The highest-leverage remaining gap is SSO / enterprise identity
-(listed above) — everything else left on this list is either intentionally
-out of reach (licensed standards text) or lower-priority infrastructure work
-(Celery, rate limiting, Kubernetes/Terraform).
+Frontend module coverage is complete (every backend module has a page), the
+public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
+SSO (OIDC) is in. What's left on this list is either intentionally out of
+reach (licensed standards text — needs a license, not a code change) or
+lower-priority infrastructure work (Celery, rate limiting, security headers,
+dependency/SAST scanning, Kubernetes/Terraform, EBIOS RM, the
+departments/threats/vulnerabilities/incidents module gaps). None of it blocks
+day-to-day use of what's already built; pick based on which specific gap
+actually matters for your next deployment target.

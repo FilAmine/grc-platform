@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { getMe, login as apiLogin, logout as apiLogout, registerOrganization as apiRegisterOrganization } from '../api/auth';
-import type { RegisterOrganizationRequest, User } from '../api/types';
+import type { RegisterOrganizationRequest, TokenResponse, User } from '../api/types';
 import { clearTokens, getAccessToken, getRefreshToken, setTokens } from './tokenStorage';
 
 type AuthContextValue = {
@@ -10,6 +10,7 @@ type AuthContextValue = {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   registerOrganization: (payload: RegisterOrganizationRequest) => Promise<void>;
+  applyTokens: (tokens: TokenResponse) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -50,6 +51,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [queryClient],
   );
 
+  // Used by the SSO callback page: unlike login/registerOrganization, tokens
+  // arrive already-issued (from the backend's redirect fragment), not from a
+  // password-flow POST this context makes itself.
+  const applyTokens = useCallback(
+    async (tokens: TokenResponse) => {
+      setTokens({ accessToken: tokens.access_token, refreshToken: tokens.refresh_token });
+      setHasToken(true);
+      await queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+    },
+    [queryClient],
+  );
+
   const logout = useCallback(async () => {
     const refreshToken = getRefreshToken();
     clearTokens();
@@ -68,9 +81,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAuthenticated: hasToken && Boolean(meQuery.data),
       login,
       registerOrganization,
+      applyTokens,
       logout,
     }),
-    [meQuery.data, meQuery.isLoading, hasToken, login, registerOrganization, logout],
+    [meQuery.data, meQuery.isLoading, hasToken, login, registerOrganization, applyTokens, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -93,6 +93,16 @@ Knowledge-base documents are embedded and retrieved via a linear cosine-similari
 scan over a JSON-encoded float array column (works on any SQL backend); swapping in
 pgvector later only touches `KnowledgeBaseRepository`.
 
+## OIDC client abstraction
+
+Same pattern, applied to SSO: `modules/sso/oidc_client.py` is the only file
+that knows how to talk to an actual identity provider (discovery, token
+exchange, JWKS-based `id_token` verification). `AuthService` depends only on
+the `OidcClient` Protocol (`build_authorization_url`, `exchange_code`), so
+tests swap in a fake client via dependency override instead of mocking `httpx`
+— see `docs/security.md`'s SSO/OIDC section for the request flow and
+`backend/tests/test_sso.py` for the fake.
+
 ## Frontend
 
 Vite + React + TypeScript + MUI + TanStack Query + React Router + React Hook Form +

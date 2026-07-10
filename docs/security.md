@@ -40,6 +40,42 @@
   platform-operator/direct-database access. Treat `users:manage` as
   superuser-equivalent when reasoning about blast radius.
 
+## SSO / OIDC
+
+- **Per-organization, not platform-wide.** Each org can optionally connect its
+  own OIDC app registration (Azure AD, Okta, Google Workspace, or any
+  standards-compliant IdP) via `PUT /sso/connection` (gated by `sso:manage`,
+  admin-only by default — not granted to Manager/Auditor/Viewer). Password
+  login keeps working for orgs that don't configure SSO; the two are not
+  mutually exclusive.
+- **Standard authorization-code flow**: `GET /auth/sso/{organization_slug}/login`
+  redirects to the IdP's `authorization_endpoint` (discovered from
+  `{issuer}/.well-known/openid-configuration`); `GET /auth/sso/callback`
+  exchanges the code, verifies the returned `id_token`'s signature against the
+  IdP's JWKS (`backend/app/modules/sso/oidc_client.py`), and redirects the
+  browser to the SPA's `/sso/callback` route with a same-shape `TokenPair` as
+  password login, carried in the URL fragment (not the query string, so it
+  isn't logged server-side or sent via `Referer`).
+- **CSRF/correlation via signed state, not server-side session storage**: the
+  `state` parameter is a short-lived (5 min) signed JWT
+  (`security/tokens.py::create_sso_state_token`) encoding the organization id
+  — nothing to look up or expire out of a database table.
+- **Just-in-time user provisioning**: the first successful SSO login for an
+  email not yet in that org auto-creates the user, with a random
+  `secrets.token_urlsafe(32)` password hash that is never communicated to
+  anyone — that user can only ever authenticate via SSO, never the password
+  form. An optional `default_role_id` on the connection is assigned to
+  newly-provisioned users; existing users keep whatever roles they already
+  have.
+- **Known limitation: `client_secret` is stored in plaintext.** No
+  KMS/envelope-encryption infrastructure exists in this codebase. Treat
+  `sso_connections.client_secret` the same as any other plaintext secret in
+  the database — encrypt at rest (or move to a real secrets manager) before
+  storing real customer IdP credentials in a production deployment.
+- **Not covered**: SAML and raw LDAP are different protocols and are not
+  implemented — only OIDC. No MFA enforcement beyond whatever the connected
+  IdP itself requires.
+
 ## Multi-tenant isolation
 
 Every list/get across every module derives `organization_id` from the
@@ -62,10 +98,10 @@ atomically.
 
 ## Known gaps (tracked in `docs/roadmap.md`)
 
-- **No MFA.** Login is single-factor (email + password).
-- **No LDAP/Azure AD/OIDC/OAuth2 SSO.** The auth module is structured so an
-  external identity provider could issue its own access tokens through the same
-  `AIProvider`-style pluggable pattern used for AI providers, but nothing is wired.
+- **No MFA** beyond whatever an org's connected SSO identity provider itself
+  enforces — password login remains single-factor.
+- **No SAML or LDAP** — only OIDC is implemented (see the SSO/OIDC section
+  above). `client_secret` is stored in plaintext, also noted above.
 - **No rate limiting** on `/auth/login` beyond the per-account lockout (a
   distributed attacker rotating source IPs isn't currently slowed by anything
   else). Redis is already a dependency and would be the natural backing store for

@@ -37,6 +37,7 @@ ASSETS_READ = "assets:read"
 ASSETS_MANAGE = "assets:manage"
 AI_USE = "ai:use"
 AI_MANAGE = "ai:manage"
+SSO_MANAGE = "sso:manage"
 
 ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(ORGANIZATIONS_READ, "View organization settings"),
@@ -61,6 +62,7 @@ ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(ASSETS_MANAGE, "Create and update CMDB assets"),
     PermissionDef(AI_USE, "Use the AI chat assistant and prompt library"),
     PermissionDef(AI_MANAGE, "Manage prompt templates and the AI knowledge base"),
+    PermissionDef(SSO_MANAGE, "Configure the organization's SSO (OIDC) connection"),
 )
 
 # Default role -> permission-code mapping seeded for every new organization.

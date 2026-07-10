@@ -3,11 +3,13 @@
 Base path: `/api/v1`. Interactive OpenAPI docs (Swagger) at `/api/v1/docs`,
 ReDoc at `/api/v1/redoc`, raw schema at `/api/v1/openapi.json`.
 
-All endpoints except `/health`, `/auth/register-organization`, and `/auth/login`
-require a `Bearer` access token (`Authorization: Bearer <token>`) and are scoped
-to the caller's organization server-side — none of them accept a client-supplied
-tenant ID. Most also require a specific RBAC permission code (see
-`docs/security.md`); the OpenAPI docs show each endpoint's requirement.
+All endpoints except `/health`, `/auth/register-organization`, `/auth/login`,
+and the two SSO redirect endpoints (`/auth/sso/{organization_slug}/login`,
+`/auth/sso/callback` — there's no bearer token to send yet at that point in the
+flow) require a `Bearer` access token (`Authorization: Bearer <token>`) and are
+scoped to the caller's organization server-side — none of them accept a
+client-supplied tenant ID. Most also require a specific RBAC permission code
+(see `docs/security.md`); the OpenAPI docs show each endpoint's requirement.
 
 ## Auth
 
@@ -18,6 +20,8 @@ tenant ID. Most also require a specific RBAC permission code (see
 | POST | `/auth/refresh` | Rotates the refresh token, returns a new pair |
 | POST | `/auth/logout` | Revokes a refresh token |
 | GET | `/auth/me` | Current user |
+| GET | `/auth/sso/{organization_slug}/login` | Unauthenticated. 307-redirects to the org's configured IdP, or 404 if none is configured/enabled, or 502 if the IdP is unreachable |
+| GET | `/auth/sso/callback` | Unauthenticated. Exchanges the authorization code, then 307-redirects to `{frontend_base_url}/sso/callback#access_token=...&refresh_token=...` (or `#error=...`) |
 
 ## Users, roles, permissions
 
@@ -123,6 +127,17 @@ only — it does not re-expose the rest of the compliance API.
 |---|---|
 | GET | `/notifications` |
 | POST | `/notifications/{notification_id}/read` |
+
+## SSO (per-organization OIDC connection)
+
+| Method | Path |
+|---|---|
+| GET/PUT/DELETE | `/sso/connection` |
+
+Requires `sso:manage` (admin-only by default). `SsoConnectionRead` never
+includes `client_secret` — same `hashed_password`-style omission pattern as
+`UserRead`. See `docs/security.md`'s SSO/OIDC section for the full flow these
+endpoints participate in.
 
 ## Dashboard
 

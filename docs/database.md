@@ -66,6 +66,8 @@ migration `202607090001_auth_rbac_and_tenancy.py` and
 | `202607090006` | `prompt_templates`, `knowledge_base_documents`, `chat_sessions`, `chat_messages` |
 | `202607090007` | `notifications` |
 | `202607100001` | Real requirement rows for NIST CSF 2.0 (14), HIPAA Security Rule (13), NIS2 (6), and DORA (5) — see the note below on why these four and not the rest of the catalog |
+| `202607100002` | Adds the `sso:manage` permission and grants it to the global `Admin` system role — the first real (idempotent, find-or-create) instance of the permission-seeding follow-up-migration pattern described below |
+| `202607100003` | `sso_connections` (per-organization OIDC configuration) |
 
 **Note on permission seeding**: `202607090001`'s seed step imports
 `security.permissions.ALL_PERMISSIONS`/`SYSTEM_ROLES` at *migration run time*, not
@@ -73,9 +75,17 @@ at the time the file was written — so a fresh `alembic upgrade head` always se
 whatever permission codes exist in that module today. Once this migration has
 actually run against a database, though, it won't run again: any permission code
 added to `security/permissions.py` *after* a database has been migrated needs its
-own follow-up migration to insert the delta. This hasn't bitten anyone yet because
-no environment has been deployed from this codebase, but it will the first time a
-new permission is added post-launch.
+own follow-up migration to insert the delta. `202607100002` (adding `sso:manage`)
+is the first real instance of this — and it's a genuine trap either way: a blind
+`INSERT` there hits a duplicate-key error on any database that was migrated
+*fresh* after `sso:manage` was added to the source file (because `202607090001`'s
+dynamic seed already picked it up), while skipping the insert entirely would
+leave it missing on any database migrated *before* that point. The fix is to
+make the follow-up migration idempotent (find-or-create for both the permission
+row and the role grant), not to special-case which scenario you think you're in
+— confirmed by actually hitting the duplicate-key error against a real local
+Postgres instance while developing `202607100002`, not just reasoned about.
+Any future new permission should follow the same idempotent pattern.
 
 **Note on `user_roles`/`role_permissions`**: both are plain many-to-many join
 tables (composite PK on the two FK columns, no extra columns of their own) —
@@ -111,9 +121,15 @@ standards without first confirming a license actually permits it.
   any content for the other licensed standards, requires either a license
   from the relevant standards body or a switch to a different source
   framework that's actually public domain.
-- Migrations have been validated with `alembic upgrade head --sql` (offline SQL
-  generation against the `postgresql` dialect) and exercised structurally via the
-  test suite's SQLite fixtures, but have **not** been run against a live Postgres
-  instance in this environment (no Docker available). The CI workflow
-  (`.github/workflows/ci.yml`) runs them for real against a Postgres service
-  container on every push.
+- Every migration is validated with `alembic upgrade head --sql` (offline SQL
+  generation against the `postgresql` dialect) before being committed, and the
+  CI workflow (`.github/workflows/ci.yml`) runs them for real against a
+  Postgres service container on every push. Several migrations (including
+  `202607100001`–`202607100003`) have additionally been exercised by hand
+  against a real local Postgres instance (portable binaries, no Docker) during
+  development — full up/down/up round-trips, not just the offline preview —
+  since offline mode can't catch everything: it's how the `create_type=False`
+  ENUM bug (see `202606250001`'s note) and a non-portable multi-argument
+  `.where()` in `202607100002`'s original draft were both actually found.
+- **`sso_connections.client_secret` is plaintext** — see `docs/security.md`'s
+  SSO/OIDC section for the same caveat from the API/security angle.

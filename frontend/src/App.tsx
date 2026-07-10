@@ -18,6 +18,8 @@ import { NotificationsPage } from './pages/NotificationsPage';
 import { RegisterOrganizationPage } from './pages/RegisterOrganizationPage';
 import { RisksPage } from './pages/RisksPage';
 import { RolesPage } from './pages/RolesPage';
+import { SsoCallbackPage } from './pages/SsoCallbackPage';
+import { SsoSettingsPage } from './pages/SsoSettingsPage';
 import { UsersPage } from './pages/UsersPage';
 
 export function App() {
@@ -27,6 +29,12 @@ export function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterOrganizationPage />} />
       </Route>
+
+      {/* Not wrapped in RedirectIfAuthenticated/RequireAuth: this must work
+          regardless of whether the SPA currently thinks it's authenticated --
+          it's what makes that determination, by applying the tokens the
+          backend's OIDC callback redirect just handed it. */}
+      <Route path="/sso/callback" element={<SsoCallbackPage />} />
 
       <Route element={<RequireAuth />}>
         <Route element={<AppShell />}>
@@ -44,6 +52,7 @@ export function App() {
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/ai" element={<AiChatPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/settings/sso" element={<SsoSettingsPage />} />
         </Route>
       </Route>
 

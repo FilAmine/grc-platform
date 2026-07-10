@@ -11,6 +11,7 @@ from backend.app.modules.organizations import api as organizations
 from backend.app.modules.permissions import api as permissions
 from backend.app.modules.risks import api as risks
 from backend.app.modules.roles import api as roles
+from backend.app.modules.sso import api as sso
 from backend.app.modules.users import api as users
 from fastapi import APIRouter
 
@@ -29,6 +30,7 @@ api_router.include_router(documents.router, prefix="/documents", tags=["document
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
 api_router.include_router(ai.router, prefix="/ai", tags=["ai"])
 api_router.include_router(notifications.router, prefix="/notifications", tags=["notifications"])
+api_router.include_router(sso.router, prefix="/sso", tags=["sso"])
 
 # Backward-compatible alias for clients using the previous system namespace.
 # Deliberately just the one route, not the whole compliance router -- that

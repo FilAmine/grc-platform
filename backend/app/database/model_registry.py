@@ -41,6 +41,7 @@ from backend.app.modules.organizations.models import OrganizationModel
 from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.risks.models import RiskModel
 from backend.app.modules.roles.models import RoleModel, role_permissions
+from backend.app.modules.sso.models import SsoConnectionModel
 from backend.app.modules.users.models import UserModel, user_roles
 
 __all__ = [
@@ -72,6 +73,7 @@ __all__ = [
     "RequirementModel",
     "RiskModel",
     "RoleModel",
+    "SsoConnectionModel",
     "UserModel",
     "role_permissions",
     "user_roles",

@@ -27,6 +27,10 @@ class OrganizationRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def get_by_slug(self, slug: str) -> Organization | None:
+        raise NotImplementedError
+
+    @abstractmethod
     def create(self, name: str, slug: str) -> Organization:
         raise NotImplementedError
 
@@ -49,6 +53,13 @@ class SqlAlchemyOrganizationRepository(OrganizationRepository):
         if model is None or model.deleted_at is not None:
             return None
         return to_organization(model)
+
+    def get_by_slug(self, slug: str) -> Organization | None:
+        statement = select(OrganizationModel).where(
+            OrganizationModel.slug == slug, OrganizationModel.deleted_at.is_(None)
+        )
+        model = self._session.scalars(statement).first()
+        return to_organization(model) if model else None
 
     def create(self, name: str, slug: str) -> Organization:
         model = OrganizationModel(name=name, slug=slug)
