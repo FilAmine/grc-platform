@@ -30,6 +30,12 @@ tenant ID. Most also require a specific RBAC permission code (see
 | PUT | `/roles/{role_id}/permissions` |
 | GET | `/permissions` |
 
+`UserRead` includes `role_ids: UUID[]` — the role IDs currently assigned to
+that user, derived from the `user_roles` join table (not a stored column).
+There's no endpoint that returns "roles for user X" separately; this field is
+the only way to read a user's role assignments, so cross-reference it against
+`GET /roles` to resolve names/permissions client-side.
+
 ## Organizations
 
 | Method | Path | Notes |
