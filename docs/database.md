@@ -76,6 +76,13 @@ own follow-up migration to insert the delta. This hasn't bitten anyone yet becau
 no environment has been deployed from this codebase, but it will the first time a
 new permission is added post-launch.
 
+**Note on `user_roles`/`role_permissions`**: both are plain many-to-many join
+tables (composite PK on the two FK columns, no extra columns of their own) —
+`users` has no `role_id`/`roles` column, and neither does `roles` carry a
+`permission_ids` column. The API's `UserRead.role_ids` field (see `docs/api.md`)
+is derived from `user_roles` at read time via the ORM relationship; it isn't a
+stored/denormalized column, so there's nothing to keep in sync on writes.
+
 ## Known gaps
 
 - **Only 4 real requirements are loaded** (ISO 27001:2022, Annex A.5.1/A.5.7/A.8.1/A.8.8),
