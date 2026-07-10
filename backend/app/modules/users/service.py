@@ -20,6 +20,7 @@ class User:
     is_superuser: bool
     failed_login_attempts: int
     locked_until: datetime | None
+    role_ids: list[UUID]
     created_at: datetime
     updated_at: datetime
 

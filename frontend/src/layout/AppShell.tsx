@@ -4,7 +4,9 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import GavelIcon from '@mui/icons-material/Gavel';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PeopleIcon from '@mui/icons-material/People';
 import RuleIcon from '@mui/icons-material/Rule';
+import SecurityIcon from '@mui/icons-material/Security';
 import ShieldIcon from '@mui/icons-material/Shield';
 import StorageIcon from '@mui/icons-material/Storage';
 import {
@@ -36,6 +38,8 @@ const NAV_ITEMS = [
   { to: '/documents', label: 'Documents', icon: <DescriptionIcon /> },
   { to: '/assets', label: 'Assets', icon: <StorageIcon /> },
   { to: '/assessments', label: 'Assessments', icon: <RuleIcon /> },
+  { to: '/users', label: 'Users', icon: <PeopleIcon /> },
+  { to: '/roles', label: 'Roles', icon: <SecurityIcon /> },
 ];
 
 export function AppShell() {

@@ -32,9 +32,13 @@
 - `require_permission(code)` is a FastAPI dependency: superusers bypass the
   check entirely; everyone else must hold a role (system or custom) granting that
   permission code.
-- **`is_superuser`** is a platform-operator flag, not assignable via the public
-  API (no endpoint sets it after registration) — it's for direct database/ops use,
-  e.g. the one Postgres operator managing the whole platform.
+- **`is_superuser`** bypasses `require_permission` entirely, regardless of role
+  assignment. It **is** settable via the public API: `POST /users` accepts an
+  `is_superuser` flag, so anyone holding `users:manage` can grant it to a new
+  user within their own organization (`modules/users/schemas.py::UserCreate`,
+  `modules/users/api.py::create_user`) — there is no additional guard requiring
+  platform-operator/direct-database access. Treat `users:manage` as
+  superuser-equivalent when reasoning about blast radius.
 
 ## Multi-tenant isolation
 

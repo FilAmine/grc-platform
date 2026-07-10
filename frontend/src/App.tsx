@@ -15,6 +15,8 @@ import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { RegisterOrganizationPage } from './pages/RegisterOrganizationPage';
 import { RisksPage } from './pages/RisksPage';
+import { RolesPage } from './pages/RolesPage';
+import { UsersPage } from './pages/UsersPage';
 
 export function App() {
   return (
@@ -36,6 +38,8 @@ export function App() {
           <Route path="/assets" element={<AssetsPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
           <Route path="/assessments/:assessmentId" element={<AssessmentDetailPage />} />
+          <Route path="/users" element={<UsersPage />} />
+          <Route path="/roles" element={<RolesPage />} />
         </Route>
       </Route>
 

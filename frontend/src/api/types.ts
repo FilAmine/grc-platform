@@ -61,8 +61,21 @@ export type User = {
   full_name: string;
   is_active: boolean;
   is_superuser: boolean;
+  role_ids: string[];
   created_at: string;
   updated_at: string;
+};
+
+export type UserCreate = {
+  email: string;
+  full_name: string;
+  password: string;
+  is_superuser?: boolean;
+};
+
+export type UserUpdate = {
+  full_name?: string;
+  is_active?: boolean;
 };
 
 export type TokenResponse = {
@@ -357,4 +370,35 @@ export type ComplianceScore = {
   framework_version_id: string;
   score: number;
   computed_at: string;
+};
+
+// --- RBAC (roles, permissions) ---------------------------------------------------
+
+export type Role = {
+  id: string;
+  organization_id: string | null;
+  name: string;
+  description: string;
+  is_system: boolean;
+  permission_codes: string[];
+  created_at: string;
+  updated_at: string;
+};
+
+export type RoleCreate = {
+  name: string;
+  description?: string;
+  permission_codes?: string[];
+};
+
+export type RolePermissionsUpdate = {
+  permission_codes: string[];
+};
+
+export type Permission = {
+  id: string;
+  code: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
 };

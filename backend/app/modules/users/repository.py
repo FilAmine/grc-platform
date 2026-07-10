@@ -21,6 +21,7 @@ def to_user(model: UserModel) -> User:
         is_superuser=model.is_superuser,
         failed_login_attempts=model.failed_login_attempts,
         locked_until=model.locked_until,
+        role_ids=[role.id for role in model.roles],
         created_at=model.created_at,
         updated_at=model.updated_at,
     )

@@ -44,5 +44,6 @@ class UserRead(ReadSchema):
     full_name: str
     is_active: bool
     is_superuser: bool
+    role_ids: list[UUID]
     created_at: datetime
     updated_at: datetime
