@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { RedirectIfAuthenticated } from './auth/RedirectIfAuthenticated';
 import { RequireAuth } from './auth/RequireAuth';
 import { AppShell } from './layout/AppShell';
+import { AiChatPage } from './pages/AiChatPage';
 import { AssessmentDetailPage } from './pages/AssessmentDetailPage';
 import { AssessmentsPage } from './pages/AssessmentsPage';
 import { AssetsPage } from './pages/AssetsPage';
@@ -13,6 +14,7 @@ import { DocumentDetailPage } from './pages/DocumentDetailPage';
 import { DocumentsPage } from './pages/DocumentsPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { NotificationsPage } from './pages/NotificationsPage';
 import { RegisterOrganizationPage } from './pages/RegisterOrganizationPage';
 import { RisksPage } from './pages/RisksPage';
 import { RolesPage } from './pages/RolesPage';
@@ -40,6 +42,8 @@ export function App() {
           <Route path="/assessments/:assessmentId" element={<AssessmentDetailPage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/roles" element={<RolesPage />} />
+          <Route path="/ai" element={<AiChatPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
         </Route>
       </Route>
 

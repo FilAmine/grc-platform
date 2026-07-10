@@ -23,16 +23,16 @@ real by reading every module. "Done" means: real persistence, a tested API, and
 - **Workflow engine**: a real, reusable `StateMachine` validating status
   transitions, used by audits/assessments/documents.
 - **Frontend**: auth flow (register/login/refresh/logout) end-to-end, protected
-  routing, Dashboard/Risks/Controls pages as a reference pattern for the rest.
+  routing, and a page for every module — Dashboard, Risks, Controls, Audits,
+  Documents, Assets/CMDB, Compliance assessments, RBAC admin (users/roles), AI
+  chat (with prompt library and knowledge-base seeding), and a notifications
+  inbox.
 - **CI**: lint (ruff, 0 errors), test (pytest, 89% coverage, `--cov-fail-under=80`
   gate), migrations exercised against a real Postgres service container,
   frontend typecheck + build, Docker image builds — all on every push/PR.
 
 ## Not done — biggest gaps first
 
-- **Frontend module coverage.** Dashboard/Risks/Controls/Audits/Documents/Assets/
-  Compliance assessments/RBAC admin (users/roles) have pages. AI chat and
-  notifications have working, tested backend APIs but no frontend yet.
 - **SSO / enterprise identity.** No LDAP, Azure AD, OIDC, or OAuth2 integration.
   No MFA. The auth module's structure (a pluggable provider behind a narrow
   interface, as done for AI providers) would extend naturally to this, but
@@ -63,6 +63,7 @@ real by reading every module. "Done" means: real persistence, a tested API, and
 
 ## Suggested next milestone
 
-With Dashboard/Risks/Controls/Audits/Documents/Assets/Compliance assessments/
-RBAC admin now covered, the remaining frontend gap is AI chat and
-notifications — both have working, tested backend APIs but no UI yet.
+Frontend module coverage is now complete (every backend module has a page).
+The highest-leverage next steps are backend-side: loading full framework
+requirement catalogs beyond the 4 illustrative ISO 27001:2022 rows, and SSO /
+enterprise identity, both listed above.

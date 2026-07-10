@@ -92,6 +92,8 @@ export type RegisterOrganizationRequest = {
   admin_password: string;
 };
 
+// --- Notifications -----------------------------------------------------------
+
 export type Notification = {
   id: string;
   organization_id: string;
@@ -401,4 +403,54 @@ export type Permission = {
   description: string;
   created_at: string;
   updated_at: string;
+};
+
+// --- AI (chat, prompt library, knowledge base) -----------------------------------
+
+export type ChatMessageRole = 'user' | 'assistant';
+
+export type ChatSession = {
+  id: string;
+  organization_id: string;
+  user_id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ChatSessionCreate = {
+  title?: string;
+};
+
+export type ChatMessage = {
+  id: string;
+  session_id: string;
+  role: ChatMessageRole;
+  content: string;
+  created_at: string;
+};
+
+export type ChatMessageCreate = {
+  content: string;
+};
+
+export type PromptTemplate = {
+  id: string;
+  organization_id: string | null;
+  name: string;
+  template_text: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PromptTemplateCreate = {
+  name: string;
+  template_text: string;
+  description?: string;
+};
+
+export type KnowledgeBaseDocumentCreate = {
+  title: string;
+  content: string;
 };
