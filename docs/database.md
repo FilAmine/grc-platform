@@ -65,6 +65,7 @@ migration `202607090001_auth_rbac_and_tenancy.py` and
 | `202607090005` | `assets` (CMDB) |
 | `202607090006` | `prompt_templates`, `knowledge_base_documents`, `chat_sessions`, `chat_messages` |
 | `202607090007` | `notifications` |
+| `202607100001` | Real requirement rows for NIST CSF 2.0 (14), HIPAA Security Rule (13), NIS2 (6), and DORA (5) — see the note below on why these four and not the rest of the catalog |
 
 **Note on permission seeding**: `202607090001`'s seed step imports
 `security.permissions.ALL_PERMISSIONS`/`SYSTEM_ROLES` at *migration run time*, not
@@ -83,13 +84,33 @@ tables (composite PK on the two FK columns, no extra columns of their own) —
 is derived from `user_roles` at read time via the ORM relationship; it isn't a
 stored/denormalized column, so there's nothing to keep in sync on writes.
 
+**Note on `202607100001` (which frameworks got real requirement text, and
+why)**: of the 10 catalog frameworks, only NIST CSF, HIPAA, NIS2, and DORA
+got real requirement rows. ISO 27001/27002/27005, CIS Controls, SOC 2, and
+PCI DSS remain catalog-only (name/code/version, zero requirement rows) —
+those are commercially licensed standards sold by their standards bodies
+(ISO, PCI SSC, AICPA, CIS), and this project has no rights to reproduce their
+official requirement text, even paraphrased. NIST CSF 2.0 and the HIPAA
+Security Rule (45 CFR Part 164) are US federal government works and are in
+the public domain (17 U.S.C. § 105); NIS2 and DORA are EU legislation, and
+the loaded rows paraphrase the legal obligations rather than quoting the
+directive/regulation text. The migration's data lives in
+`REQUIREMENTS_BY_FRAMEWORK` in
+`backend/migrations/versions/202607100001_public_domain_requirement_catalogs.py`
+— add rows there (and a follow-up migration, per the pattern below) for any
+future public-domain framework content; don't add rows for the licensed
+standards without first confirming a license actually permits it.
+
 ## Known gaps
 
-- **Only 4 real requirements are loaded** (ISO 27001:2022, Annex A.5.1/A.5.7/A.8.1/A.8.8),
-  as a working example of the generic engine. Loading full official requirement
-  text for every catalog entry is a data-loading exercise (and in several cases —
-  PCI DSS, HIPAA — involves licensed/restricted content), not a schema or code
-  change.
+- **ISO 27001 still only has 4 illustrative requirements** (Annex
+  A.5.1/A.5.7/A.8.1/A.8.8) as a worked example of the generic engine, and
+  ISO 27002/27005, CIS Controls, SOC 2, and PCI DSS have zero requirement
+  rows at all — see the `202607100001` note above for why (commercial
+  licensing, not a schema or code limitation). Loading more ISO content, or
+  any content for the other licensed standards, requires either a license
+  from the relevant standards body or a switch to a different source
+  framework that's actually public domain.
 - Migrations have been validated with `alembic upgrade head --sql` (offline SQL
   generation against the `postgresql` dialect) and exercised structurally via the
   test suite's SQLite fixtures, but have **not** been run against a live Postgres
