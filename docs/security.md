@@ -96,20 +96,74 @@ atomically.
   (`change-me-in-production`) is intentionally named to fail a security review if
   left in place.
 
+## Rate limiting
+
+Redis-backed fixed-window counters (`INCR` + `EXPIRE`, `backend/app/core/rate_limit.py`)
+applied to the unauthenticated/pre-auth `auth` endpoints, keyed by
+`request.client.host`:
+
+| Endpoint | Limit |
+|---|---|
+| `POST /auth/login` | 10 / 60s per IP |
+| `POST /auth/register-organization` | 5 / 3600s per IP |
+| `POST /auth/refresh` | 30 / 60s per IP (higher — legitimate 401-triggered auto-refresh) |
+| `GET /auth/sso/{organization_slug}/login` | 20 / 60s per IP |
+| `GET /auth/sso/callback` | 20 / 60s per IP |
+
+Thresholds are hardcoded constants next to the routes they gate
+(`modules/auth/api.py`), matching the existing
+`MAX_FAILED_LOGIN_ATTEMPTS`/`LOCKOUT_MINUTES` precedent rather than new
+`Settings` fields. This is on top of, not instead of, the per-account lockout
+above — the lockout stops credential-stuffing a single account, the rate
+limiter slows a distributed attacker rotating accounts or source IPs.
+
+**Fails open**: if Redis is unreachable, the request is allowed through and a
+warning is logged, rather than making Redis a hard availability dependency for
+login/auth. A small circuit breaker skips Redis entirely for 5s after the
+first failure, so an outage doesn't add a per-request connect-timeout to every
+call.
+
+**No reverse proxy sits in front of the backend** in this project's
+docker-compose setup, so `request.client.host` is the real client IP as seen
+directly by Starlette. If a proxy is ever added in front of the backend, this
+needs `ProxyHeadersMiddleware` (or equivalent trusted-hosts handling) —
+otherwise every request collapses into one shared rate-limit bucket keyed on
+the proxy's own IP.
+
+## Security headers
+
+Set at the application level for the API (`backend/app/core/security_headers.py`,
+a `BaseHTTPMiddleware` wired in `main.py`) and at the nginx level for the SPA
+(`frontend/nginx.conf`, the file actually copied into the frontend Docker
+image by `frontend/Dockerfile` — not `infra/nginx/default.conf`, which was an
+unreferenced duplicate and has been removed). There is no reverse proxy in
+front of the FastAPI backend, so these can't be assumed to come from a proxy
+layer.
+
+Both set: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
+`Referrer-Policy: strict-origin-when-cross-origin`,
+`Permissions-Policy: geolocation=(), microphone=(), camera=()`,
+`Strict-Transport-Security: max-age=31536000; includeSubDomains` (safe to send
+even over plain HTTP — browsers only enforce HSTS over HTTPS).
+
+**CSP**: the API's default policy is strict (`default-src 'self';
+frame-ancestors 'none'`), with a looser override specifically for
+`/api/v1/docs` and `/api/v1/redoc` (FastAPI's built-in Swagger UI/ReDoc pages,
+which load JS/CSS from `cdn.jsdelivr.net` and each embed an inline
+bootstrap `<script>` — `'unsafe-inline'` is required there since FastAPI's
+built-in docs routes have no nonce/hash wiring). The SPA's policy
+(`default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';
+img-src 'self' data:; connect-src 'self' http://localhost:8000; frame-ancestors
+'none'`) needs `style-src 'unsafe-inline'` for MUI's emotion runtime, which
+injects `<style>` tags without a nonce — a known, deliberate compromise rather
+than an oversight.
+
 ## Known gaps (tracked in `docs/roadmap.md`)
 
 - **No MFA** beyond whatever an org's connected SSO identity provider itself
   enforces — password login remains single-factor.
 - **No SAML or LDAP** — only OIDC is implemented (see the SSO/OIDC section
   above). `client_secret` is stored in plaintext, also noted above.
-- **No rate limiting** on `/auth/login` beyond the per-account lockout (a
-  distributed attacker rotating source IPs isn't currently slowed by anything
-  else). Redis is already a dependency and would be the natural backing store for
-  this.
-- **No security headers middleware** (CSP, HSTS, X-Frame-Options, etc.) — FastAPI's
-  default response headers are used as-is. Typically added at the reverse-proxy
-  layer (nginx, already in front of the frontend container) rather than in the
-  app; the `infra/nginx/default.conf` does not yet set these.
 - **No automated dependency/SAST scanning** wired into CI yet (e.g. `pip-audit`,
   `npm audit`, CodeQL) — `ruff` covers style/some correctness issues but not
   vulnerability scanning.

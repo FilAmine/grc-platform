@@ -2,6 +2,7 @@ from collections.abc import Generator
 from uuid import UUID
 
 from backend.app.core.config import settings
+from backend.app.core.redis_client import get_redis  # noqa: F401  (re-exported for rate_limit.py + test overrides)
 from backend.app.database import get_db_session
 from backend.app.modules.ai.providers import get_ai_provider
 from backend.app.modules.ai.repository import (

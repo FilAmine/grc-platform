@@ -64,8 +64,10 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   `docker-compose.yml` service for it. Candidate real uses once needed:
   recomputing compliance scores on a schedule, async document/evidence file
   processing, scheduled notification digests.
-- **Rate limiting, security headers middleware, dependency/SAST scanning in
-  CI.** See `docs/security.md` for the full list.
+- **Dependency/SAST scanning in CI** (e.g. `pip-audit`, `npm audit`, CodeQL) —
+  `ruff` covers style/some correctness issues but not vulnerability scanning.
+  Rate limiting and security headers middleware are done; see
+  `docs/security.md`.
 - **Kubernetes/Helm/Terraform.** See `docs/deployment.md`.
 - **EBIOS RM.** Named in the spec as "prepare for"; the current risk model
   (severity/status/owner) doesn't yet have the asset-value / threat-source /
