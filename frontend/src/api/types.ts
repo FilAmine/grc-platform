@@ -253,3 +253,108 @@ export type AssetCreate = {
   integrity?: ClassificationLevel;
   availability?: ClassificationLevel;
 };
+
+// --- Compliance (frameworks, assessments, evidence) -----------------------------
+
+export type AssessmentStatus = 'draft' | 'in_progress' | 'completed' | 'archived';
+export type RequirementResultStatus =
+  | 'not_assessed'
+  | 'compliant'
+  | 'partially_compliant'
+  | 'non_compliant'
+  | 'not_applicable';
+
+export type Framework = {
+  id: string;
+  organization_id: string | null;
+  code: string;
+  name: string;
+  description: string;
+  is_system: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type FrameworkVersion = {
+  id: string;
+  framework_id: string;
+  version: string;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Requirement = {
+  id: string;
+  framework_version_id: string;
+  category_id: string | null;
+  code: string;
+  title: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Assessment = {
+  id: string;
+  organization_id: string;
+  framework_version_id: string;
+  name: string;
+  status: AssessmentStatus;
+  period_start: string | null;
+  period_end: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AssessmentCreate = {
+  framework_version_id: string;
+  name: string;
+  period_start?: string | null;
+  period_end?: string | null;
+};
+
+export type AssessmentResult = {
+  id: string;
+  assessment_id: string;
+  requirement_id: string;
+  status: RequirementResultStatus;
+  notes: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AssessmentResultUpdate = {
+  status: RequirementResultStatus;
+  notes?: string;
+};
+
+export type Evidence = {
+  id: string;
+  organization_id: string;
+  assessment_result_id: string | null;
+  control_id: string | null;
+  title: string;
+  description: string;
+  file_reference: string;
+  uploaded_by_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type EvidenceCreate = {
+  title: string;
+  description?: string;
+  file_reference: string;
+  assessment_result_id?: string | null;
+  control_id?: string | null;
+};
+
+export type ComplianceScore = {
+  id: string;
+  organization_id: string;
+  assessment_id: string;
+  framework_version_id: string;
+  score: number;
+  computed_at: string;
+};

@@ -30,10 +30,10 @@ real by reading every module. "Done" means: real persistence, a tested API, and
 
 ## Not done — biggest gaps first
 
-- **Frontend module coverage.** Only Dashboard/Risks/Controls have pages. Audits,
-  documents, assets, compliance assessments, AI chat, notifications, and RBAC
-  admin (user/role management UI) have working, tested backend APIs but no
-  frontend. This is the single largest remaining gap.
+- **Frontend module coverage.** Dashboard/Risks/Controls/Audits/Documents/Assets
+  have pages. Compliance assessments, AI chat, notifications, and RBAC admin
+  (user/role management UI) have working, tested backend APIs but no frontend
+  yet. This is the largest remaining gap.
 - **SSO / enterprise identity.** No LDAP, Azure AD, OIDC, or OAuth2 integration.
   No MFA. The auth module's structure (a pluggable provider behind a narrow
   interface, as done for AI providers) would extend naturally to this, but
@@ -64,8 +64,8 @@ real by reading every module. "Done" means: real persistence, a tested API, and
 
 ## Suggested next milestone
 
-Given the backend is broad and tested but the frontend covers ~15% of it, the
-highest-leverage next step is extending the frontend to the audits and documents
-modules (both have complete, tested backend APIs and are natural next UI targets
-given they're core GRC workflows), followed by an admin UI for user/role
-management (currently API-only, exercised in tests but not clickable).
+With Dashboard/Risks/Controls/Audits/Documents/Assets now covered, the
+highest-leverage next step is a compliance assessments UI (the generic
+Framework/Requirement/Assessment/Evidence engine is the spec's centerpiece and
+still has no frontend), followed by an admin UI for user/role management
+(currently API-only, exercised in tests but not clickable).
