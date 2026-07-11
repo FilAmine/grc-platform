@@ -538,3 +538,28 @@ export type VulnerabilityCreate = {
   severity: VulnerabilitySeverity;
   description?: string;
 };
+
+// --- Incidents -----------------------------------------------------------------
+
+export type IncidentSeverity = 'low' | 'medium' | 'high' | 'critical';
+export type IncidentStatus = 'open' | 'investigating' | 'resolved' | 'closed';
+
+export type Incident = {
+  id: string;
+  organization_id: string;
+  title: string;
+  description: string;
+  severity: IncidentSeverity;
+  status: IncidentStatus;
+  reported_by: string;
+  resolved_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type IncidentCreate = {
+  title: string;
+  severity: IncidentSeverity;
+  reported_by: string;
+  description?: string;
+};

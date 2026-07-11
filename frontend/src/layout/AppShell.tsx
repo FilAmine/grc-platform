@@ -8,6 +8,7 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PeopleIcon from '@mui/icons-material/People';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import RuleIcon from '@mui/icons-material/Rule';
 import SecurityIcon from '@mui/icons-material/Security';
 import ShieldIcon from '@mui/icons-material/Shield';
@@ -42,6 +43,7 @@ const NAV_ITEMS = [
   { to: '/controls', label: 'Controls', icon: <FactCheckIcon /> },
   { to: '/audits', label: 'Audits', icon: <GavelIcon /> },
   { to: '/documents', label: 'Documents', icon: <DescriptionIcon /> },
+  { to: '/incidents', label: 'Incidents', icon: <ReportProblemIcon /> },
   { to: '/assets', label: 'Assets', icon: <StorageIcon /> },
   { to: '/departments', label: 'Departments', icon: <AccountTreeIcon /> },
   { to: '/threats', label: 'Threats', icon: <WarningAmberIcon /> },

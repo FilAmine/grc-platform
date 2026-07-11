@@ -44,6 +44,8 @@ THREATS_READ = "threats:read"
 THREATS_MANAGE = "threats:manage"
 VULNERABILITIES_READ = "vulnerabilities:read"
 VULNERABILITIES_MANAGE = "vulnerabilities:manage"
+INCIDENTS_READ = "incidents:read"
+INCIDENTS_MANAGE = "incidents:manage"
 
 ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(ORGANIZATIONS_READ, "View organization settings"),
@@ -75,6 +77,8 @@ ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(THREATS_MANAGE, "Create threats"),
     PermissionDef(VULNERABILITIES_READ, "View the vulnerability register"),
     PermissionDef(VULNERABILITIES_MANAGE, "Create vulnerabilities"),
+    PermissionDef(INCIDENTS_READ, "View incidents"),
+    PermissionDef(INCIDENTS_MANAGE, "Create incidents and change their status"),
 )
 
 # Default role -> permission-code mapping seeded for every new organization.
@@ -105,6 +109,8 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         THREATS_MANAGE,
         VULNERABILITIES_READ,
         VULNERABILITIES_MANAGE,
+        INCIDENTS_READ,
+        INCIDENTS_MANAGE,
     ),
     "Auditor": (
         ORGANIZATIONS_READ,
@@ -123,6 +129,7 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         DEPARTMENTS_READ,
         THREATS_READ,
         VULNERABILITIES_READ,
+        INCIDENTS_READ,
     ),
     "Viewer": (
         ORGANIZATIONS_READ,
@@ -137,5 +144,6 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         DEPARTMENTS_READ,
         THREATS_READ,
         VULNERABILITIES_READ,
+        INCIDENTS_READ,
     ),
 }

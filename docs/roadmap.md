@@ -51,6 +51,13 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   tenant-scoped) matching how Risks/Assets work, not yet cross-linked to the
   risk register (that wiring is the separate EBIOS RM item below). See
   `docs/api.md` for the endpoints.
+- **Incident management**: a standalone `Incident` entity with a real
+  status workflow (`open` → `investigating` → `resolved` → `closed`, plus a
+  `reopen` path) validated server-side by the same `StateMachine` the Audits
+  module uses — illegal transitions 409. Not yet cross-linked to
+  assets/threats/vulnerabilities (same "standalone first" reasoning as
+  Departments/Threats/Vulnerabilities above). See `docs/api.md` for the
+  endpoints.
 
 ## Not done — biggest gaps first
 
@@ -64,10 +71,9 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   to reproduce, even paraphrased, without a license from ISO/PCI SSC/AICPA/CIS.
   See `docs/database.md` for the full rationale and the migration to extend if
   a license is ever obtained.
-- **Tenants-as-distinct-from-organizations, incidents, generic
-  tasks-as-a-module.** The spec's module list names these separately; this
-  build treats `organizations` as the tenant root (no separate `tenants`
-  entity) and has no incident-management module.
+- **Tenants-as-distinct-from-organizations, generic tasks-as-a-module.** The
+  spec's module list names these separately; this build treats
+  `organizations` as the tenant root (no separate `tenants` entity).
   `corrective_actions`/`checklist_items` cover audit-scoped follow-up items
   but there's no cross-module generic "Task" entity yet.
 - **Celery.** Declared as a dependency; no worker process, no task, no
@@ -101,11 +107,11 @@ real by reading every module. "Done" means: real persistence, a tested API, and
 
 Frontend module coverage is complete (every backend module has a page), the
 public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
-SSO (OIDC), rate limiting/security headers/dependency scanning, and
-departments/threats/vulnerabilities are all in. What's left on this list is
-either intentionally out of reach (licensed standards text — needs a license,
-not a code change) or lower-priority infrastructure work (Celery, the
-FastAPI/starlette and Vite upgrades, Kubernetes/Terraform, EBIOS RM, the
-tenants/incidents/tasks module gaps). None of it blocks day-to-day use of
-what's already built; pick based on which specific gap actually matters for
-your next deployment target.
+SSO (OIDC), rate limiting/security headers/dependency scanning,
+departments/threats/vulnerabilities, and incident management are all in.
+What's left on this list is either intentionally out of reach (licensed
+standards text — needs a license, not a code change) or lower-priority
+infrastructure work (Celery, the FastAPI/starlette and Vite upgrades,
+Kubernetes/Terraform, EBIOS RM, the tenants/tasks module gaps). None of it
+blocks day-to-day use of what's already built; pick based on which specific
+gap actually matters for your next deployment target.

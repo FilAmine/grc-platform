@@ -142,6 +142,22 @@ A standalone threat catalog — not yet cross-linked to the risk register (see
 A standalone vulnerability register — same not-yet-cross-linked caveat as
 Threats above.
 
+## Incidents
+
+| Method | Path |
+|---|---|
+| GET/POST | `/incidents` |
+| GET | `/incidents/{incident_id}` |
+| PATCH | `/incidents/{incident_id}/status` |
+
+Unlike Departments/Threats/Vulnerabilities, Incidents has a real status
+workflow (`open` → `investigating` → `resolved` → `closed`, with a `reopen`
+path back from `resolved` to `investigating`) validated server-side by the
+same `StateMachine` the Audits module uses — an illegal transition returns
+`409`. `resolved_at` is set when status becomes `resolved` and cleared again
+on `reopen`. Standalone, not yet cross-linked to assets/threats/
+vulnerabilities.
+
 ## AI
 
 | Method | Path |

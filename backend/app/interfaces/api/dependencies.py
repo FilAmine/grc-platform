@@ -41,6 +41,8 @@ from backend.app.modules.departments.repository import SqlAlchemyDepartmentRepos
 from backend.app.modules.departments.service import DepartmentService
 from backend.app.modules.documents.repository import SqlAlchemyDocumentRepository
 from backend.app.modules.documents.service import DocumentService
+from backend.app.modules.incidents.repository import SqlAlchemyIncidentRepository
+from backend.app.modules.incidents.service import IncidentService
 from backend.app.modules.notifications.repository import SqlAlchemyNotificationRepository
 from backend.app.modules.notifications.service import NotificationService
 from backend.app.modules.organizations.repository import (
@@ -140,6 +142,10 @@ def get_compliance_scoring_service(
 
 def get_audit_service(session: Session = Depends(get_session)) -> AuditService:
     return AuditService(SqlAlchemyAuditRepository(session))
+
+
+def get_incident_service(session: Session = Depends(get_session)) -> IncidentService:
+    return IncidentService(SqlAlchemyIncidentRepository(session))
 
 
 def get_notification_service(session: Session = Depends(get_session)) -> NotificationService:

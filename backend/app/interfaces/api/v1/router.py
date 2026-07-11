@@ -7,6 +7,7 @@ from backend.app.modules.controls import api as controls
 from backend.app.modules.dashboard import api as dashboard
 from backend.app.modules.departments import api as departments
 from backend.app.modules.documents import api as documents
+from backend.app.modules.incidents import api as incidents
 from backend.app.modules.notifications import api as notifications
 from backend.app.modules.organizations import api as organizations
 from backend.app.modules.permissions import api as permissions
@@ -34,6 +35,7 @@ api_router.include_router(
 )
 api_router.include_router(compliance.router, prefix="/compliance", tags=["compliance"])
 api_router.include_router(audits.router, prefix="/audits", tags=["audits"])
+api_router.include_router(incidents.router, prefix="/incidents", tags=["incidents"])
 api_router.include_router(documents.router, prefix="/documents", tags=["documents"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
 api_router.include_router(ai.router, prefix="/ai", tags=["ai"])

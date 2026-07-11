@@ -69,6 +69,7 @@ migration `202607090001_auth_rbac_and_tenancy.py` and
 | `202607100002` | Adds the `sso:manage` permission and grants it to the global `Admin` system role — the first real (idempotent, find-or-create) instance of the permission-seeding follow-up-migration pattern described below |
 | `202607100003` | `sso_connections` (per-organization OIDC configuration) |
 | `202607110001` | `departments` (self-referential hierarchy), `threats`, `vulnerabilities`; seeds the 6 new permission codes and grants them to the 4 global system roles — the second real instance of the idempotent permission-seeding pattern `202607100002` established |
+| `202607120001` | `incidents` (with a `resolved_at` column driven by a real status-workflow state machine, unlike the other catalog/register tables); seeds 2 new permission codes and grants them — the third instance of the idempotent permission-seeding pattern |
 
 **Note on permission seeding**: `202607090001`'s seed step imports
 `security.permissions.ALL_PERMISSIONS`/`SYSTEM_ROLES` at *migration run time*, not

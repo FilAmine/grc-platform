@@ -13,6 +13,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { DepartmentsPage } from './pages/DepartmentsPage';
 import { DocumentDetailPage } from './pages/DocumentDetailPage';
 import { DocumentsPage } from './pages/DocumentsPage';
+import { IncidentsPage } from './pages/IncidentsPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { NotificationsPage } from './pages/NotificationsPage';
@@ -48,6 +49,7 @@ export function App() {
           <Route path="/audits/:auditId" element={<AuditDetailPage />} />
           <Route path="/documents" element={<DocumentsPage />} />
           <Route path="/documents/:documentId" element={<DocumentDetailPage />} />
+          <Route path="/incidents" element={<IncidentsPage />} />
           <Route path="/assets" element={<AssetsPage />} />
           <Route path="/departments" element={<DepartmentsPage />} />
           <Route path="/threats" element={<ThreatsPage />} />
