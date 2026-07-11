@@ -45,6 +45,23 @@ jobs:
       - name: Lint (ruff)
         run: ruff check backend
 
+      - name: Dependency vulnerability scan (pip-audit)
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt \
+            --ignore-vuln PYSEC-2026-161 \
+            --ignore-vuln PYSEC-2026-249 \
+            --ignore-vuln PYSEC-2026-248 \
+            --ignore-vuln PYSEC-2026-1943 \
+            --ignore-vuln PYSEC-2026-1941 \
+            --ignore-vuln CVE-2026-48818 \
+            --ignore-vuln CVE-2026-48817 \
+            --ignore-vuln PYSEC-2026-1325
+        # Ignored advisories are starlette (fix requires a FastAPI major-version
+        # upgrade, tracked as a separate follow-up in docs/roadmap.md) and ecdsa
+        # (no fix available upstream; verified inapplicable -- see
+        # docs/security.md's dependency scanning section for why).
+
       - name: Apply migrations against Postgres
         run: alembic upgrade head
 
@@ -68,6 +85,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Dependency vulnerability scan (npm audit)
+        # --omit=dev: the only two current findings (vite, esbuild) are dev
+        # server/build-tool-only issues with no production exposure -- nginx
+        # serves the pre-built static output, no vite/esbuild code ever runs
+        # there. The fix (vite 8.x) is a breaking change that broke MUI icon
+        # rendering when tried locally; see docs/security.md.
+        run: npm audit --omit=dev --audit-level=high
 
       - name: Typecheck
         run: npx tsc -b

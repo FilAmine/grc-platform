@@ -158,15 +158,54 @@ img-src 'self' data:; connect-src 'self' http://localhost:8000; frame-ancestors
 injects `<style>` tags without a nonce — a known, deliberate compromise rather
 than an oversight.
 
+## Dependency and static-analysis scanning
+
+CI runs `pip-audit -r requirements.txt` (backend), `npm audit --omit=dev
+--audit-level=high` (frontend), and CodeQL (`python` + `javascript-typescript`,
+on push/PR to `main` and weekly) — see `.github/workflows/ci.yml` and
+`.github/workflows/codeql.yml`.
+
+`pip-audit` ignores two advisory groups, both deliberately, not by omission:
+
+- **`starlette` (7 advisories, e.g. `PYSEC-2026-161`, `CVE-2026-48818`)**: fixed
+  only in `starlette>=1.0.1`, which needs a FastAPI version many minors ahead of
+  the one pinned here (`0.111.0` → `0.139.0`+) — a real upgrade with its own
+  regression risk across every endpoint and DI-based dependency in this
+  codebase, tracked as a separate item in `docs/roadmap.md` rather than bundled
+  into a CI config change.
+- **`ecdsa` (`PYSEC-2026-1325`, Minerva timing attack)**: no fix exists upstream
+  (the maintainers consider side-channel attacks out of scope for a pure-Python
+  implementation) and the vulnerable code paths — `sign_digest()`, key
+  generation, ECDH — are never exercised by this app: access/refresh tokens are
+  always HS256 (`security/tokens.py`), and the SSO `id_token` verification path
+  only ever does ECDSA/RSA *verification* (unaffected — see the advisory),
+  never signing.
+
+`python-jose`'s one remaining unfixed advisory (`PYSEC-2025-185`, a JWE
+decompression-bomb DoS) isn't ignored in CI because it doesn't need to be: this
+codebase never calls `jwe.decrypt` or otherwise touches JWE, only `jwt.encode`/
+`jwt.decode` — the vulnerable function simply isn't reachable, so it doesn't
+show up as a finding in the first place.
+
+`npm audit` runs with `--omit=dev`: the frontend's only two current findings
+are in `vite`/`esbuild` (dev server and build-tool only — no production
+exposure, since nginx serves the pre-built static output and no
+vite/esbuild code ever runs there). The fix (`vite@8.x`) was tried directly —
+`npm install` and `npx tsc -b`/`npm run build` succeeded, but the app crashed
+at runtime (`@mui/icons-material` deep imports resolved to module namespace
+objects instead of components, breaking every nav icon) when checked live in
+a browser. Reverted; tracked as a separate follow-up in `docs/roadmap.md`
+rather than shipped broken. `--omit=dev` is a real, stated tradeoff, not just
+an evasion for these two: it also means a future devDependency supply-chain
+compromise (a real category of past npm incidents) wouldn't be caught by
+this CI gate — production dependencies are scanned in full.
+
 ## Known gaps (tracked in `docs/roadmap.md`)
 
 - **No MFA** beyond whatever an org's connected SSO identity provider itself
   enforces — password login remains single-factor.
 - **No SAML or LDAP** — only OIDC is implemented (see the SSO/OIDC section
   above). `client_secret` is stored in plaintext, also noted above.
-- **No automated dependency/SAST scanning** wired into CI yet (e.g. `pip-audit`,
-  `npm audit`, CodeQL) — `ruff` covers style/some correctness issues but not
-  vulnerability scanning.
 - **Electronic signatures**: `DocumentApproval.signature_reference` is a schema
   slot for an external e-signature provider's envelope ID — no provider is
   integrated, so "electronic signature ready" means the data model has somewhere

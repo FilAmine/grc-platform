@@ -39,6 +39,12 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   configure it — see `docs/security.md`'s SSO/OIDC section for the full design
   and its known limitations (OIDC only, no SAML/LDAP; `client_secret` stored
   in plaintext).
+- **Rate limiting, security headers, dependency/SAST scanning**: Redis-backed
+  rate limits on the unauthenticated auth endpoints, CSP/HSTS/X-Frame-Options
+  etc. at the application (API) and nginx (SPA) levels, and `pip-audit`/
+  `npm audit`/CodeQL wired into CI — see `docs/security.md` for thresholds,
+  the fail-open/circuit-breaker design, CSP specifics, and which advisories
+  are deliberately ignored and why.
 
 ## Not done — biggest gaps first
 
@@ -64,10 +70,24 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   `docker-compose.yml` service for it. Candidate real uses once needed:
   recomputing compliance scores on a schedule, async document/evidence file
   processing, scheduled notification digests.
-- **Dependency/SAST scanning in CI** (e.g. `pip-audit`, `npm audit`, CodeQL) —
-  `ruff` covers style/some correctness issues but not vulnerability scanning.
-  Rate limiting and security headers middleware are done; see
-  `docs/security.md`.
+- **FastAPI/starlette major-version upgrade.** `pip-audit` (wired into CI, see
+  `docs/security.md`) flags several `starlette` advisories only fixed in
+  `starlette>=1.0.1`, which needs a FastAPI version many minors ahead of the
+  `0.111.0` pinned here. Deliberately not bundled into the dependency-scanning
+  CI work — it's a real upgrade with its own regression risk across every
+  endpoint and DI-based dependency in this codebase, and deserves its own pass
+  (bump, then re-run the full test suite plus a live-browser check of the
+  docs/SSO/rate-limiting paths that touch middleware most directly).
+- **Vite major-version upgrade.** `npm audit` flags `vite`/`esbuild` dev-tool
+  vulnerabilities only fixed in `vite@8.x`. Tried directly: typecheck and build
+  both passed, but the app crashed at runtime in a live-browser check —
+  `@mui/icons-material` deep imports (`import Icon from
+  '@mui/icons-material/X'`) resolved to module namespace objects instead of
+  components under Vite 8's dependency pre-bundling, breaking every nav icon
+  in `AppShell.tsx`. Reverted rather than shipped broken; needs its own pass
+  (likely switching to `@mui/icons-material`'s named exports, or whatever the
+  actual interop fix turns out to be) with the same live-browser verification,
+  not just typecheck/build green.
 - **Kubernetes/Helm/Terraform.** See `docs/deployment.md`.
 - **EBIOS RM.** Named in the spec as "prepare for"; the current risk model
   (severity/status/owner) doesn't yet have the asset-value / threat-source /
@@ -79,8 +99,8 @@ Frontend module coverage is complete (every backend module has a page), the
 public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
 SSO (OIDC) is in. What's left on this list is either intentionally out of
 reach (licensed standards text — needs a license, not a code change) or
-lower-priority infrastructure work (Celery, rate limiting, security headers,
-dependency/SAST scanning, Kubernetes/Terraform, EBIOS RM, the
+lower-priority infrastructure work (Celery, the FastAPI/starlette and Vite
+upgrades, Kubernetes/Terraform, EBIOS RM, the
 departments/threats/vulnerabilities/incidents module gaps). None of it blocks
 day-to-day use of what's already built; pick based on which specific gap
 actually matters for your next deployment target.
