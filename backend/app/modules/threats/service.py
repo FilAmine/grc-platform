@@ -44,6 +44,9 @@ class ThreatStore(Protocol):
     def list(self, organization_id: UUID) -> list[Threat]:
         raise NotImplementedError
 
+    def get_by_id(self, threat_id: UUID) -> Threat | None:
+        raise NotImplementedError
+
     def create(
         self,
         organization_id: UUID,
@@ -62,6 +65,9 @@ class ThreatService:
 
     def list_threats(self, organization_id: UUID) -> list[Threat]:
         return self._threats.list(organization_id)
+
+    def get_threat(self, threat_id: UUID) -> Threat | None:
+        return self._threats.get_by_id(threat_id)
 
     def create_threat(self, command: CreateThreatCommand) -> Threat:
         return self._threats.create(

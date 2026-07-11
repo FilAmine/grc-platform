@@ -1,5 +1,12 @@
+from datetime import UTC, datetime
+from uuid import uuid4
+
+from backend.app.modules.threats.models import ThreatModel
+from backend.app.modules.threats.repository import SqlAlchemyThreatRepository
+from backend.app.modules.threats.service import ThreatCategory, ThreatLikelihood
 from backend.tests.conftest import auth_headers, register_organization
 from fastapi.testclient import TestClient
+from sqlalchemy.orm import Session
 
 
 def test_threat_create_and_list(client: TestClient) -> None:
@@ -35,3 +42,28 @@ def test_threat_is_scoped_to_organization(client: TestClient) -> None:
 
     assert len(org_a_list) == 1
     assert org_b_list == []
+
+
+def test_threat_repository_get_by_id(db_session: Session) -> None:
+    repository = SqlAlchemyThreatRepository(db_session)
+    organization_id = uuid4()
+
+    created = repository.create(
+        organization_id=organization_id,
+        name="Insider threat",
+        category=ThreatCategory.HUMAN,
+        description="",
+        likelihood=ThreatLikelihood.MEDIUM,
+        created_by_id=None,
+    )
+
+    found = repository.get_by_id(created.id)
+    assert found is not None
+    assert found.id == created.id
+
+    assert repository.get_by_id(uuid4()) is None
+
+    model = db_session.get(ThreatModel, created.id)
+    model.deleted_at = datetime.now(UTC)
+    db_session.commit()
+    assert repository.get_by_id(created.id) is None

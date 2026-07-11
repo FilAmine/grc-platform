@@ -52,6 +52,14 @@ the only way to read a user's role assignments, so cross-reference it against
 | Method | Path |
 |---|---|
 | GET/POST | `/risks` |
+
+`RiskCreate`/`RiskRead` include 4 optional EBIOS-RM-flavored link fields:
+`asset_id`, `threat_id`, `vulnerability_id`, `feared_event_id` — each
+validated cross-tenant on `POST` (404 if the referenced row belongs to
+another organization). Settable at creation only: Risk has no `GET/{id}`,
+detail page, or update endpoint, so these links can't be edited after a risk
+is created. See `## Feared Events` below and `docs/roadmap.md`'s EBIOS RM
+entry for the full picture.
 | GET/POST | `/controls` |
 
 ## Compliance (generic framework engine)
@@ -157,6 +165,18 @@ same `StateMachine` the Audits module uses — an illegal transition returns
 `409`. `resolved_at` is set when status becomes `resolved` and cleared again
 on `reopen`. Standalone, not yet cross-linked to assets/threats/
 vulnerabilities.
+
+## Feared Events
+
+| Method | Path |
+|---|---|
+| GET/POST | `/feared-events` |
+
+An undesirable event impacting an asset's confidentiality, integrity, or
+availability — EBIOS RM's "feared event" (événement redouté), with
+"business value" and "supporting asset" deliberately conflated into the
+existing CMDB `Asset` (see `docs/roadmap.md`). `asset_id` is **required**
+(unlike Risk's 4 optional link fields) and validated cross-tenant on `POST`.
 
 ## AI
 

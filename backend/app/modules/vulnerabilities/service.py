@@ -44,6 +44,9 @@ class VulnerabilityStore(Protocol):
     def list(self, organization_id: UUID) -> list[Vulnerability]:
         raise NotImplementedError
 
+    def get_by_id(self, vulnerability_id: UUID) -> Vulnerability | None:
+        raise NotImplementedError
+
     def create(
         self,
         organization_id: UUID,
@@ -61,6 +64,9 @@ class VulnerabilityService:
 
     def list_vulnerabilities(self, organization_id: UUID) -> list[Vulnerability]:
         return self._vulnerabilities.list(organization_id)
+
+    def get_vulnerability(self, vulnerability_id: UUID) -> Vulnerability | None:
+        return self._vulnerabilities.get_by_id(vulnerability_id)
 
     def create_vulnerability(self, command: CreateVulnerabilityCommand) -> Vulnerability:
         return self._vulnerabilities.create(

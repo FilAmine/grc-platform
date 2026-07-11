@@ -30,6 +30,10 @@ class Risk:
     owner: str
     created_at: datetime
     updated_at: datetime
+    asset_id: UUID | None = None
+    threat_id: UUID | None = None
+    vulnerability_id: UUID | None = None
+    feared_event_id: UUID | None = None
 
 
 @dataclass(frozen=True)
@@ -40,6 +44,10 @@ class CreateRiskCommand:
     severity: RiskSeverity
     owner: str
     created_by_id: UUID | None = None
+    asset_id: UUID | None = None
+    threat_id: UUID | None = None
+    vulnerability_id: UUID | None = None
+    feared_event_id: UUID | None = None
 
 
 class RiskStore(Protocol):
@@ -54,6 +62,10 @@ class RiskStore(Protocol):
         severity: RiskSeverity,
         owner: str,
         created_by_id: UUID | None = None,
+        asset_id: UUID | None = None,
+        threat_id: UUID | None = None,
+        vulnerability_id: UUID | None = None,
+        feared_event_id: UUID | None = None,
     ) -> Risk:
         raise NotImplementedError
 
@@ -73,4 +85,8 @@ class RiskService:
             severity=command.severity,
             owner=command.owner,
             created_by_id=command.created_by_id,
+            asset_id=command.asset_id,
+            threat_id=command.threat_id,
+            vulnerability_id=command.vulnerability_id,
+            feared_event_id=command.feared_event_id,
         )

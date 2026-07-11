@@ -70,6 +70,7 @@ migration `202607090001_auth_rbac_and_tenancy.py` and
 | `202607100003` | `sso_connections` (per-organization OIDC configuration) |
 | `202607110001` | `departments` (self-referential hierarchy), `threats`, `vulnerabilities`; seeds the 6 new permission codes and grants them to the 4 global system roles — the second real instance of the idempotent permission-seeding pattern `202607100002` established |
 | `202607120001` | `incidents` (with a `resolved_at` column driven by a real status-workflow state machine, unlike the other catalog/register tables); seeds 2 new permission codes and grants them — the third instance of the idempotent permission-seeding pattern |
+| `202607130001` | `feared_events` (`asset_id` `NOT NULL`, `ondelete="RESTRICT"` — mirrors `Assessment`/`AssessmentResult.framework_version_id`'s existing `RESTRICT` precedent); adds 4 nullable FK columns to the pre-existing `risks` table (`asset_id`, `threat_id`, `vulnerability_id`, `feared_event_id`, all `ondelete="SET NULL"`) via `op.add_column`/`op.create_foreign_key` — the first migration in this repo to `ALTER` an existing table rather than only `create_table`; seeds 2 new permission codes and grants them — the fourth instance of the idempotent permission-seeding pattern |
 
 **Note on permission seeding**: `202607090001`'s seed step imports
 `security.permissions.ALL_PERMISSIONS`/`SYSTEM_ROLES` at *migration run time*, not

@@ -30,6 +30,10 @@ class VulnerabilityRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def get_by_id(self, vulnerability_id: UUID) -> Vulnerability | None:
+        raise NotImplementedError
+
+    @abstractmethod
     def create(
         self,
         organization_id: UUID,
@@ -54,6 +58,12 @@ class SqlAlchemyVulnerabilityRepository(VulnerabilityRepository):
         )
         rows = self._session.scalars(statement).all()
         return [to_vulnerability(row) for row in rows]
+
+    def get_by_id(self, vulnerability_id: UUID) -> Vulnerability | None:
+        model = self._session.get(VulnerabilityModel, vulnerability_id)
+        if model is None or model.deleted_at is not None:
+            return None
+        return to_vulnerability(model)
 
     def create(
         self,

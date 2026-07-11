@@ -18,6 +18,10 @@ def to_risk(model: RiskModel) -> Risk:
         owner=model.owner,
         created_at=model.created_at,
         updated_at=model.updated_at,
+        asset_id=model.asset_id,
+        threat_id=model.threat_id,
+        vulnerability_id=model.vulnerability_id,
+        feared_event_id=model.feared_event_id,
     )
 
 
@@ -35,6 +39,10 @@ class RiskRepository(ABC):
         severity: RiskSeverity,
         owner: str,
         created_by_id: UUID | None = None,
+        asset_id: UUID | None = None,
+        threat_id: UUID | None = None,
+        vulnerability_id: UUID | None = None,
+        feared_event_id: UUID | None = None,
     ) -> Risk:
         raise NotImplementedError
 
@@ -62,6 +70,10 @@ class SqlAlchemyRiskRepository(RiskRepository):
         severity: RiskSeverity,
         owner: str,
         created_by_id: UUID | None = None,
+        asset_id: UUID | None = None,
+        threat_id: UUID | None = None,
+        vulnerability_id: UUID | None = None,
+        feared_event_id: UUID | None = None,
     ) -> Risk:
         model = RiskModel(
             organization_id=organization_id,
@@ -72,6 +84,10 @@ class SqlAlchemyRiskRepository(RiskRepository):
             owner=owner,
             created_by_id=created_by_id,
             updated_by_id=created_by_id,
+            asset_id=asset_id,
+            threat_id=threat_id,
+            vulnerability_id=vulnerability_id,
+            feared_event_id=feared_event_id,
         )
         self._session.add(model)
         self._session.commit()

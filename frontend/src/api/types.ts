@@ -19,6 +19,12 @@ export type Risk = {
   owner: string;
   created_at: string;
   updated_at: string;
+  // EBIOS-RM-flavored structural links -- settable at creation only, see
+  // docs/roadmap.md for the stated boundary (no Risk detail page/update yet).
+  asset_id: string | null;
+  threat_id: string | null;
+  vulnerability_id: string | null;
+  feared_event_id: string | null;
 };
 
 export type RiskCreate = {
@@ -26,6 +32,10 @@ export type RiskCreate = {
   description: string;
   severity: RiskSeverity;
   owner: string;
+  asset_id?: string | null;
+  threat_id?: string | null;
+  vulnerability_id?: string | null;
+  feared_event_id?: string | null;
 };
 
 export type ControlStatus = 'draft' | 'active' | 'retired';
@@ -561,5 +571,30 @@ export type IncidentCreate = {
   title: string;
   severity: IncidentSeverity;
   reported_by: string;
+  description?: string;
+};
+
+// --- Feared Events ---------------------------------------------------------------
+
+export type FearedEventCriterion = 'confidentiality' | 'integrity' | 'availability';
+export type FearedEventGravity = 'low' | 'medium' | 'high' | 'critical';
+
+export type FearedEvent = {
+  id: string;
+  organization_id: string;
+  title: string;
+  description: string;
+  asset_id: string;
+  criterion: FearedEventCriterion;
+  gravity: FearedEventGravity;
+  created_at: string;
+  updated_at: string;
+};
+
+export type FearedEventCreate = {
+  title: string;
+  asset_id: string;
+  criterion: FearedEventCriterion;
+  gravity: FearedEventGravity;
   description?: string;
 };

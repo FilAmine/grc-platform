@@ -37,6 +37,7 @@ from backend.app.modules.documents.models import (
     DocumentModel,
     DocumentVersionModel,
 )
+from backend.app.modules.feared_events.models import FearedEventModel
 from backend.app.modules.incidents.models import IncidentModel
 from backend.app.modules.notifications.models import NotificationModel
 from backend.app.modules.organizations.models import OrganizationModel
@@ -67,6 +68,7 @@ __all__ = [
     "ControlMappingModel",
     "ControlModel",
     "EvidenceModel",
+    "FearedEventModel",
     "FrameworkModel",
     "FrameworkVersionModel",
     "IncidentModel",

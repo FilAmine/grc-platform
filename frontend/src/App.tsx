@@ -13,6 +13,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { DepartmentsPage } from './pages/DepartmentsPage';
 import { DocumentDetailPage } from './pages/DocumentDetailPage';
 import { DocumentsPage } from './pages/DocumentsPage';
+import { FearedEventsPage } from './pages/FearedEventsPage';
 import { IncidentsPage } from './pages/IncidentsPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -54,6 +55,7 @@ export function App() {
           <Route path="/departments" element={<DepartmentsPage />} />
           <Route path="/threats" element={<ThreatsPage />} />
           <Route path="/vulnerabilities" element={<VulnerabilitiesPage />} />
+          <Route path="/feared-events" element={<FearedEventsPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
           <Route path="/assessments/:assessmentId" element={<AssessmentDetailPage />} />
           <Route path="/users" element={<UsersPage />} />

@@ -1,5 +1,12 @@
+from datetime import UTC, datetime
+from uuid import uuid4
+
+from backend.app.modules.vulnerabilities.models import VulnerabilityModel
+from backend.app.modules.vulnerabilities.repository import SqlAlchemyVulnerabilityRepository
+from backend.app.modules.vulnerabilities.service import VulnerabilitySeverity
 from backend.tests.conftest import auth_headers, register_organization
 from fastapi.testclient import TestClient
+from sqlalchemy.orm import Session
 
 
 def test_vulnerability_create_and_list(client: TestClient) -> None:
@@ -35,3 +42,27 @@ def test_vulnerability_is_scoped_to_organization(client: TestClient) -> None:
 
     assert len(org_a_list) == 1
     assert org_b_list == []
+
+
+def test_vulnerability_repository_get_by_id(db_session: Session) -> None:
+    repository = SqlAlchemyVulnerabilityRepository(db_session)
+    organization_id = uuid4()
+
+    created = repository.create(
+        organization_id=organization_id,
+        name="Unpatched Log4j",
+        severity=VulnerabilitySeverity.CRITICAL,
+        description="",
+        created_by_id=None,
+    )
+
+    found = repository.get_by_id(created.id)
+    assert found is not None
+    assert found.id == created.id
+
+    assert repository.get_by_id(uuid4()) is None
+
+    model = db_session.get(VulnerabilityModel, created.id)
+    model.deleted_at = datetime.now(UTC)
+    db_session.commit()
+    assert repository.get_by_id(created.id) is None

@@ -5,6 +5,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import GavelIcon from '@mui/icons-material/Gavel';
+import GppMaybeIcon from '@mui/icons-material/GppMaybe';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PeopleIcon from '@mui/icons-material/People';
@@ -48,6 +49,7 @@ const NAV_ITEMS = [
   { to: '/departments', label: 'Departments', icon: <AccountTreeIcon /> },
   { to: '/threats', label: 'Threats', icon: <WarningAmberIcon /> },
   { to: '/vulnerabilities', label: 'Vulnerabilities', icon: <BugReportIcon /> },
+  { to: '/feared-events', label: 'Feared Events', icon: <GppMaybeIcon /> },
   { to: '/assessments', label: 'Assessments', icon: <RuleIcon /> },
   { to: '/users', label: 'Users', icon: <PeopleIcon /> },
   { to: '/roles', label: 'Roles', icon: <SecurityIcon /> },

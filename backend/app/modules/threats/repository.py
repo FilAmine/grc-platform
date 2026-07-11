@@ -26,6 +26,10 @@ class ThreatRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def get_by_id(self, threat_id: UUID) -> Threat | None:
+        raise NotImplementedError
+
+    @abstractmethod
     def create(
         self,
         organization_id: UUID,
@@ -51,6 +55,12 @@ class SqlAlchemyThreatRepository(ThreatRepository):
         )
         rows = self._session.scalars(statement).all()
         return [to_threat(row) for row in rows]
+
+    def get_by_id(self, threat_id: UUID) -> Threat | None:
+        model = self._session.get(ThreatModel, threat_id)
+        if model is None or model.deleted_at is not None:
+            return None
+        return to_threat(model)
 
     def create(
         self,

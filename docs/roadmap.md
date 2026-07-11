@@ -58,6 +58,22 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   assets/threats/vulnerabilities (same "standalone first" reasoning as
   Departments/Threats/Vulnerabilities above). See `docs/api.md` for the
   endpoints.
+- **EBIOS-RM-flavored risk linking**: `Risk` gained 4 optional,
+  cross-tenant-validated FK fields — `asset_id`, `threat_id`,
+  `vulnerability_id`, `feared_event_id` — plus a new standalone `FearedEvent`
+  catalog (`asset_id` required, `criterion` = which CIA property is
+  impacted, `gravity`). This is the structural linking
+  `docs/roadmap.md` previously called out as missing ("asset-value /
+  threat-source / feared-events structure"), **not** the full 5-workshop
+  ANSSI EBIOS RM methodology: no risk-source/target-objective (SR/OV)
+  pairing, no strategic/operational attack-path scenarios, no
+  MITRE-ATT&CK-style technique modeling, no risk-treatment workflow. EBIOS
+  RM's "business value" and "supporting asset" tiers are also deliberately
+  conflated into the existing CMDB `Asset` — a stated simplification, not an
+  oversight. Risk still has no `GET/{id}`, detail page, or update endpoint,
+  so these links are settable at creation only; editing them later needs a
+  future Risk detail page + `PATCH /risks/{id}`. See `docs/api.md` for the
+  endpoints.
 
 ## Not done — biggest gaps first
 
@@ -99,19 +115,23 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   actual interop fix turns out to be) with the same live-browser verification,
   not just typecheck/build green.
 - **Kubernetes/Helm/Terraform.** See `docs/deployment.md`.
-- **EBIOS RM.** Named in the spec as "prepare for"; the current risk model
-  (severity/status/owner) doesn't yet have the asset-value / threat-source /
-  feared-events structure EBIOS RM assessments need.
+- **Full EBIOS RM methodology.** The structural linking (asset/threat/
+  vulnerability/feared-event) is done — see "Done" above — but the full
+  5-workshop ANSSI methodology (risk-source/target-objective pairing,
+  strategic/operational attack-path scenarios, MITRE-ATT&CK-style technique
+  modeling, risk-treatment workflow) is not attempted and would be its own
+  multi-week effort if ever pursued.
 
 ## Suggested next milestone
 
 Frontend module coverage is complete (every backend module has a page), the
 public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
 SSO (OIDC), rate limiting/security headers/dependency scanning,
-departments/threats/vulnerabilities, and incident management are all in.
-What's left on this list is either intentionally out of reach (licensed
-standards text — needs a license, not a code change) or lower-priority
-infrastructure work (Celery, the FastAPI/starlette and Vite upgrades,
-Kubernetes/Terraform, EBIOS RM, the tenants/tasks module gaps). None of it
-blocks day-to-day use of what's already built; pick based on which specific
-gap actually matters for your next deployment target.
+departments/threats/vulnerabilities, incident management, and EBIOS-RM-
+flavored risk linking are all in. What's left on this list is either
+intentionally out of reach (licensed standards text — needs a license, not a
+code change) or lower-priority infrastructure work (Celery, the
+FastAPI/starlette and Vite upgrades, Kubernetes/Terraform, the full 5-workshop
+EBIOS RM methodology, the tenants/tasks module gaps). None of it blocks
+day-to-day use of what's already built; pick based on which specific gap
+actually matters for your next deployment target.

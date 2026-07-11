@@ -41,6 +41,8 @@ from backend.app.modules.departments.repository import SqlAlchemyDepartmentRepos
 from backend.app.modules.departments.service import DepartmentService
 from backend.app.modules.documents.repository import SqlAlchemyDocumentRepository
 from backend.app.modules.documents.service import DocumentService
+from backend.app.modules.feared_events.repository import SqlAlchemyFearedEventRepository
+from backend.app.modules.feared_events.service import FearedEventService
 from backend.app.modules.incidents.repository import SqlAlchemyIncidentRepository
 from backend.app.modules.incidents.service import IncidentService
 from backend.app.modules.notifications.repository import SqlAlchemyNotificationRepository
@@ -88,6 +90,10 @@ def get_risk_service(session: Session = Depends(get_session)) -> RiskService:
 
 def get_department_service(session: Session = Depends(get_session)) -> DepartmentService:
     return DepartmentService(SqlAlchemyDepartmentRepository(session))
+
+
+def get_feared_event_service(session: Session = Depends(get_session)) -> FearedEventService:
+    return FearedEventService(SqlAlchemyFearedEventRepository(session))
 
 
 def get_threat_service(session: Session = Depends(get_session)) -> ThreatService:
