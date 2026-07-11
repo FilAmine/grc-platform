@@ -112,6 +112,36 @@ only — it does not re-expose the rest of the compliance API.
 | GET | `/assets/{asset_id}` |
 | PATCH | `/assets/{asset_id}/lifecycle` |
 
+## Departments
+
+| Method | Path |
+|---|---|
+| GET/POST | `/departments` |
+
+A flat list, ordered by `created_at`; the `parent_department_id` on each row
+forms a hierarchy. There's no server-side tree endpoint — the frontend walks
+`parent_department_id` client-side to render indentation. `POST` 404s if
+`parent_department_id` doesn't reference a department in the caller's own
+organization.
+
+## Threats
+
+| Method | Path |
+|---|---|
+| GET/POST | `/threats` |
+
+A standalone threat catalog — not yet cross-linked to the risk register (see
+`docs/roadmap.md`'s EBIOS RM item).
+
+## Vulnerabilities
+
+| Method | Path |
+|---|---|
+| GET/POST | `/vulnerabilities` |
+
+A standalone vulnerability register — same not-yet-cross-linked caveat as
+Threats above.
+
 ## AI
 
 | Method | Path |

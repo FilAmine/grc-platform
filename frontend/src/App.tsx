@@ -10,6 +10,7 @@ import { AuditDetailPage } from './pages/AuditDetailPage';
 import { AuditsPage } from './pages/AuditsPage';
 import { ControlsPage } from './pages/ControlsPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { DepartmentsPage } from './pages/DepartmentsPage';
 import { DocumentDetailPage } from './pages/DocumentDetailPage';
 import { DocumentsPage } from './pages/DocumentsPage';
 import { LoginPage } from './pages/LoginPage';
@@ -20,7 +21,9 @@ import { RisksPage } from './pages/RisksPage';
 import { RolesPage } from './pages/RolesPage';
 import { SsoCallbackPage } from './pages/SsoCallbackPage';
 import { SsoSettingsPage } from './pages/SsoSettingsPage';
+import { ThreatsPage } from './pages/ThreatsPage';
 import { UsersPage } from './pages/UsersPage';
+import { VulnerabilitiesPage } from './pages/VulnerabilitiesPage';
 
 export function App() {
   return (
@@ -46,6 +49,9 @@ export function App() {
           <Route path="/documents" element={<DocumentsPage />} />
           <Route path="/documents/:documentId" element={<DocumentDetailPage />} />
           <Route path="/assets" element={<AssetsPage />} />
+          <Route path="/departments" element={<DepartmentsPage />} />
+          <Route path="/threats" element={<ThreatsPage />} />
+          <Route path="/vulnerabilities" element={<VulnerabilitiesPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
           <Route path="/assessments/:assessmentId" element={<AssessmentDetailPage />} />
           <Route path="/users" element={<UsersPage />} />

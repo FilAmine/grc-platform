@@ -38,6 +38,12 @@ ASSETS_MANAGE = "assets:manage"
 AI_USE = "ai:use"
 AI_MANAGE = "ai:manage"
 SSO_MANAGE = "sso:manage"
+DEPARTMENTS_READ = "departments:read"
+DEPARTMENTS_MANAGE = "departments:manage"
+THREATS_READ = "threats:read"
+THREATS_MANAGE = "threats:manage"
+VULNERABILITIES_READ = "vulnerabilities:read"
+VULNERABILITIES_MANAGE = "vulnerabilities:manage"
 
 ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(ORGANIZATIONS_READ, "View organization settings"),
@@ -63,6 +69,12 @@ ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(AI_USE, "Use the AI chat assistant and prompt library"),
     PermissionDef(AI_MANAGE, "Manage prompt templates and the AI knowledge base"),
     PermissionDef(SSO_MANAGE, "Configure the organization's SSO (OIDC) connection"),
+    PermissionDef(DEPARTMENTS_READ, "View the department hierarchy"),
+    PermissionDef(DEPARTMENTS_MANAGE, "Create departments"),
+    PermissionDef(THREATS_READ, "View the threat catalog"),
+    PermissionDef(THREATS_MANAGE, "Create threats"),
+    PermissionDef(VULNERABILITIES_READ, "View the vulnerability register"),
+    PermissionDef(VULNERABILITIES_MANAGE, "Create vulnerabilities"),
 )
 
 # Default role -> permission-code mapping seeded for every new organization.
@@ -87,6 +99,12 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         ASSETS_MANAGE,
         AI_USE,
         AI_MANAGE,
+        DEPARTMENTS_READ,
+        DEPARTMENTS_MANAGE,
+        THREATS_READ,
+        THREATS_MANAGE,
+        VULNERABILITIES_READ,
+        VULNERABILITIES_MANAGE,
     ),
     "Auditor": (
         ORGANIZATIONS_READ,
@@ -102,6 +120,9 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         DOCUMENTS_READ,
         ASSETS_READ,
         AI_USE,
+        DEPARTMENTS_READ,
+        THREATS_READ,
+        VULNERABILITIES_READ,
     ),
     "Viewer": (
         ORGANIZATIONS_READ,
@@ -113,5 +134,8 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         DOCUMENTS_READ,
         ASSETS_READ,
         AI_USE,
+        DEPARTMENTS_READ,
+        THREATS_READ,
+        VULNERABILITIES_READ,
     ),
 }

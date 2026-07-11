@@ -31,6 +31,7 @@ from backend.app.modules.compliance.models import (
     RequirementModel,
 )
 from backend.app.modules.controls.models import ControlModel
+from backend.app.modules.departments.models import DepartmentModel
 from backend.app.modules.documents.models import (
     DocumentApprovalModel,
     DocumentModel,
@@ -42,7 +43,9 @@ from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.risks.models import RiskModel
 from backend.app.modules.roles.models import RoleModel, role_permissions
 from backend.app.modules.sso.models import SsoConnectionModel
+from backend.app.modules.threats.models import ThreatModel
 from backend.app.modules.users.models import UserModel, user_roles
+from backend.app.modules.vulnerabilities.models import VulnerabilityModel
 
 __all__ = [
     "AssessmentModel",
@@ -54,6 +57,7 @@ __all__ = [
     "ChecklistItemModel",
     "ComplianceScoreModel",
     "CorrectiveActionModel",
+    "DepartmentModel",
     "DocumentApprovalModel",
     "DocumentModel",
     "DocumentVersionModel",
@@ -74,7 +78,9 @@ __all__ = [
     "RiskModel",
     "RoleModel",
     "SsoConnectionModel",
+    "ThreatModel",
     "UserModel",
+    "VulnerabilityModel",
     "role_permissions",
     "user_roles",
 ]

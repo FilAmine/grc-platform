@@ -45,6 +45,12 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   `npm audit`/CodeQL wired into CI — see `docs/security.md` for thresholds,
   the fail-open/circuit-breaker design, CSP specifics, and which advisories
   are deliberately ignored and why.
+- **Departments, threats, vulnerabilities**: a self-referential department
+  hierarchy under an organization, a threat catalog, and a vulnerability
+  register — each a standalone catalog/register module (list+create,
+  tenant-scoped) matching how Risks/Assets work, not yet cross-linked to the
+  risk register (that wiring is the separate EBIOS RM item below). See
+  `docs/api.md` for the endpoints.
 
 ## Not done — biggest gaps first
 
@@ -58,14 +64,12 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   to reproduce, even paraphrased, without a license from ISO/PCI SSC/AICPA/CIS.
   See `docs/database.md` for the full rationale and the migration to extend if
   a license is ever obtained.
-- **Departments, tenants-as-distinct-from-organizations, threats,
-  vulnerabilities, incidents, generic tasks-as-a-module.** The spec's module list
-  names these separately; this build treats `organizations` as the tenant root
-  (no separate `tenants` entity), doesn't yet have a `departments` hierarchy
-  under an org, and the risk register doesn't yet have separate Threat/
-  Vulnerability catalog entities (EBIOS RM readiness) or an incident-management
-  module. `corrective_actions`/`checklist_items` cover audit-scoped follow-up
-  items but there's no cross-module generic "Task" entity yet.
+- **Tenants-as-distinct-from-organizations, incidents, generic
+  tasks-as-a-module.** The spec's module list names these separately; this
+  build treats `organizations` as the tenant root (no separate `tenants`
+  entity) and has no incident-management module.
+  `corrective_actions`/`checklist_items` cover audit-scoped follow-up items
+  but there's no cross-module generic "Task" entity yet.
 - **Celery.** Declared as a dependency; no worker process, no task, no
   `docker-compose.yml` service for it. Candidate real uses once needed:
   recomputing compliance scores on a schedule, async document/evidence file
@@ -97,10 +101,11 @@ real by reading every module. "Done" means: real persistence, a tested API, and
 
 Frontend module coverage is complete (every backend module has a page), the
 public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
-SSO (OIDC) is in. What's left on this list is either intentionally out of
-reach (licensed standards text — needs a license, not a code change) or
-lower-priority infrastructure work (Celery, the FastAPI/starlette and Vite
-upgrades, Kubernetes/Terraform, EBIOS RM, the
-departments/threats/vulnerabilities/incidents module gaps). None of it blocks
-day-to-day use of what's already built; pick based on which specific gap
-actually matters for your next deployment target.
+SSO (OIDC), rate limiting/security headers/dependency scanning, and
+departments/threats/vulnerabilities are all in. What's left on this list is
+either intentionally out of reach (licensed standards text — needs a license,
+not a code change) or lower-priority infrastructure work (Celery, the
+FastAPI/starlette and Vite upgrades, Kubernetes/Terraform, EBIOS RM, the
+tenants/incidents/tasks module gaps). None of it blocks day-to-day use of
+what's already built; pick based on which specific gap actually matters for
+your next deployment target.

@@ -37,6 +37,8 @@ from backend.app.modules.controls.repository import (
 )
 from backend.app.modules.controls.service import ControlService
 from backend.app.modules.dashboard.service import DashboardService
+from backend.app.modules.departments.repository import SqlAlchemyDepartmentRepository
+from backend.app.modules.departments.service import DepartmentService
 from backend.app.modules.documents.repository import SqlAlchemyDocumentRepository
 from backend.app.modules.documents.service import DocumentService
 from backend.app.modules.notifications.repository import SqlAlchemyNotificationRepository
@@ -56,8 +58,12 @@ from backend.app.modules.roles.service import RoleService
 from backend.app.modules.sso.oidc_client import HttpxOidcClient, OidcClient
 from backend.app.modules.sso.repository import SqlAlchemySsoConnectionRepository
 from backend.app.modules.sso.service import SsoService
+from backend.app.modules.threats.repository import SqlAlchemyThreatRepository
+from backend.app.modules.threats.service import ThreatService
 from backend.app.modules.users.repository import SqlAlchemyUserRepository
 from backend.app.modules.users.service import User, UserService
+from backend.app.modules.vulnerabilities.repository import SqlAlchemyVulnerabilityRepository
+from backend.app.modules.vulnerabilities.service import VulnerabilityService
 from backend.app.security.tokens import InvalidTokenError, decode_access_token
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -76,6 +82,18 @@ def get_organization_service(session: Session = Depends(get_session)) -> Organiz
 
 def get_risk_service(session: Session = Depends(get_session)) -> RiskService:
     return RiskService(SqlAlchemyRiskRepository(session))
+
+
+def get_department_service(session: Session = Depends(get_session)) -> DepartmentService:
+    return DepartmentService(SqlAlchemyDepartmentRepository(session))
+
+
+def get_threat_service(session: Session = Depends(get_session)) -> ThreatService:
+    return ThreatService(SqlAlchemyThreatRepository(session))
+
+
+def get_vulnerability_service(session: Session = Depends(get_session)) -> VulnerabilityService:
+    return VulnerabilityService(SqlAlchemyVulnerabilityRepository(session))
 
 
 def get_control_service(session: Session = Depends(get_session)) -> ControlService:

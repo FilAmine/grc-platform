@@ -68,6 +68,7 @@ migration `202607090001_auth_rbac_and_tenancy.py` and
 | `202607100001` | Real requirement rows for NIST CSF 2.0 (14), HIPAA Security Rule (13), NIS2 (6), and DORA (5) — see the note below on why these four and not the rest of the catalog |
 | `202607100002` | Adds the `sso:manage` permission and grants it to the global `Admin` system role — the first real (idempotent, find-or-create) instance of the permission-seeding follow-up-migration pattern described below |
 | `202607100003` | `sso_connections` (per-organization OIDC configuration) |
+| `202607110001` | `departments` (self-referential hierarchy), `threats`, `vulnerabilities`; seeds the 6 new permission codes and grants them to the 4 global system roles — the second real instance of the idempotent permission-seeding pattern `202607100002` established |
 
 **Note on permission seeding**: `202607090001`'s seed step imports
 `security.permissions.ALL_PERMISSIONS`/`SYSTEM_ROLES` at *migration run time*, not

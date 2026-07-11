@@ -1,4 +1,6 @@
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import BugReportIcon from '@mui/icons-material/BugReport';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
@@ -12,6 +14,7 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import StorageIcon from '@mui/icons-material/Storage';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import {
   AppBar,
   Avatar,
@@ -40,6 +43,9 @@ const NAV_ITEMS = [
   { to: '/audits', label: 'Audits', icon: <GavelIcon /> },
   { to: '/documents', label: 'Documents', icon: <DescriptionIcon /> },
   { to: '/assets', label: 'Assets', icon: <StorageIcon /> },
+  { to: '/departments', label: 'Departments', icon: <AccountTreeIcon /> },
+  { to: '/threats', label: 'Threats', icon: <WarningAmberIcon /> },
+  { to: '/vulnerabilities', label: 'Vulnerabilities', icon: <BugReportIcon /> },
   { to: '/assessments', label: 'Assessments', icon: <RuleIcon /> },
   { to: '/users', label: 'Users', icon: <PeopleIcon /> },
   { to: '/roles', label: 'Roles', icon: <SecurityIcon /> },

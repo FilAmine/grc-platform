@@ -475,3 +475,66 @@ export type SsoConnectionUpdate = {
   default_role_id?: string | null;
   is_enabled: boolean;
 };
+
+// --- Departments -----------------------------------------------------------
+
+export type Department = {
+  id: string;
+  organization_id: string;
+  name: string;
+  description: string;
+  parent_department_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DepartmentCreate = {
+  name: string;
+  description?: string;
+  parent_department_id?: string | null;
+};
+
+// --- Threats -----------------------------------------------------------------
+
+export type ThreatCategory = 'human' | 'technical' | 'environmental' | 'organizational';
+export type ThreatLikelihood = 'low' | 'medium' | 'high';
+
+export type Threat = {
+  id: string;
+  organization_id: string;
+  name: string;
+  description: string;
+  category: ThreatCategory;
+  likelihood: ThreatLikelihood;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ThreatCreate = {
+  name: string;
+  category: ThreatCategory;
+  description?: string;
+  likelihood?: ThreatLikelihood;
+};
+
+// --- Vulnerabilities -----------------------------------------------------------
+
+export type VulnerabilitySeverity = 'low' | 'medium' | 'high' | 'critical';
+export type VulnerabilityStatus = 'open' | 'mitigated' | 'accepted' | 'closed';
+
+export type Vulnerability = {
+  id: string;
+  organization_id: string;
+  name: string;
+  description: string;
+  severity: VulnerabilitySeverity;
+  status: VulnerabilityStatus;
+  created_at: string;
+  updated_at: string;
+};
+
+export type VulnerabilityCreate = {
+  name: string;
+  severity: VulnerabilitySeverity;
+  description?: string;
+};
