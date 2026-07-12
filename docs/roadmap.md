@@ -175,11 +175,10 @@ Frontend module coverage is complete (every backend module has a page), the
 public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
 SSO (OIDC), rate limiting/security headers/dependency scanning,
 departments/threats/vulnerabilities, incident management, EBIOS-RM-flavored
-risk linking, the Tenant/Task modules, and a real Celery worker are all in.
-The Vite major-version upgrade is now done too. What's left on this list is
-either intentionally out of reach (licensed standards text — needs a
-license, not a code change) or lower-priority infrastructure work (the
-FastAPI/starlette upgrade, Kubernetes/Terraform, the full 5-workshop EBIOS
-RM methodology). None of it blocks day-to-day use of what's already built;
-pick based on which specific gap actually matters for your next deployment
-target.
+risk linking, the Tenant/Task modules, a real Celery worker, and the Vite
+major-version upgrade are all in. What's left is either intentionally out
+of reach (licensed standards text — needs a license, not a code change) or
+lower-priority infrastructure work (the FastAPI/starlette upgrade,
+Kubernetes/Terraform, the full 5-workshop EBIOS RM methodology). None of it
+blocks day-to-day use of what's already built; pick based on which specific
+gap actually matters for your next deployment target.
