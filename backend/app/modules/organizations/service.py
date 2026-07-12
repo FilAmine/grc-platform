@@ -11,6 +11,7 @@ class Organization:
     slug: str
     created_at: datetime
     updated_at: datetime
+    tenant_id: UUID | None = None
 
 
 @dataclass(frozen=True)
@@ -32,6 +33,9 @@ class OrganizationStore(Protocol):
     def create(self, name: str, slug: str) -> Organization:
         raise NotImplementedError
 
+    def set_tenant(self, organization_id: UUID, tenant_id: UUID | None) -> Organization:
+        raise NotImplementedError
+
 
 class OrganizationService:
     def __init__(self, organizations: OrganizationStore) -> None:
@@ -48,3 +52,6 @@ class OrganizationService:
 
     def create_organization(self, command: CreateOrganizationCommand) -> Organization:
         return self._organizations.create(name=command.name, slug=command.slug)
+
+    def set_tenant(self, organization_id: UUID, tenant_id: UUID | None) -> Organization:
+        return self._organizations.set_tenant(organization_id, tenant_id)

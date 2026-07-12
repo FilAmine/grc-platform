@@ -45,6 +45,8 @@ from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.risks.models import RiskModel
 from backend.app.modules.roles.models import RoleModel, role_permissions
 from backend.app.modules.sso.models import SsoConnectionModel
+from backend.app.modules.tasks.models import TaskModel
+from backend.app.modules.tenants.models import TenantModel
 from backend.app.modules.threats.models import ThreatModel
 from backend.app.modules.users.models import UserModel, user_roles
 from backend.app.modules.vulnerabilities.models import VulnerabilityModel
@@ -82,6 +84,8 @@ __all__ = [
     "RiskModel",
     "RoleModel",
     "SsoConnectionModel",
+    "TaskModel",
+    "TenantModel",
     "ThreatModel",
     "UserModel",
     "VulnerabilityModel",

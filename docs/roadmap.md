@@ -74,6 +74,22 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   so these links are settable at creation only; editing them later needs a
   future Risk detail page + `PATCH /risks/{id}`. See `docs/api.md` for the
   endpoints.
+- **Tenant entity + generic Task module**: a real `Tenant` entity now exists
+  above `Organization` (a nullable `organizations.tenant_id`), letting a
+  platform operator group several existing orgs under one record. This does
+  not touch the tenant-isolation boundary — `organization_id` is unaffected,
+  and every existing module's scoping/RBAC/JWT-claim behavior is exactly as
+  before. Note the resulting terminology overload, stated plainly rather
+  than hidden: "tenant" now means two different things in this codebase —
+  see `docs/database.md`'s `## Conventions` for the full disambiguation.
+  `Tenant` has no frontend page (Organization management itself has none
+  either — both are invisible, superuser-only backend concerns) and no RBAC
+  permission codes (gated by a raw `is_superuser` check instead,
+  deliberately, so the capability can never become delegable to a per-org
+  role). Also added: a standalone, `StateMachine`-gated `Task` module
+  (`open` → `in_progress` → `done`, plus `reopen`) — generic, not tied to
+  any one module, unlike audit-scoped `corrective_actions`/`checklist_items`.
+  See `docs/api.md` for the endpoints.
 
 ## Not done — biggest gaps first
 
@@ -87,11 +103,6 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   to reproduce, even paraphrased, without a license from ISO/PCI SSC/AICPA/CIS.
   See `docs/database.md` for the full rationale and the migration to extend if
   a license is ever obtained.
-- **Tenants-as-distinct-from-organizations, generic tasks-as-a-module.** The
-  spec's module list names these separately; this build treats
-  `organizations` as the tenant root (no separate `tenants` entity).
-  `corrective_actions`/`checklist_items` cover audit-scoped follow-up items
-  but there's no cross-module generic "Task" entity yet.
 - **Celery.** Declared as a dependency; no worker process, no task, no
   `docker-compose.yml` service for it. Candidate real uses once needed:
   recomputing compliance scores on a schedule, async document/evidence file
@@ -127,11 +138,11 @@ real by reading every module. "Done" means: real persistence, a tested API, and
 Frontend module coverage is complete (every backend module has a page), the
 public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
 SSO (OIDC), rate limiting/security headers/dependency scanning,
-departments/threats/vulnerabilities, incident management, and EBIOS-RM-
-flavored risk linking are all in. What's left on this list is either
-intentionally out of reach (licensed standards text — needs a license, not a
-code change) or lower-priority infrastructure work (Celery, the
-FastAPI/starlette and Vite upgrades, Kubernetes/Terraform, the full 5-workshop
-EBIOS RM methodology, the tenants/tasks module gaps). None of it blocks
-day-to-day use of what's already built; pick based on which specific gap
+departments/threats/vulnerabilities, incident management, EBIOS-RM-flavored
+risk linking, and the Tenant/Task modules are all in. What's left on this
+list is either intentionally out of reach (licensed standards text — needs a
+license, not a code change) or lower-priority infrastructure work (Celery,
+the FastAPI/starlette and Vite upgrades, Kubernetes/Terraform, the full
+5-workshop EBIOS RM methodology). None of it blocks day-to-day use of what's
+already built; pick based on which specific gap
 actually matters for your next deployment target.

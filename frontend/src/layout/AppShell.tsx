@@ -15,6 +15,7 @@ import SecurityIcon from '@mui/icons-material/Security';
 import ShieldIcon from '@mui/icons-material/Shield';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import StorageIcon from '@mui/icons-material/Storage';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import {
@@ -50,6 +51,7 @@ const NAV_ITEMS = [
   { to: '/threats', label: 'Threats', icon: <WarningAmberIcon /> },
   { to: '/vulnerabilities', label: 'Vulnerabilities', icon: <BugReportIcon /> },
   { to: '/feared-events', label: 'Feared Events', icon: <GppMaybeIcon /> },
+  { to: '/tasks', label: 'Tasks', icon: <TaskAltIcon /> },
   { to: '/assessments', label: 'Assessments', icon: <RuleIcon /> },
   { to: '/users', label: 'Users', icon: <PeopleIcon /> },
   { to: '/roles', label: 'Roles', icon: <SecurityIcon /> },

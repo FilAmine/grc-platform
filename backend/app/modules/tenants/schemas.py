@@ -5,19 +5,14 @@ from backend.app.common.schemas import ReadSchema
 from pydantic import Field
 
 
-class OrganizationCreate(ReadSchema):
+class TenantCreate(ReadSchema):
     name: str = Field(min_length=2, max_length=255)
     slug: str = Field(min_length=2, max_length=100, pattern=r"^[a-z0-9-]+$")
 
 
-class OrganizationRead(ReadSchema):
+class TenantRead(ReadSchema):
     id: UUID
     name: str
     slug: str
     created_at: datetime
     updated_at: datetime
-    tenant_id: UUID | None
-
-
-class OrganizationTenantUpdate(ReadSchema):
-    tenant_id: UUID | None

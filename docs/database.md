@@ -22,7 +22,22 @@ on startup — see `docker-compose.yml`).
   roles) have no user at all.
 - **Tenant scoping** (`TenantScopedMixin` → `organization_id`, FK to
   `organizations.id`) on every tenant-owned table. `organizations` itself has no
-  `organization_id` — it *is* the tenant root.
+  `organization_id` — it *is* the tenant-**isolation** root, and that never
+  changes.
+- **"Tenant" means two different things after `202607140001`, stated
+  plainly**: (1) the isolation boundary above (`organization_id`,
+  `TenantScopedMixin`, "tenant isolation tests") — unchanged; and (2) the
+  `Tenant` entity (`tenants` table), an optional grouping *above*
+  `organizations` (e.g. a holding company with several subsidiary orgs) via
+  a nullable `organizations.tenant_id`. `Tenant` does not carry
+  `organization_id` and doesn't participate in the isolation boundary at
+  all — it's the reverse direction, organizations optionally belong to a
+  `Tenant`, not the other way around. Gated by a raw `is_superuser` check
+  (mirroring `organizations/api.py`), not `require_permission` — no
+  `tenants:*` permission codes exist, deliberately: `require_permission`
+  would let an org-scoped role holding such a code through, making a
+  platform-level, cross-org capability delegable to a per-org role, which
+  must never be possible.
 - **Naming convention**: `Base.metadata` has an explicit naming convention
   (`ix_<table>_<cols>`, `fk_<table>_<cols>_<ref_table>`, `pk_<table>`,
   `uq_<table>_<cols>`) so constraint names are deterministic and migrations don't
@@ -71,6 +86,7 @@ migration `202607090001_auth_rbac_and_tenancy.py` and
 | `202607110001` | `departments` (self-referential hierarchy), `threats`, `vulnerabilities`; seeds the 6 new permission codes and grants them to the 4 global system roles — the second real instance of the idempotent permission-seeding pattern `202607100002` established |
 | `202607120001` | `incidents` (with a `resolved_at` column driven by a real status-workflow state machine, unlike the other catalog/register tables); seeds 2 new permission codes and grants them — the third instance of the idempotent permission-seeding pattern |
 | `202607130001` | `feared_events` (`asset_id` `NOT NULL`, `ondelete="RESTRICT"` — mirrors `Assessment`/`AssessmentResult.framework_version_id`'s existing `RESTRICT` precedent); adds 4 nullable FK columns to the pre-existing `risks` table (`asset_id`, `threat_id`, `vulnerability_id`, `feared_event_id`, all `ondelete="SET NULL"`) via `op.add_column`/`op.create_foreign_key` — the first migration in this repo to `ALTER` an existing table rather than only `create_table`; seeds 2 new permission codes and grants them — the fourth instance of the idempotent permission-seeding pattern |
+| `202607140001` | `tenants` (no `organization_id` — see the "tenant" disambiguation above); adds a nullable `tenant_id` FK to the pre-existing `organizations` table — the second `ALTER`-an-existing-table migration; `tasks` (standard `organization_id`-scoped shape, `status` driven by a real `StateMachine` like `incidents`); seeds 2 new permission codes (`tasks:*` only — no `tenants:*` codes exist) and grants them — the fifth instance of the idempotent permission-seeding pattern |
 
 **Note on permission seeding**: `202607090001`'s seed step imports
 `security.permissions.ALL_PERMISSIONS`/`SYSTEM_ROLES` at *migration run time*, not

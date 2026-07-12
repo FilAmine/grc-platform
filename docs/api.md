@@ -46,6 +46,18 @@ the only way to read a user's role assignments, so cross-reference it against
 |---|---|---|
 | GET | `/organizations` | Returns the caller's own org (or all, if superuser) |
 | POST | `/organizations` | Superuser-only; regular signup goes through `/auth/register-organization` |
+| PATCH | `/organizations/{id}/tenant` | Superuser-only; assigns/clears the org's `tenant_id` (404 if the given `tenant_id` doesn't exist) |
+
+## Tenants
+
+| Method | Path | Notes |
+|---|---|---|
+| GET/POST | `/tenants` | Superuser-only (raw `is_superuser` check, not `require_permission` — see `docs/database.md` for why) |
+
+An optional grouping *above* `Organization` (e.g. a holding company with
+several subsidiary orgs) — not the tenant-isolation boundary, which remains
+`organization_id`. See `docs/database.md` for the full disambiguation. No
+frontend page — Organization management itself has none either.
 
 ## Risks / Controls
 
@@ -177,6 +189,20 @@ availability — EBIOS RM's "feared event" (événement redouté), with
 "business value" and "supporting asset" deliberately conflated into the
 existing CMDB `Asset` (see `docs/roadmap.md`). `asset_id` is **required**
 (unlike Risk's 4 optional link fields) and validated cross-tenant on `POST`.
+
+## Tasks
+
+| Method | Path |
+|---|---|
+| GET/POST | `/tasks` |
+| GET | `/tasks/{task_id}` |
+| PATCH | `/tasks/{task_id}/status` |
+
+A generic, standalone follow-up item, not tied to any one module (unlike
+`corrective_actions`/`checklist_items`, which are audit-scoped). Same real
+`StateMachine` status workflow as Audits/Incidents (`open` →
+`in_progress` → `done`, with a `reopen` path back from `done` to
+`in_progress`) — an illegal transition returns `409`.
 
 ## AI
 

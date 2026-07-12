@@ -1,4 +1,5 @@
 from collections.abc import Generator
+from uuid import UUID
 
 import pytest
 from backend.app.database import (
@@ -9,6 +10,7 @@ from backend.app.interfaces.api import dependencies as deps
 from backend.app.main import app
 from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.roles.models import RoleModel
+from backend.app.modules.users.models import UserModel
 from backend.app.security.permissions import ALL_PERMISSIONS, SYSTEM_ROLES
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -82,3 +84,19 @@ def register_organization(client: TestClient, *, slug: str = "acme", email: str 
 
 def auth_headers(access_token: str) -> dict[str, str]:
     return {"Authorization": f"Bearer {access_token}"}
+
+
+def promote_to_superuser(db_session: Session, user_id: UUID | str) -> None:
+    """There is no API path, seed script, or existing test that produces an
+    `is_superuser=True` user -- every superuser-gated path today (see
+    `test_non_superuser_cannot_create_organization_directly`) is only tested
+    on its negative branch. This flips the flag directly on the row, via the
+    same `db_session` fixture the `client` fixture is already wired to, so
+    tests for `Tenant`/`PATCH /organizations/{id}/tenant` can exercise the
+    positive path too."""
+    if isinstance(user_id, str):
+        user_id = UUID(user_id)
+    user = db_session.get(UserModel, user_id)
+    assert user is not None
+    user.is_superuser = True
+    db_session.commit()

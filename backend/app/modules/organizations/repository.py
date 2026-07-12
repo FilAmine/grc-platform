@@ -14,6 +14,7 @@ def to_organization(model: OrganizationModel) -> Organization:
         slug=model.slug,
         created_at=model.created_at,
         updated_at=model.updated_at,
+        tenant_id=model.tenant_id,
     )
 
 
@@ -32,6 +33,10 @@ class OrganizationRepository(ABC):
 
     @abstractmethod
     def create(self, name: str, slug: str) -> Organization:
+        raise NotImplementedError
+
+    @abstractmethod
+    def set_tenant(self, organization_id: PyUUID, tenant_id: PyUUID | None) -> Organization:
         raise NotImplementedError
 
 
@@ -64,6 +69,14 @@ class SqlAlchemyOrganizationRepository(OrganizationRepository):
     def create(self, name: str, slug: str) -> Organization:
         model = OrganizationModel(name=name, slug=slug)
         self._session.add(model)
+        self._session.commit()
+        self._session.refresh(model)
+        return to_organization(model)
+
+    def set_tenant(self, organization_id: PyUUID, tenant_id: PyUUID | None) -> Organization:
+        model = self._session.get(OrganizationModel, organization_id)
+        assert model is not None
+        model.tenant_id = tenant_id
         self._session.commit()
         self._session.refresh(model)
         return to_organization(model)

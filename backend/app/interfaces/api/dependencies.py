@@ -62,6 +62,10 @@ from backend.app.modules.roles.service import RoleService
 from backend.app.modules.sso.oidc_client import HttpxOidcClient, OidcClient
 from backend.app.modules.sso.repository import SqlAlchemySsoConnectionRepository
 from backend.app.modules.sso.service import SsoService
+from backend.app.modules.tasks.repository import SqlAlchemyTaskRepository
+from backend.app.modules.tasks.service import TaskService
+from backend.app.modules.tenants.repository import SqlAlchemyTenantRepository
+from backend.app.modules.tenants.service import TenantService
 from backend.app.modules.threats.repository import SqlAlchemyThreatRepository
 from backend.app.modules.threats.service import ThreatService
 from backend.app.modules.users.repository import SqlAlchemyUserRepository
@@ -82,6 +86,10 @@ def get_session() -> Generator[Session, None, None]:
 
 def get_organization_service(session: Session = Depends(get_session)) -> OrganizationService:
     return OrganizationService(SqlAlchemyOrganizationRepository(session))
+
+
+def get_tenant_service(session: Session = Depends(get_session)) -> TenantService:
+    return TenantService(SqlAlchemyTenantRepository(session))
 
 
 def get_risk_service(session: Session = Depends(get_session)) -> RiskService:
@@ -152,6 +160,10 @@ def get_audit_service(session: Session = Depends(get_session)) -> AuditService:
 
 def get_incident_service(session: Session = Depends(get_session)) -> IncidentService:
     return IncidentService(SqlAlchemyIncidentRepository(session))
+
+
+def get_task_service(session: Session = Depends(get_session)) -> TaskService:
+    return TaskService(SqlAlchemyTaskRepository(session))
 
 
 def get_notification_service(session: Session = Depends(get_session)) -> NotificationService:

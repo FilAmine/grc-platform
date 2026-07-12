@@ -23,6 +23,7 @@ import { RisksPage } from './pages/RisksPage';
 import { RolesPage } from './pages/RolesPage';
 import { SsoCallbackPage } from './pages/SsoCallbackPage';
 import { SsoSettingsPage } from './pages/SsoSettingsPage';
+import { TasksPage } from './pages/TasksPage';
 import { ThreatsPage } from './pages/ThreatsPage';
 import { UsersPage } from './pages/UsersPage';
 import { VulnerabilitiesPage } from './pages/VulnerabilitiesPage';
@@ -56,6 +57,7 @@ export function App() {
           <Route path="/threats" element={<ThreatsPage />} />
           <Route path="/vulnerabilities" element={<VulnerabilitiesPage />} />
           <Route path="/feared-events" element={<FearedEventsPage />} />
+          <Route path="/tasks" element={<TasksPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
           <Route path="/assessments/:assessmentId" element={<AssessmentDetailPage />} />
           <Route path="/users" element={<UsersPage />} />

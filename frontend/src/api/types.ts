@@ -598,3 +598,26 @@ export type FearedEventCreate = {
   gravity: FearedEventGravity;
   description?: string;
 };
+
+// --- Tasks -----------------------------------------------------------------------
+
+export type TaskStatus = 'open' | 'in_progress' | 'done';
+
+export type Task = {
+  id: string;
+  organization_id: string;
+  title: string;
+  description: string;
+  status: TaskStatus;
+  due_date: string | null;
+  assignee: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type TaskCreate = {
+  title: string;
+  assignee: string;
+  description?: string;
+  due_date?: string | null;
+};
