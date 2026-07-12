@@ -121,6 +121,33 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   build`, and a live-browser console check (zero errors, including on the
   unauthenticated `/login` route, which is enough to exercise every
   statically-imported page/icon per `App.tsx`'s non-lazy imports).
+- **FastAPI/starlette major-version upgrade**: bumped `fastapi` `0.111.0` →
+  `0.139.0`, which pulls in `starlette>=1.0.1` (fixing every `pip-audit`-flagged
+  `starlette` advisory — confirmed via a fresh `pip-audit` run afterward; only
+  the pre-existing, separately-tracked `ecdsa` finding remains) and required
+  bumping `pydantic` `2.8.2` → `2.13.4` and `pydantic-settings` `2.3.4` →
+  `2.14.2` to satisfy fastapi's new `pydantic>=2.9.0` floor. Lower actual risk
+  than the version jump suggests: a pre-upgrade audit of the codebase found no
+  use of anything Starlette 1.0 removed (`on_event`/`on_startup`/`on_shutdown`,
+  the `@app.route()`/`@app.middleware()` decorators, deprecated `TestClient`/
+  `FileResponse` args) and no legacy Pydantic v1-style calls (`.dict()`,
+  `regex=`, `orm_mode`) anywhere — this project's endpoints, DI, and custom
+  `BaseHTTPMiddleware` (`security_headers.py`) already used current-generation
+  idioms throughout. Verified via `ruff check`, the full test suite (88 passed,
+  90% coverage, no regressions), `pip-audit`, and a direct `TestClient` smoke
+  check of `/health`, `/api/v1/openapi.json` (schema still generates, 73
+  paths), `/api/v1/docs`/`/redoc` (render correctly, CSP headers intact), and
+  security headers on a plain request — not a literal browser click-through
+  (no local Postgres/Docker in this environment to run a live server against;
+  same constraint noted for Celery's compose services), but a real ASGI
+  request/response cycle through the full middleware stack, which is what a
+  browser check would exercise anyway. One new, non-blocking
+  deprecation warning surfaced: Starlette's `TestClient` now warns that
+  `httpx`-based testing is deprecated in favor of a package called `httpx2` —
+  not acted on here (that package is new and its stability wasn't evaluated),
+  left as a future note rather than a blocker since tests still pass today.
+  `.github/workflows/ci.yml`'s `pip-audit` step no longer needs to ignore the
+  7 starlette advisory IDs — only `ecdsa`'s remains.
 - **Celery**: a real worker + beat process now exist (`celery-worker`/
   `celery-beat` in `docker-compose.yml`, both reusing the `backend` image
   with a different `command:`, sharing an `x-backend-env` anchor with
@@ -153,14 +180,6 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   to reproduce, even paraphrased, without a license from ISO/PCI SSC/AICPA/CIS.
   See `docs/database.md` for the full rationale and the migration to extend if
   a license is ever obtained.
-- **FastAPI/starlette major-version upgrade.** `pip-audit` (wired into CI, see
-  `docs/security.md`) flags several `starlette` advisories only fixed in
-  `starlette>=1.0.1`, which needs a FastAPI version many minors ahead of the
-  `0.111.0` pinned here. Deliberately not bundled into the dependency-scanning
-  CI work — it's a real upgrade with its own regression risk across every
-  endpoint and DI-based dependency in this codebase, and deserves its own pass
-  (bump, then re-run the full test suite plus a live-browser check of the
-  docs/SSO/rate-limiting paths that touch middleware most directly).
 - **Kubernetes/Helm/Terraform.** See `docs/deployment.md`.
 - **Full EBIOS RM methodology.** The structural linking (asset/threat/
   vulnerability/feared-event) is done — see "Done" above — but the full
@@ -176,9 +195,9 @@ public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
 SSO (OIDC), rate limiting/security headers/dependency scanning,
 departments/threats/vulnerabilities, incident management, EBIOS-RM-flavored
 risk linking, the Tenant/Task modules, a real Celery worker, and the Vite
-major-version upgrade are all in. What's left is either intentionally out
-of reach (licensed standards text — needs a license, not a code change) or
-lower-priority infrastructure work (the FastAPI/starlette upgrade,
-Kubernetes/Terraform, the full 5-workshop EBIOS RM methodology). None of it
-blocks day-to-day use of what's already built; pick based on which specific
-gap actually matters for your next deployment target.
+and FastAPI/starlette major-version upgrades are all in. What's left is
+either intentionally out of reach (licensed standards text — needs a
+license, not a code change) or its own multi-week effort (Kubernetes/
+Terraform, the full 5-workshop EBIOS RM methodology). None of it blocks
+day-to-day use of what's already built; pick based on which specific gap
+actually matters for your next deployment target.

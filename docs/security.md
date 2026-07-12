@@ -165,14 +165,10 @@ CI runs `pip-audit -r requirements.txt` (backend), `npm audit --omit=dev
 on push/PR to `main` and weekly) — see `.github/workflows/ci.yml` and
 `.github/workflows/codeql.yml`.
 
-`pip-audit` ignores two advisory groups, both deliberately, not by omission:
+`pip-audit` ignores one advisory now (it used to ignore two — the `starlette`
+group was fixed by bumping `fastapi` `0.111.0` → `0.139.0`, which pulls in
+`starlette>=1.0.1`; see `docs/roadmap.md`):
 
-- **`starlette` (7 advisories, e.g. `PYSEC-2026-161`, `CVE-2026-48818`)**: fixed
-  only in `starlette>=1.0.1`, which needs a FastAPI version many minors ahead of
-  the one pinned here (`0.111.0` → `0.139.0`+) — a real upgrade with its own
-  regression risk across every endpoint and DI-based dependency in this
-  codebase, tracked as a separate item in `docs/roadmap.md` rather than bundled
-  into a CI config change.
 - **`ecdsa` (`PYSEC-2026-1325`, Minerva timing attack)**: no fix exists upstream
   (the maintainers consider side-channel attacks out of scope for a pure-Python
   implementation) and the vulnerable code paths — `sign_digest()`, key
@@ -187,18 +183,15 @@ codebase never calls `jwe.decrypt` or otherwise touches JWE, only `jwt.encode`/
 `jwt.decode` — the vulnerable function simply isn't reachable, so it doesn't
 show up as a finding in the first place.
 
-`npm audit` runs with `--omit=dev`: the frontend's only two current findings
-are in `vite`/`esbuild` (dev server and build-tool only — no production
-exposure, since nginx serves the pre-built static output and no
-vite/esbuild code ever runs there). The fix (`vite@8.x`) was tried directly —
-`npm install` and `npx tsc -b`/`npm run build` succeeded, but the app crashed
-at runtime (`@mui/icons-material` deep imports resolved to module namespace
-objects instead of components, breaking every nav icon) when checked live in
-a browser. Reverted; tracked as a separate follow-up in `docs/roadmap.md`
-rather than shipped broken. `--omit=dev` is a real, stated tradeoff, not just
-an evasion for these two: it also means a future devDependency supply-chain
-compromise (a real category of past npm incidents) wouldn't be caught by
-this CI gate — production dependencies are scanned in full.
+`npm audit` runs with `--omit=dev`. It used to flag `vite`/`esbuild`
+(dev server/build-tool only, no production exposure); that's fixed now —
+see `docs/roadmap.md` for the `vite@8` upgrade and the two follow-up issues
+it took to actually ship (an `@mui/icons-material` CJS/ESM interop bug, and
+a TypeScript `moduleResolution` setting). `--omit=dev` remains a real,
+stated tradeoff regardless of what's currently flagged: it means a future
+devDependency supply-chain compromise (a real category of past npm
+incidents) wouldn't be caught by this CI gate — production dependencies are
+scanned in full.
 
 ## Known gaps (tracked in `docs/roadmap.md`)
 
