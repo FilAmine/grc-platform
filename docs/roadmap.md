@@ -90,6 +90,27 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   (`open` → `in_progress` → `done`, plus `reopen`) — generic, not tied to
   any one module, unlike audit-scoped `corrective_actions`/`checklist_items`.
   See `docs/api.md` for the endpoints.
+- **Vite major-version upgrade**: bumped to `vite@8.1.4` +
+  `@vitejs/plugin-react@6.0.3`, fixing the `npm audit`-flagged `vite`/`esbuild`
+  dev-tool advisories. Root cause of the previous failed attempt (see prior
+  "Not done" text, now obsolete): `@mui/icons-material`'s `package.json` has
+  no `exports` map, so a deep default import
+  (`import Icon from '@mui/icons-material/X'`) resolves by plain file
+  resolution straight to the package's **CJS** build
+  (`@mui/icons-material/X.js`, `exports.default = ...`). Vite 8's bundler
+  (Rolldown) fails to unwrap that CJS `.default` correctly for this import
+  shape, so the imported binding is the whole CJS exports object instead of
+  the component — every nav/page icon rendered as React's "type is invalid"
+  crash. Fix: switched every icon import in the 21 affected files (51
+  imports total) from the deep default form to a named import off the
+  package barrel (`import { X as XIcon } from '@mui/icons-material'`), which
+  resolves via the package's `module`/`types` fields to genuinely-ESM
+  sources — no CJS interop involved. `sideEffects: false` in that package's
+  `package.json` keeps this tree-shakeable, so the production bundle isn't
+  pulling in the full ~2,000-icon set. Verified via `tsc -b`, `npm run
+  build`, and a live-browser console check (zero errors, including on the
+  unauthenticated `/login` route, which is enough to exercise every
+  statically-imported page/icon per `App.tsx`'s non-lazy imports).
 - **Celery**: a real worker + beat process now exist (`celery-worker`/
   `celery-beat` in `docker-compose.yml`, both reusing the `backend` image
   with a different `command:`, sharing an `x-backend-env` anchor with
@@ -130,16 +151,6 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   endpoint and DI-based dependency in this codebase, and deserves its own pass
   (bump, then re-run the full test suite plus a live-browser check of the
   docs/SSO/rate-limiting paths that touch middleware most directly).
-- **Vite major-version upgrade.** `npm audit` flags `vite`/`esbuild` dev-tool
-  vulnerabilities only fixed in `vite@8.x`. Tried directly: typecheck and build
-  both passed, but the app crashed at runtime in a live-browser check —
-  `@mui/icons-material` deep imports (`import Icon from
-  '@mui/icons-material/X'`) resolved to module namespace objects instead of
-  components under Vite 8's dependency pre-bundling, breaking every nav icon
-  in `AppShell.tsx`. Reverted rather than shipped broken; needs its own pass
-  (likely switching to `@mui/icons-material`'s named exports, or whatever the
-  actual interop fix turns out to be) with the same live-browser verification,
-  not just typecheck/build green.
 - **Kubernetes/Helm/Terraform.** See `docs/deployment.md`.
 - **Full EBIOS RM methodology.** The structural linking (asset/threat/
   vulnerability/feared-event) is done — see "Done" above — but the full
@@ -155,9 +166,10 @@ public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
 SSO (OIDC), rate limiting/security headers/dependency scanning,
 departments/threats/vulnerabilities, incident management, EBIOS-RM-flavored
 risk linking, the Tenant/Task modules, and a real Celery worker are all in.
-What's left on this list is either intentionally out of reach (licensed
-standards text — needs a license, not a code change) or lower-priority
-infrastructure work (the FastAPI/starlette and Vite upgrades,
-Kubernetes/Terraform, the full 5-workshop EBIOS RM methodology). None of it
-blocks day-to-day use of what's already built; pick based on which specific gap
-actually matters for your next deployment target.
+The Vite major-version upgrade is now done too. What's left on this list is
+either intentionally out of reach (licensed standards text — needs a
+license, not a code change) or lower-priority infrastructure work (the
+FastAPI/starlette upgrade, Kubernetes/Terraform, the full 5-workshop EBIOS
+RM methodology). None of it blocks day-to-day use of what's already built;
+pick based on which specific gap actually matters for your next deployment
+target.

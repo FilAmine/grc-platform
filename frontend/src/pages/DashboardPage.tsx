@@ -1,6 +1,8 @@
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import BusinessIcon from '@mui/icons-material/Business';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
+import {
+  Assessment as AssessmentIcon,
+  Business as BusinessIcon,
+  FactCheck as FactCheckIcon,
+} from '@mui/icons-material';
 import { Box, Chip, Container, Grid, LinearProgress, Paper, Stack, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import type { ReactNode } from 'react';

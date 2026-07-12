@@ -1,7 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import AddIcon from '@mui/icons-material/Add';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Add as AddIcon,
+  ArrowBack as ArrowBackIcon,
+  ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,

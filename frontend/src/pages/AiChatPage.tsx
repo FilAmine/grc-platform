@@ -1,7 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import AddIcon from '@mui/icons-material/Add';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import SendIcon from '@mui/icons-material/Send';
+import {
+  Add as AddIcon,
+  LibraryBooks as LibraryBooksIcon,
+  Send as SendIcon,
+} from '@mui/icons-material';
 import {
   Box,
   Button,

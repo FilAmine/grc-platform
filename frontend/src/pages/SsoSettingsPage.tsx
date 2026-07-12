@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { ContentCopy as ContentCopyIcon } from '@mui/icons-material';
 import {
   Alert,
   Box,

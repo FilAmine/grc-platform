@@ -1,23 +1,25 @@
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import BugReportIcon from '@mui/icons-material/BugReport';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import DescriptionIcon from '@mui/icons-material/Description';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import GavelIcon from '@mui/icons-material/Gavel';
-import GppMaybeIcon from '@mui/icons-material/GppMaybe';
-import LogoutIcon from '@mui/icons-material/Logout';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import PeopleIcon from '@mui/icons-material/People';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import RuleIcon from '@mui/icons-material/Rule';
-import SecurityIcon from '@mui/icons-material/Security';
-import ShieldIcon from '@mui/icons-material/Shield';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import StorageIcon from '@mui/icons-material/Storage';
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import {
+  AccountTree as AccountTreeIcon,
+  Assessment as AssessmentIcon,
+  BugReport as BugReportIcon,
+  Dashboard as DashboardIcon,
+  Description as DescriptionIcon,
+  FactCheck as FactCheckIcon,
+  Gavel as GavelIcon,
+  GppMaybe as GppMaybeIcon,
+  Logout as LogoutIcon,
+  Notifications as NotificationsIcon,
+  People as PeopleIcon,
+  ReportProblem as ReportProblemIcon,
+  Rule as RuleIcon,
+  Security as SecurityIcon,
+  Shield as ShieldIcon,
+  SmartToy as SmartToyIcon,
+  Storage as StorageIcon,
+  TaskAlt as TaskAltIcon,
+  VpnKey as VpnKeyIcon,
+  WarningAmber as WarningAmberIcon,
+} from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
