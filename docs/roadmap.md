@@ -90,6 +90,25 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   (`open` → `in_progress` → `done`, plus `reopen`) — generic, not tied to
   any one module, unlike audit-scoped `corrective_actions`/`checklist_items`.
   See `docs/api.md` for the endpoints.
+- **Celery**: a real worker + beat process now exist (`celery-worker`/
+  `celery-beat` in `docker-compose.yml`, both reusing the `backend` image
+  with a different `command:`, sharing an `x-backend-env` anchor with
+  `backend` to avoid tripling the environment block). One real scheduled
+  task — `recompute_all_compliance_scores`
+  (`backend/app/core/tasks.py`), nightly via Celery Beat
+  (`crontab(hour=2, minute=0)` UTC), recomputing every `IN_PROGRESS`
+  assessment's score across every organization. Deliberately scoped to
+  `IN_PROGRESS` only — `COMPLETED` is meant to be a locked/final state
+  (the state machine's explicit `reopen` transition signals this), so a
+  scheduled recompute doesn't silently rewrite a "final" score. The other
+  two candidate uses (async document/evidence file processing, scheduled
+  notification digests) are still not built — no real upload pipeline or
+  digest concept to hook into yet. `celery-worker`/`celery-beat`'s
+  `depends_on: backend` is a best-effort ordering hint only, not a
+  guarantee (`backend` has no healthcheck, so it just means "container
+  started," not "migrations finished") — a real fix would need a
+  healthcheck on `backend` or a separate migration-completion signal, not
+  attempted here.
 
 ## Not done — biggest gaps first
 
@@ -103,10 +122,6 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   to reproduce, even paraphrased, without a license from ISO/PCI SSC/AICPA/CIS.
   See `docs/database.md` for the full rationale and the migration to extend if
   a license is ever obtained.
-- **Celery.** Declared as a dependency; no worker process, no task, no
-  `docker-compose.yml` service for it. Candidate real uses once needed:
-  recomputing compliance scores on a schedule, async document/evidence file
-  processing, scheduled notification digests.
 - **FastAPI/starlette major-version upgrade.** `pip-audit` (wired into CI, see
   `docs/security.md`) flags several `starlette` advisories only fixed in
   `starlette>=1.0.1`, which needs a FastAPI version many minors ahead of the
@@ -139,10 +154,10 @@ Frontend module coverage is complete (every backend module has a page), the
 public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
 SSO (OIDC), rate limiting/security headers/dependency scanning,
 departments/threats/vulnerabilities, incident management, EBIOS-RM-flavored
-risk linking, and the Tenant/Task modules are all in. What's left on this
-list is either intentionally out of reach (licensed standards text — needs a
-license, not a code change) or lower-priority infrastructure work (Celery,
-the FastAPI/starlette and Vite upgrades, Kubernetes/Terraform, the full
-5-workshop EBIOS RM methodology). None of it blocks day-to-day use of what's
-already built; pick based on which specific gap
+risk linking, the Tenant/Task modules, and a real Celery worker are all in.
+What's left on this list is either intentionally out of reach (licensed
+standards text — needs a license, not a code change) or lower-priority
+infrastructure work (the FastAPI/starlette and Vite upgrades,
+Kubernetes/Terraform, the full 5-workshop EBIOS RM methodology). None of it
+blocks day-to-day use of what's already built; pick based on which specific gap
 actually matters for your next deployment target.

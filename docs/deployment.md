@@ -3,9 +3,19 @@
 ## Current target: Docker Compose
 
 `docker-compose.yml` is the reference deployment: `postgres`, `redis`, `backend`
-(runs `alembic upgrade head` then `uvicorn`), `frontend` (built into a static
-bundle, served by nginx). This is suitable for a single-host deployment; it is
+(runs `alembic upgrade head` then `uvicorn`), `celery-worker`/`celery-beat`
+(same image as `backend`, different `command:`, sharing its environment via
+an `x-backend-env` YAML anchor), `frontend` (built into a static bundle,
+served by nginx). This is suitable for a single-host deployment; it is
 **not** a high-availability setup.
+
+`celery-worker`/`celery-beat`'s `depends_on: backend` is a best-effort
+ordering hint only, not a guarantee: `backend` has no healthcheck (only
+`postgres`/`redis` do), so `depends_on` there just means "container
+started," not "migrations finished" — a worker task could still race
+`backend`'s `alembic upgrade head` on a cold start. Not solved here; would
+need a real healthcheck on `backend` or a separate migration-completion
+signal.
 
 Before deploying anywhere real:
 
