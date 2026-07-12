@@ -107,7 +107,17 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   resolves via the package's `module`/`types` fields to genuinely-ESM
   sources — no CJS interop involved. `sideEffects: false` in that package's
   `package.json` keeps this tree-shakeable, so the production bundle isn't
-  pulling in the full ~2,000-icon set. Verified via `tsc -b`, `npm run
+  pulling in the full ~2,000-icon set. Separately, `vite@8`/
+  `@vitejs/plugin-react@6` also ship exports-only `package.json`s with no
+  top-level `types` field, which TypeScript's legacy `moduleResolution:
+  "Node"` can't resolve at all (it ignores the `exports` map entirely) —
+  this only surfaced in CI, not locally, because a stale `.tsbuildinfo`
+  incremental-build cache (gitignored, left over from before the bump) let
+  local `tsc -b` skip re-validating `vite.config.ts` against the new
+  package's types. Fixed by switching `moduleResolution` to `"Bundler"` in
+  both `tsconfig.json` and `tsconfig.node.json` — the setting Vite projects
+  are meant to use anyway. Verified via `tsc -b` (after deleting the stale
+  `.tsbuildinfo` files to force a true from-scratch check), `npm run
   build`, and a live-browser console check (zero errors, including on the
   unauthenticated `/login` route, which is enough to exercise every
   statically-imported page/icon per `App.tsx`'s non-lazy imports).
