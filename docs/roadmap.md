@@ -180,7 +180,16 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   to reproduce, even paraphrased, without a license from ISO/PCI SSC/AICPA/CIS.
   See `docs/database.md` for the full rationale and the migration to extend if
   a license is ever obtained.
-- **Kubernetes/Helm/Terraform.** See `docs/deployment.md`.
+- **Kubernetes/Helm/Terraform.** `k8s/` now has a drafted set of plain
+  manifests (no Helm chart, no Terraform) mirroring `docker-compose.yml`'s
+  topology, implementing the three priorities this bullet used to list:
+  secrets in a Kubernetes Secret, migrations as a separate Job, and
+  liveness/readiness probes on `/health`. Deliberately not called "Done"
+  above: no `kubectl`/`helm`/cluster was available to apply, render, or
+  schema-validate any of it against a real API server — only YAML-syntax
+  parsing was checked. See `docs/deployment.md` and `k8s/README.md` for the
+  full status and what's still missing (a real secrets-manager integration,
+  autoscaling, network policies, and any Terraform at all).
 - **Full EBIOS RM methodology.** The structural linking (asset/threat/
   vulnerability/feared-event) is done — see "Done" above — but the full
   5-workshop ANSSI methodology (risk-source/target-objective pairing,

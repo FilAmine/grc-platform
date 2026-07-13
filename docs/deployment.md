@@ -55,16 +55,34 @@ Every migration in this repo implements a real `downgrade()`, not a no-op — se
 redeploying the previous container image; there's no blue/green or canary
 mechanism in the Compose setup.
 
-## Future-ready, not yet implemented
+## Kubernetes
 
-The spec anticipates Kubernetes/Helm/Terraform as a future target. Nothing in this
-repo assumes Docker Compose specifically — the `backend`/`frontend` Dockerfiles are
-standard multi-stage builds that would work unmodified as a Kubernetes Deployment's
-container image — but no Helm chart or Terraform module exists yet. Priorities for
-that work, in order: externalize secrets (currently plain env vars) into a
-secrets manager, run migrations as a Kubernetes Job/initContainer rather than in
-the app container's startup command, and add liveness/readiness probes pointing at
+`k8s/` has a drafted set of plain manifests (no Helm chart) mirroring this
+file's Docker Compose topology — see `k8s/README.md` for the full apply
+sequence, prerequisites, and what's deliberately not included (Helm/
+Terraform, autoscaling, network policies, a real secrets-manager
+integration). **They have not been applied to or validated against a real
+cluster** — no `kubectl`/`helm`/cluster was available where they were
+written; only YAML-syntax parsing was checked. Treat them as a solid draft
+to `--dry-run=server` and fix up, not a tested deployment artifact.
+
+They do implement the three priorities this section used to list before
+they were drafted: secrets moved into a Kubernetes Secret
+(`k8s/secret.example.yaml` — still a stopgap, not a real secrets-manager
+integration; see its header), migrations run as a separate
+`k8s/migration-job.yaml` Job instead of in the app container's startup
+command, and `k8s/backend-deployment.yaml` has liveness/readiness probes on
 `/health`.
+
+One related change needed regardless of Kubernetes: `frontend/Dockerfile`
+now accepts a `VITE_API_BASE_URL` build arg (default unchanged, so existing
+Compose/local builds are unaffected) — the frontend bakes its API origin in
+at build time, not container runtime, and had no way to point at a
+non-`localhost` backend before this.
+
+Terraform is still not attempted — nothing in this repo needs it yet (no
+cloud-provider resources to provision beyond what `k8s/` already assumes
+exist: a cluster, an ingress controller, cert-manager).
 
 ## Health checks
 

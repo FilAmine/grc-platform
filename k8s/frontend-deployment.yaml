@@ -1,0 +1,58 @@
+# No env vars here on purpose: the frontend image bakes VITE_API_BASE_URL in
+# at `docker build` time (see frontend/Dockerfile's ARG and
+# frontend/nginx.conf's comment), not at container runtime -- setting an env
+# var on this Deployment would silently do nothing. If the API origin needs
+# to change, rebuild and repush the image with a different
+# --build-arg VITE_API_BASE_URL=..., then update the image tag below. See
+# k8s/README.md.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: grc-platform
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/your-org/grc-frontend:latest # replace with your built+pushed image
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: grc-platform
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 80

@@ -1,0 +1,39 @@
+# replicas MUST stay at 1: celery-beat is a scheduler, not a worker -- two
+# copies would each independently fire recompute_all_compliance_scores on
+# its nightly crontab (backend/app/core/celery_app.py), double-recomputing
+# every IN_PROGRESS assessment's score instead of once. This is a real
+# correctness constraint, not a resource-saving default; do not add an HPA
+# or bump replicas on this Deployment.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-beat
+  namespace: grc-platform
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate # avoid two beat pods running simultaneously during a rollout
+  selector:
+    matchLabels:
+      app: celery-beat
+  template:
+    metadata:
+      labels:
+        app: celery-beat
+    spec:
+      containers:
+        - name: celery-beat
+          image: ghcr.io/your-org/grc-backend:latest # replace with your built+pushed image; same image as backend
+          command: ["celery", "-A", "backend.app.core.celery_app", "beat", "--loglevel=info"]
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secrets
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi

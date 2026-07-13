@@ -1,0 +1,24 @@
+# Non-secret application config, mirroring docker-compose.yml's x-backend-env
+# anchor minus anything that belongs in a Secret (see secret.example.yaml).
+# backend, celery-worker, and celery-beat all share this ConfigMap, same as
+# they share docker-compose's x-backend-env block.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: grc-platform
+data:
+  APP_ENV: "production"
+  APP_NAME: "GRC Platform"
+  API_V1_PREFIX: "/api/v1"
+  ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+  REFRESH_TOKEN_EXPIRE_DAYS: "30"
+  # Update to your real frontend origin(s) before deploying -- see
+  # docs/deployment.md's "Before deploying anywhere real" checklist.
+  BACKEND_CORS_ORIGINS: "https://grc.example.com"
+  BACKEND_BASE_URL: "https://api.grc.example.com"
+  FRONTEND_BASE_URL: "https://grc.example.com"
+  AI_PROVIDER: "echo"
+  OPENAI_MODEL: "gpt-4o-mini"
+  OLLAMA_BASE_URL: "http://ollama:11434"
+  OLLAMA_MODEL: "llama3"

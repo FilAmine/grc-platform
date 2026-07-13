@@ -1,6 +1,7 @@
 .env
 .env.*
 !.env.example
+k8s/secret.yaml
 __pycache__/
 *.py[cod]
 *.pyo

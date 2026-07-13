@@ -1,0 +1,29 @@
+# Runs `alembic upgrade head` once, separately from the backend container's
+# startup -- docs/deployment.md's stated K8s priority #2. Unlike
+# docker-compose.yml's `backend` service (which chains migration-then-uvicorn
+# in one `command:`, racy under multiple replicas -- see that file's
+# comments), a Job runs to completion exactly once regardless of how many
+# backend replicas come up after it.
+#
+# A Job's spec is immutable once created, so re-running this on every deploy
+# means deleting the old one first: see k8s/README.md for the
+# delete-then-apply-then-wait sequence this is meant to run inside.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+  namespace: grc-platform
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: ghcr.io/your-org/grc-backend:latest # replace with your built+pushed image
+          command: ["alembic", "upgrade", "head"]
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secrets

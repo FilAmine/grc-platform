@@ -1,0 +1,48 @@
+# Two separate hostnames (not one host with path-based routing) so the
+# frontend's build-time-baked VITE_API_BASE_URL (frontend/Dockerfile) can
+# just be "https://api.grc.example.com/api/v1" -- a real absolute URL,
+# matching BACKEND_BASE_URL/FRONTEND_BASE_URL in configmap.yaml, which the
+# SSO/OIDC redirect_uri construction (backend/app/core/config.py) already
+# assumes are real, separate origins. Replace grc.example.com /
+# api.grc.example.com with your real domains everywhere in this file.
+#
+# Assumes an ingress-nginx controller and cert-manager are installed
+# cluster-side (neither is provisioned by these manifests) -- swap the
+# annotation/ingressClassName if you're on a different controller, and
+# remove the cert-manager annotation + tls: block entirely if you're
+# terminating TLS elsewhere (e.g. a cloud load balancer in front of this).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grc-platform
+  namespace: grc-platform
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - grc.example.com
+        - api.grc.example.com
+      secretName: grc-platform-tls
+  rules:
+    - host: grc.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+    - host: api.grc.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 8000
