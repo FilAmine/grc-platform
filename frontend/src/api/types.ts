@@ -621,3 +621,60 @@ export type TaskCreate = {
   description?: string;
   due_date?: string | null;
 };
+
+// --- EBIOS RM Workshop 2: risk sources + risk origins (SR/OV pairing) ------------
+
+export type RiskSourceCategory =
+  | 'state'
+  | 'organized_crime'
+  | 'terrorist'
+  | 'activist'
+  | 'vengeful_individual'
+  | 'amateur'
+  | 'specialized_firm';
+export type RiskSourceLevel = 'low' | 'moderate' | 'significant' | 'very_high';
+export type RiskSourceActivity = 'low' | 'medium' | 'high';
+
+export type RiskSource = {
+  id: string;
+  organization_id: string;
+  name: string;
+  description: string;
+  category: RiskSourceCategory;
+  motivation: RiskSourceLevel;
+  resources: RiskSourceLevel;
+  activity: RiskSourceActivity;
+  created_at: string;
+  updated_at: string;
+};
+
+export type RiskSourceCreate = {
+  name: string;
+  category: RiskSourceCategory;
+  description?: string;
+  motivation?: RiskSourceLevel;
+  resources?: RiskSourceLevel;
+  activity?: RiskSourceActivity;
+};
+
+export type RiskOriginPertinence = 'low' | 'medium' | 'high' | 'critical';
+
+export type RiskOrigin = {
+  id: string;
+  organization_id: string;
+  risk_source_id: string;
+  target_objective: string;
+  feared_event_id: string | null;
+  pertinence: RiskOriginPertinence;
+  retained: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type RiskOriginCreate = {
+  risk_source_id: string;
+  target_objective: string;
+  feared_event_id?: string | null;
+  pertinence?: RiskOriginPertinence;
+  retained?: boolean;
+};

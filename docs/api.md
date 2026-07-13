@@ -190,6 +190,36 @@ availability — EBIOS RM's "feared event" (événement redouté), with
 existing CMDB `Asset` (see `docs/roadmap.md`). `asset_id` is **required**
 (unlike Risk's 4 optional link fields) and validated cross-tenant on `POST`.
 
+## Risk Sources
+
+| Method | Path |
+|---|---|
+| GET/POST | `/risk-sources` |
+
+EBIOS RM Workshop 2's threat-actor catalog ("who"). `category` is one of
+ANSSI's 7 standard risk-source categories (state, organized crime,
+terrorist, activist, vengeful individual, amateur, specialized firm);
+`motivation`/`resources` share a 4-level scale (low/moderate/significant/
+very_high), `activity` a simpler 3-level one (low/medium/high) — all
+matching ANSSI's own Workshop 2 evaluation grid.
+
+## Risk Origins
+
+| Method | Path |
+|---|---|
+| GET/POST | `/risk-origins` |
+
+EBIOS RM Workshop 2's "couple source de risque / objectif vise" (SR/OV
+pair): pairs a `risk_source_id` (required — a risk origin *is* the pairing)
+with a free-text `target_objective` and an optional `feared_event_id` (not
+every objective maps to a pre-existing feared event). Scored for
+`pertinence` (low/medium/high/critical, same shape as `feared_events`'
+`gravity`) and flagged `retained` for whether this pair is prioritized to
+carry forward into Workshop 3's strategic scenarios — Workshop 3 itself
+isn't built (see `docs/roadmap.md`). Both `risk_source_id` and
+`feared_event_id` are validated cross-tenant on `POST`, same pattern as
+Risk's optional FK links.
+
 ## Tasks
 
 | Method | Path |

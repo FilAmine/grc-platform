@@ -12,6 +12,8 @@ from backend.app.modules.incidents import api as incidents
 from backend.app.modules.notifications import api as notifications
 from backend.app.modules.organizations import api as organizations
 from backend.app.modules.permissions import api as permissions
+from backend.app.modules.risk_origins import api as risk_origins
+from backend.app.modules.risk_sources import api as risk_sources
 from backend.app.modules.risks import api as risks
 from backend.app.modules.roles import api as roles
 from backend.app.modules.sso import api as sso
@@ -38,6 +40,8 @@ api_router.include_router(
     vulnerabilities.router, prefix="/vulnerabilities", tags=["vulnerabilities"]
 )
 api_router.include_router(feared_events.router, prefix="/feared-events", tags=["feared-events"])
+api_router.include_router(risk_sources.router, prefix="/risk-sources", tags=["risk-sources"])
+api_router.include_router(risk_origins.router, prefix="/risk-origins", tags=["risk-origins"])
 api_router.include_router(compliance.router, prefix="/compliance", tags=["compliance"])
 api_router.include_router(audits.router, prefix="/audits", tags=["audits"])
 api_router.include_router(incidents.router, prefix="/incidents", tags=["incidents"])

@@ -50,6 +50,10 @@ FEARED_EVENTS_READ = "feared_events:read"
 FEARED_EVENTS_MANAGE = "feared_events:manage"
 TASKS_READ = "tasks:read"
 TASKS_MANAGE = "tasks:manage"
+RISK_SOURCES_READ = "risk_sources:read"
+RISK_SOURCES_MANAGE = "risk_sources:manage"
+RISK_ORIGINS_READ = "risk_origins:read"
+RISK_ORIGINS_MANAGE = "risk_origins:manage"
 
 ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(ORGANIZATIONS_READ, "View organization settings"),
@@ -87,6 +91,10 @@ ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(FEARED_EVENTS_MANAGE, "Create feared events"),
     PermissionDef(TASKS_READ, "View tasks"),
     PermissionDef(TASKS_MANAGE, "Create tasks and change their status"),
+    PermissionDef(RISK_SOURCES_READ, "View the EBIOS RM risk source catalog"),
+    PermissionDef(RISK_SOURCES_MANAGE, "Create risk sources"),
+    PermissionDef(RISK_ORIGINS_READ, "View EBIOS RM risk origin (SR/OV) pairs"),
+    PermissionDef(RISK_ORIGINS_MANAGE, "Create and prioritize risk origin (SR/OV) pairs"),
 )
 
 # Default role -> permission-code mapping seeded for every new organization.
@@ -123,6 +131,10 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         FEARED_EVENTS_MANAGE,
         TASKS_READ,
         TASKS_MANAGE,
+        RISK_SOURCES_READ,
+        RISK_SOURCES_MANAGE,
+        RISK_ORIGINS_READ,
+        RISK_ORIGINS_MANAGE,
     ),
     "Auditor": (
         ORGANIZATIONS_READ,
@@ -144,6 +156,8 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         INCIDENTS_READ,
         FEARED_EVENTS_READ,
         TASKS_READ,
+        RISK_SOURCES_READ,
+        RISK_ORIGINS_READ,
     ),
     "Viewer": (
         ORGANIZATIONS_READ,
@@ -161,5 +175,7 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         INCIDENTS_READ,
         FEARED_EVENTS_READ,
         TASKS_READ,
+        RISK_SOURCES_READ,
+        RISK_ORIGINS_READ,
     ),
 }

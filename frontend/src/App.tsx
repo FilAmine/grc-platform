@@ -19,6 +19,8 @@ import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { RegisterOrganizationPage } from './pages/RegisterOrganizationPage';
+import { RiskOriginsPage } from './pages/RiskOriginsPage';
+import { RiskSourcesPage } from './pages/RiskSourcesPage';
 import { RisksPage } from './pages/RisksPage';
 import { RolesPage } from './pages/RolesPage';
 import { SsoCallbackPage } from './pages/SsoCallbackPage';
@@ -57,6 +59,8 @@ export function App() {
           <Route path="/threats" element={<ThreatsPage />} />
           <Route path="/vulnerabilities" element={<VulnerabilitiesPage />} />
           <Route path="/feared-events" element={<FearedEventsPage />} />
+          <Route path="/risk-sources" element={<RiskSourcesPage />} />
+          <Route path="/risk-origins" element={<RiskOriginsPage />} />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
           <Route path="/assessments/:assessmentId" element={<AssessmentDetailPage />} />

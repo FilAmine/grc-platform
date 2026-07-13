@@ -64,16 +64,28 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   catalog (`asset_id` required, `criterion` = which CIA property is
   impacted, `gravity`). This is the structural linking
   `docs/roadmap.md` previously called out as missing ("asset-value /
-  threat-source / feared-events structure"), **not** the full 5-workshop
-  ANSSI EBIOS RM methodology: no risk-source/target-objective (SR/OV)
-  pairing, no strategic/operational attack-path scenarios, no
-  MITRE-ATT&CK-style technique modeling, no risk-treatment workflow. EBIOS
-  RM's "business value" and "supporting asset" tiers are also deliberately
-  conflated into the existing CMDB `Asset` — a stated simplification, not an
-  oversight. Risk still has no `GET/{id}`, detail page, or update endpoint,
-  so these links are settable at creation only; editing them later needs a
-  future Risk detail page + `PATCH /risks/{id}`. See `docs/api.md` for the
-  endpoints.
+  threat-source / feared-events structure") — see the Workshop 2 bullet
+  below for the risk-source/target-objective (SR/OV) pairing, which is now
+  also done. EBIOS RM's "business value" and "supporting asset" tiers are
+  deliberately conflated into the existing CMDB `Asset` — a stated
+  simplification, not an oversight. Risk still has no `GET/{id}`, detail
+  page, or update endpoint, so these links are settable at creation only;
+  editing them later needs a future Risk detail page + `PATCH /risks/{id}`.
+  See `docs/api.md` for the endpoints.
+- **EBIOS RM Workshop 2 (risk sources + SR/OV pairing)**: a `RiskSource`
+  catalog (ANSSI's 7 standard threat-actor categories — state, organized
+  crime, terrorist, activist, vengeful individual, amateur, specialized
+  firm — each scored on `motivation`/`resources`, a shared 4-level scale,
+  and `activity`, a 3-level one, matching ANSSI's own Workshop 2 evaluation
+  grid) plus `RiskOrigin`, the actual "couple SR/OV": a mandatory
+  `risk_source_id` paired with a free-text `target_objective`, an optional
+  `feared_event_id` link, a `pertinence` score, and a `retained` flag
+  marking which pairs are prioritized to carry into Workshop 3. Workshop 3
+  (strategic scenarios + ecosystem mapping), Workshop 4 (operational/
+  technical attack scenarios, e.g. MITRE-ATT&CK-style technique modeling),
+  and Workshop 5 (risk synthesis + treatment workflow) are still not
+  attempted — each is its own substantial slice, not bundled into this one.
+  See `docs/api.md` for the endpoints.
 - **Tenant entity + generic Task module**: a real `Tenant` entity now exists
   above `Organization` (a nullable `organizations.tenant_id`), letting a
   platform operator group several existing orgs under one record. This does
@@ -191,11 +203,13 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   full status and what's still missing (a real secrets-manager integration,
   autoscaling, network policies, and any Terraform at all).
 - **Full EBIOS RM methodology.** The structural linking (asset/threat/
-  vulnerability/feared-event) is done — see "Done" above — but the full
-  5-workshop ANSSI methodology (risk-source/target-objective pairing,
-  strategic/operational attack-path scenarios, MITRE-ATT&CK-style technique
-  modeling, risk-treatment workflow) is not attempted and would be its own
-  multi-week effort if ever pursued.
+  vulnerability/feared-event) and Workshop 2 (risk sources + SR/OV pairing)
+  are done — see "Done" above — but Workshops 3-5 (strategic scenarios +
+  ecosystem mapping, operational/technical attack scenarios including any
+  MITRE-ATT&CK-style technique modeling, and risk synthesis + treatment
+  workflow) are not attempted. Each is a substantial, mostly-independent
+  slice; Workshop 3 is the natural next one, since it builds directly on
+  Workshop 2's `retained` risk origins.
 
 ## Suggested next milestone
 
@@ -203,10 +217,11 @@ Frontend module coverage is complete (every backend module has a page), the
 public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
 SSO (OIDC), rate limiting/security headers/dependency scanning,
 departments/threats/vulnerabilities, incident management, EBIOS-RM-flavored
-risk linking, the Tenant/Task modules, a real Celery worker, and the Vite
-and FastAPI/starlette major-version upgrades are all in. What's left is
-either intentionally out of reach (licensed standards text — needs a
-license, not a code change) or its own multi-week effort (Kubernetes/
-Terraform, the full 5-workshop EBIOS RM methodology). None of it blocks
-day-to-day use of what's already built; pick based on which specific gap
+risk linking plus its Workshop 2 (risk sources + SR/OV pairing), the
+Tenant/Task modules, a real Celery worker, and the Vite and FastAPI/
+starlette major-version upgrades are all in. What's left is either
+intentionally out of reach (licensed standards text — needs a license, not
+a code change) or its own substantial effort (Terraform, EBIOS RM
+Workshops 3-5). None of it blocks day-to-day use of what's already built;
+pick based on which specific gap
 actually matters for your next deployment target.

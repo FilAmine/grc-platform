@@ -53,6 +53,10 @@ from backend.app.modules.organizations.repository import (
 from backend.app.modules.organizations.service import OrganizationService
 from backend.app.modules.permissions.repository import SqlAlchemyPermissionRepository
 from backend.app.modules.permissions.service import PermissionService
+from backend.app.modules.risk_origins.repository import SqlAlchemyRiskOriginRepository
+from backend.app.modules.risk_origins.service import RiskOriginService
+from backend.app.modules.risk_sources.repository import SqlAlchemyRiskSourceRepository
+from backend.app.modules.risk_sources.service import RiskSourceService
 from backend.app.modules.risks.repository import (
     SqlAlchemyRiskRepository,
 )
@@ -110,6 +114,14 @@ def get_threat_service(session: Session = Depends(get_session)) -> ThreatService
 
 def get_vulnerability_service(session: Session = Depends(get_session)) -> VulnerabilityService:
     return VulnerabilityService(SqlAlchemyVulnerabilityRepository(session))
+
+
+def get_risk_source_service(session: Session = Depends(get_session)) -> RiskSourceService:
+    return RiskSourceService(SqlAlchemyRiskSourceRepository(session))
+
+
+def get_risk_origin_service(session: Session = Depends(get_session)) -> RiskOriginService:
+    return RiskOriginService(SqlAlchemyRiskOriginRepository(session))
 
 
 def get_control_service(session: Session = Depends(get_session)) -> ControlService:
