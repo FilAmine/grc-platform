@@ -21,6 +21,7 @@ import {
   SmartToy as SmartToyIcon,
   Storage as StorageIcon,
   TaskAlt as TaskAltIcon,
+  Terminal as TerminalIcon,
   VpnKey as VpnKeyIcon,
   WarningAmber as WarningAmberIcon,
 } from '@mui/icons-material';
@@ -61,6 +62,7 @@ const NAV_ITEMS = [
   { to: '/risk-origins', label: 'Risk Origins', icon: <GpsFixedIcon /> },
   { to: '/ecosystem-parties', label: 'Ecosystem Parties', icon: <HubIcon /> },
   { to: '/strategic-scenarios', label: 'Strategic Scenarios', icon: <AltRouteIcon /> },
+  { to: '/operational-scenarios', label: 'Operational Scenarios', icon: <TerminalIcon /> },
   { to: '/tasks', label: 'Tasks', icon: <TaskAltIcon /> },
   { to: '/assessments', label: 'Assessments', icon: <RuleIcon /> },
   { to: '/users', label: 'Users', icon: <PeopleIcon /> },

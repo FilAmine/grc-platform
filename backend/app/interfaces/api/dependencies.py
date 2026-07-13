@@ -49,6 +49,8 @@ from backend.app.modules.incidents.repository import SqlAlchemyIncidentRepositor
 from backend.app.modules.incidents.service import IncidentService
 from backend.app.modules.notifications.repository import SqlAlchemyNotificationRepository
 from backend.app.modules.notifications.service import NotificationService
+from backend.app.modules.operational_scenarios.repository import SqlAlchemyOperationalScenarioRepository
+from backend.app.modules.operational_scenarios.service import OperationalScenarioService
 from backend.app.modules.organizations.repository import (
     SqlAlchemyOrganizationRepository,
 )
@@ -134,6 +136,12 @@ def get_ecosystem_party_service(session: Session = Depends(get_session)) -> Ecos
 
 def get_strategic_scenario_service(session: Session = Depends(get_session)) -> StrategicScenarioService:
     return StrategicScenarioService(SqlAlchemyStrategicScenarioRepository(session))
+
+
+def get_operational_scenario_service(
+    session: Session = Depends(get_session),
+) -> OperationalScenarioService:
+    return OperationalScenarioService(SqlAlchemyOperationalScenarioRepository(session))
 
 
 def get_control_service(session: Session = Depends(get_session)) -> ControlService:

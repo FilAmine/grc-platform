@@ -727,3 +727,27 @@ export type StrategicScenarioCreate = {
   description?: string;
   likelihood?: StrategicScenarioLikelihood;
 };
+
+// --- EBIOS RM Workshop 4: operational scenarios -----------------------------------
+
+export type OperationalScenarioLikelihood = 'low' | 'medium' | 'high' | 'critical';
+
+export type OperationalScenario = {
+  id: string;
+  organization_id: string;
+  strategic_scenario_id: string;
+  name: string;
+  description: string;
+  mitre_technique_ids: string[];
+  technical_likelihood: OperationalScenarioLikelihood;
+  created_at: string;
+  updated_at: string;
+};
+
+export type OperationalScenarioCreate = {
+  strategic_scenario_id: string;
+  name: string;
+  description?: string;
+  mitre_technique_ids?: string[];
+  technical_likelihood?: OperationalScenarioLikelihood;
+};

@@ -245,9 +245,24 @@ EBIOS RM Workshop 3's actual output: elaborates a `risk_origin_id` (Workshop
 duplicated onto this table), optionally routed through an
 `ecosystem_party_id` (optional — not every attack path uses a third
 party). Scored for `likelihood` (low/medium/high/critical). All three FKs
-are validated cross-tenant on `POST`. Workshops 4 (operational/technical
-scenarios) and 5 (risk synthesis + treatment) aren't built (see
-`docs/roadmap.md`).
+are validated cross-tenant on `POST`.
+
+## Operational Scenarios
+
+| Method | Path |
+|---|---|
+| GET/POST | `/operational-scenarios` |
+
+EBIOS RM Workshop 4's actual output: elaborates a `strategic_scenario_id`
+(required) into a concrete technical attack chain, with
+`mitre_technique_ids` (a free-text list of technique identifiers, e.g.
+`["T1566", "T1078"]` — not validated against a live MITRE ATT&CK catalog,
+see the module's docstring for why) and its own `technical_likelihood`
+(low/medium/high/critical) — deliberately separate from the linked
+strategic scenario's `likelihood`, since one captures attacker motivation/
+targeting and the other technical feasibility. `strategic_scenario_id` is
+validated cross-tenant on `POST`. Workshop 5 (risk synthesis + treatment)
+isn't built (see `docs/roadmap.md`).
 
 ## Tasks
 

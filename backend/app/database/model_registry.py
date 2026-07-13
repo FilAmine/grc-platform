@@ -41,6 +41,7 @@ from backend.app.modules.ecosystem_parties.models import EcosystemPartyModel
 from backend.app.modules.feared_events.models import FearedEventModel
 from backend.app.modules.incidents.models import IncidentModel
 from backend.app.modules.notifications.models import NotificationModel
+from backend.app.modules.operational_scenarios.models import OperationalScenarioModel
 from backend.app.modules.organizations.models import OrganizationModel
 from backend.app.modules.permissions.models import PermissionModel
 from backend.app.modules.risk_origins.models import RiskOriginModel
@@ -81,6 +82,7 @@ __all__ = [
     "IncidentModel",
     "KnowledgeBaseDocumentModel",
     "NotificationModel",
+    "OperationalScenarioModel",
     "OrganizationModel",
     "PromptTemplateModel",
     "PermissionModel",

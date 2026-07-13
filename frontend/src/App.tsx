@@ -19,6 +19,7 @@ import { IncidentsPage } from './pages/IncidentsPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { NotificationsPage } from './pages/NotificationsPage';
+import { OperationalScenariosPage } from './pages/OperationalScenariosPage';
 import { RegisterOrganizationPage } from './pages/RegisterOrganizationPage';
 import { RiskOriginsPage } from './pages/RiskOriginsPage';
 import { RiskSourcesPage } from './pages/RiskSourcesPage';
@@ -65,6 +66,7 @@ export function App() {
           <Route path="/risk-origins" element={<RiskOriginsPage />} />
           <Route path="/ecosystem-parties" element={<EcosystemPartiesPage />} />
           <Route path="/strategic-scenarios" element={<StrategicScenariosPage />} />
+          <Route path="/operational-scenarios" element={<OperationalScenariosPage />} />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
           <Route path="/assessments/:assessmentId" element={<AssessmentDetailPage />} />
