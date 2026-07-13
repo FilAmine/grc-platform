@@ -7,6 +7,7 @@ from backend.app.modules.controls import api as controls
 from backend.app.modules.dashboard import api as dashboard
 from backend.app.modules.departments import api as departments
 from backend.app.modules.documents import api as documents
+from backend.app.modules.ecosystem_parties import api as ecosystem_parties
 from backend.app.modules.feared_events import api as feared_events
 from backend.app.modules.incidents import api as incidents
 from backend.app.modules.notifications import api as notifications
@@ -17,6 +18,7 @@ from backend.app.modules.risk_sources import api as risk_sources
 from backend.app.modules.risks import api as risks
 from backend.app.modules.roles import api as roles
 from backend.app.modules.sso import api as sso
+from backend.app.modules.strategic_scenarios import api as strategic_scenarios
 from backend.app.modules.tasks import api as tasks
 from backend.app.modules.tenants import api as tenants
 from backend.app.modules.threats import api as threats
@@ -42,6 +44,12 @@ api_router.include_router(
 api_router.include_router(feared_events.router, prefix="/feared-events", tags=["feared-events"])
 api_router.include_router(risk_sources.router, prefix="/risk-sources", tags=["risk-sources"])
 api_router.include_router(risk_origins.router, prefix="/risk-origins", tags=["risk-origins"])
+api_router.include_router(
+    ecosystem_parties.router, prefix="/ecosystem-parties", tags=["ecosystem-parties"]
+)
+api_router.include_router(
+    strategic_scenarios.router, prefix="/strategic-scenarios", tags=["strategic-scenarios"]
+)
 api_router.include_router(compliance.router, prefix="/compliance", tags=["compliance"])
 api_router.include_router(audits.router, prefix="/audits", tags=["audits"])
 api_router.include_router(incidents.router, prefix="/incidents", tags=["incidents"])

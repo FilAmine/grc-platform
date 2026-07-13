@@ -13,6 +13,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { DepartmentsPage } from './pages/DepartmentsPage';
 import { DocumentDetailPage } from './pages/DocumentDetailPage';
 import { DocumentsPage } from './pages/DocumentsPage';
+import { EcosystemPartiesPage } from './pages/EcosystemPartiesPage';
 import { FearedEventsPage } from './pages/FearedEventsPage';
 import { IncidentsPage } from './pages/IncidentsPage';
 import { LoginPage } from './pages/LoginPage';
@@ -25,6 +26,7 @@ import { RisksPage } from './pages/RisksPage';
 import { RolesPage } from './pages/RolesPage';
 import { SsoCallbackPage } from './pages/SsoCallbackPage';
 import { SsoSettingsPage } from './pages/SsoSettingsPage';
+import { StrategicScenariosPage } from './pages/StrategicScenariosPage';
 import { TasksPage } from './pages/TasksPage';
 import { ThreatsPage } from './pages/ThreatsPage';
 import { UsersPage } from './pages/UsersPage';
@@ -61,6 +63,8 @@ export function App() {
           <Route path="/feared-events" element={<FearedEventsPage />} />
           <Route path="/risk-sources" element={<RiskSourcesPage />} />
           <Route path="/risk-origins" element={<RiskOriginsPage />} />
+          <Route path="/ecosystem-parties" element={<EcosystemPartiesPage />} />
+          <Route path="/strategic-scenarios" element={<StrategicScenariosPage />} />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
           <Route path="/assessments/:assessmentId" element={<AssessmentDetailPage />} />

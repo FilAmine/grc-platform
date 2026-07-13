@@ -215,10 +215,39 @@ with a free-text `target_objective` and an optional `feared_event_id` (not
 every objective maps to a pre-existing feared event). Scored for
 `pertinence` (low/medium/high/critical, same shape as `feared_events`'
 `gravity`) and flagged `retained` for whether this pair is prioritized to
-carry forward into Workshop 3's strategic scenarios — Workshop 3 itself
-isn't built (see `docs/roadmap.md`). Both `risk_source_id` and
-`feared_event_id` are validated cross-tenant on `POST`, same pattern as
+carry forward into Workshop 3's strategic scenarios. Both `risk_source_id`
+and `feared_event_id` are validated cross-tenant on `POST`, same pattern as
 Risk's optional FK links.
+
+## Ecosystem Parties
+
+| Method | Path |
+|---|---|
+| GET/POST | `/ecosystem-parties` |
+
+EBIOS RM Workshop 3's ecosystem cartography: third parties (`category`:
+provider/subcontractor/partner/client) a strategic scenario's attack path
+can use as a stepping stone. Scored on `dependency_level` (how critical
+this party is to the org's own operations) and `cyber_maturity` (their own
+security posture — low maturity makes a more attractive stepping stone),
+both sharing a 3-level scale (low/medium/high).
+
+## Strategic Scenarios
+
+| Method | Path |
+|---|---|
+| GET/POST | `/strategic-scenarios` |
+
+EBIOS RM Workshop 3's actual output: elaborates a `risk_origin_id` (Workshop
+2's SR/OV pair — required, and must be `retained`, enforced with a `409` on
+`POST` if not) into a concrete attack path targeting a `feared_event_id`
+(required — severity comes from that feared event's `gravity`, not
+duplicated onto this table), optionally routed through an
+`ecosystem_party_id` (optional — not every attack path uses a third
+party). Scored for `likelihood` (low/medium/high/critical). All three FKs
+are validated cross-tenant on `POST`. Workshops 4 (operational/technical
+scenarios) and 5 (risk synthesis + treatment) aren't built (see
+`docs/roadmap.md`).
 
 ## Tasks
 

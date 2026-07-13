@@ -678,3 +678,52 @@ export type RiskOriginCreate = {
   pertinence?: RiskOriginPertinence;
   retained?: boolean;
 };
+
+// --- EBIOS RM Workshop 3: ecosystem parties + strategic scenarios ----------------
+
+export type EcosystemPartyCategory = 'provider' | 'subcontractor' | 'partner' | 'client';
+export type EcosystemPartyLevel = 'low' | 'medium' | 'high';
+
+export type EcosystemParty = {
+  id: string;
+  organization_id: string;
+  name: string;
+  description: string;
+  category: EcosystemPartyCategory;
+  dependency_level: EcosystemPartyLevel;
+  cyber_maturity: EcosystemPartyLevel;
+  created_at: string;
+  updated_at: string;
+};
+
+export type EcosystemPartyCreate = {
+  name: string;
+  category: EcosystemPartyCategory;
+  description?: string;
+  dependency_level?: EcosystemPartyLevel;
+  cyber_maturity?: EcosystemPartyLevel;
+};
+
+export type StrategicScenarioLikelihood = 'low' | 'medium' | 'high' | 'critical';
+
+export type StrategicScenario = {
+  id: string;
+  organization_id: string;
+  risk_origin_id: string;
+  feared_event_id: string;
+  ecosystem_party_id: string | null;
+  name: string;
+  description: string;
+  likelihood: StrategicScenarioLikelihood;
+  created_at: string;
+  updated_at: string;
+};
+
+export type StrategicScenarioCreate = {
+  risk_origin_id: string;
+  feared_event_id: string;
+  name: string;
+  ecosystem_party_id?: string | null;
+  description?: string;
+  likelihood?: StrategicScenarioLikelihood;
+};

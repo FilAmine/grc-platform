@@ -1,5 +1,6 @@
 import {
   AccountTree as AccountTreeIcon,
+  AltRoute as AltRouteIcon,
   Assessment as AssessmentIcon,
   BugReport as BugReportIcon,
   Dashboard as DashboardIcon,
@@ -8,6 +9,7 @@ import {
   Gavel as GavelIcon,
   GppMaybe as GppMaybeIcon,
   GpsFixed as GpsFixedIcon,
+  Hub as HubIcon,
   Logout as LogoutIcon,
   Notifications as NotificationsIcon,
   People as PeopleIcon,
@@ -57,6 +59,8 @@ const NAV_ITEMS = [
   { to: '/feared-events', label: 'Feared Events', icon: <GppMaybeIcon /> },
   { to: '/risk-sources', label: 'Risk Sources', icon: <PersonSearchIcon /> },
   { to: '/risk-origins', label: 'Risk Origins', icon: <GpsFixedIcon /> },
+  { to: '/ecosystem-parties', label: 'Ecosystem Parties', icon: <HubIcon /> },
+  { to: '/strategic-scenarios', label: 'Strategic Scenarios', icon: <AltRouteIcon /> },
   { to: '/tasks', label: 'Tasks', icon: <TaskAltIcon /> },
   { to: '/assessments', label: 'Assessments', icon: <RuleIcon /> },
   { to: '/users', label: 'Users', icon: <PeopleIcon /> },

@@ -37,6 +37,7 @@ from backend.app.modules.documents.models import (
     DocumentModel,
     DocumentVersionModel,
 )
+from backend.app.modules.ecosystem_parties.models import EcosystemPartyModel
 from backend.app.modules.feared_events.models import FearedEventModel
 from backend.app.modules.incidents.models import IncidentModel
 from backend.app.modules.notifications.models import NotificationModel
@@ -47,6 +48,7 @@ from backend.app.modules.risk_sources.models import RiskSourceModel
 from backend.app.modules.risks.models import RiskModel
 from backend.app.modules.roles.models import RoleModel, role_permissions
 from backend.app.modules.sso.models import SsoConnectionModel
+from backend.app.modules.strategic_scenarios.models import StrategicScenarioModel
 from backend.app.modules.tasks.models import TaskModel
 from backend.app.modules.tenants.models import TenantModel
 from backend.app.modules.threats.models import ThreatModel
@@ -67,6 +69,7 @@ __all__ = [
     "DocumentApprovalModel",
     "DocumentModel",
     "DocumentVersionModel",
+    "EcosystemPartyModel",
     "FindingModel",
     "ControlCategoryModel",
     "ControlMappingModel",
@@ -88,6 +91,7 @@ __all__ = [
     "RiskSourceModel",
     "RoleModel",
     "SsoConnectionModel",
+    "StrategicScenarioModel",
     "TaskModel",
     "TenantModel",
     "ThreatModel",

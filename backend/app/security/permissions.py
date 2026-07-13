@@ -54,6 +54,10 @@ RISK_SOURCES_READ = "risk_sources:read"
 RISK_SOURCES_MANAGE = "risk_sources:manage"
 RISK_ORIGINS_READ = "risk_origins:read"
 RISK_ORIGINS_MANAGE = "risk_origins:manage"
+ECOSYSTEM_PARTIES_READ = "ecosystem_parties:read"
+ECOSYSTEM_PARTIES_MANAGE = "ecosystem_parties:manage"
+STRATEGIC_SCENARIOS_READ = "strategic_scenarios:read"
+STRATEGIC_SCENARIOS_MANAGE = "strategic_scenarios:manage"
 
 ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(ORGANIZATIONS_READ, "View organization settings"),
@@ -95,6 +99,10 @@ ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(RISK_SOURCES_MANAGE, "Create risk sources"),
     PermissionDef(RISK_ORIGINS_READ, "View EBIOS RM risk origin (SR/OV) pairs"),
     PermissionDef(RISK_ORIGINS_MANAGE, "Create and prioritize risk origin (SR/OV) pairs"),
+    PermissionDef(ECOSYSTEM_PARTIES_READ, "View the EBIOS RM ecosystem party catalog"),
+    PermissionDef(ECOSYSTEM_PARTIES_MANAGE, "Create ecosystem parties"),
+    PermissionDef(STRATEGIC_SCENARIOS_READ, "View EBIOS RM strategic scenarios"),
+    PermissionDef(STRATEGIC_SCENARIOS_MANAGE, "Create strategic scenarios"),
 )
 
 # Default role -> permission-code mapping seeded for every new organization.
@@ -135,6 +143,10 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         RISK_SOURCES_MANAGE,
         RISK_ORIGINS_READ,
         RISK_ORIGINS_MANAGE,
+        ECOSYSTEM_PARTIES_READ,
+        ECOSYSTEM_PARTIES_MANAGE,
+        STRATEGIC_SCENARIOS_READ,
+        STRATEGIC_SCENARIOS_MANAGE,
     ),
     "Auditor": (
         ORGANIZATIONS_READ,
@@ -158,6 +170,8 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         TASKS_READ,
         RISK_SOURCES_READ,
         RISK_ORIGINS_READ,
+        ECOSYSTEM_PARTIES_READ,
+        STRATEGIC_SCENARIOS_READ,
     ),
     "Viewer": (
         ORGANIZATIONS_READ,
@@ -177,5 +191,7 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         TASKS_READ,
         RISK_SOURCES_READ,
         RISK_ORIGINS_READ,
+        ECOSYSTEM_PARTIES_READ,
+        STRATEGIC_SCENARIOS_READ,
     ),
 }

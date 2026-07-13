@@ -41,6 +41,8 @@ from backend.app.modules.departments.repository import SqlAlchemyDepartmentRepos
 from backend.app.modules.departments.service import DepartmentService
 from backend.app.modules.documents.repository import SqlAlchemyDocumentRepository
 from backend.app.modules.documents.service import DocumentService
+from backend.app.modules.ecosystem_parties.repository import SqlAlchemyEcosystemPartyRepository
+from backend.app.modules.ecosystem_parties.service import EcosystemPartyService
 from backend.app.modules.feared_events.repository import SqlAlchemyFearedEventRepository
 from backend.app.modules.feared_events.service import FearedEventService
 from backend.app.modules.incidents.repository import SqlAlchemyIncidentRepository
@@ -66,6 +68,8 @@ from backend.app.modules.roles.service import RoleService
 from backend.app.modules.sso.oidc_client import HttpxOidcClient, OidcClient
 from backend.app.modules.sso.repository import SqlAlchemySsoConnectionRepository
 from backend.app.modules.sso.service import SsoService
+from backend.app.modules.strategic_scenarios.repository import SqlAlchemyStrategicScenarioRepository
+from backend.app.modules.strategic_scenarios.service import StrategicScenarioService
 from backend.app.modules.tasks.repository import SqlAlchemyTaskRepository
 from backend.app.modules.tasks.service import TaskService
 from backend.app.modules.tenants.repository import SqlAlchemyTenantRepository
@@ -122,6 +126,14 @@ def get_risk_source_service(session: Session = Depends(get_session)) -> RiskSour
 
 def get_risk_origin_service(session: Session = Depends(get_session)) -> RiskOriginService:
     return RiskOriginService(SqlAlchemyRiskOriginRepository(session))
+
+
+def get_ecosystem_party_service(session: Session = Depends(get_session)) -> EcosystemPartyService:
+    return EcosystemPartyService(SqlAlchemyEcosystemPartyRepository(session))
+
+
+def get_strategic_scenario_service(session: Session = Depends(get_session)) -> StrategicScenarioService:
+    return StrategicScenarioService(SqlAlchemyStrategicScenarioRepository(session))
 
 
 def get_control_service(session: Session = Depends(get_session)) -> ControlService:
