@@ -109,8 +109,15 @@ def _create_operational_scenarios_table() -> None:
             name="fk_operational_scenarios_organization_id_organizations", ondelete="CASCADE",
         ),
         sa.ForeignKeyConstraint(
+            # Name kept under Postgres's 63-byte identifier limit (the
+            # obvious fk_operational_scenarios_strategic_scenario_id_strategic_scenarios
+            # is 66 bytes) by dropping the redundant "_strategic_scenarios"
+            # referent suffix this one migration's naming convention would
+            # otherwise add -- every other FK constraint name in this repo
+            # fits comfortably, this was the one case column name and table
+            # name overlapped enough to blow the budget.
             ["strategic_scenario_id"], ["strategic_scenarios.id"],
-            name="fk_operational_scenarios_strategic_scenario_id_strategic_scenarios", ondelete="RESTRICT",
+            name="fk_operational_scenarios_strategic_scenario_id", ondelete="RESTRICT",
         ),
         sa.ForeignKeyConstraint(
             ["created_by_id"], ["users.id"], name="fk_operational_scenarios_created_by_id_users",
