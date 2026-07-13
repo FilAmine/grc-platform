@@ -1,0 +1,69 @@
+{{- if .Values.postgres.enabled }}
+# In-cluster Postgres for dev/test parity only -- point secrets.* at a
+# managed instance and set postgres.enabled: false for anything real. See
+# k8s/postgres.yaml's original header for the full reasoning (identical
+# here, just templated).
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "grc-platform.fullname" . }}-postgres
+  labels:
+    {{- include "grc-platform.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "grc-platform.fullname" . }}-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "grc-platform.fullname" . }}-postgres
+  template:
+    metadata:
+      labels:
+        app: {{ include "grc-platform.fullname" . }}-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.image }}
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: {{ include "grc-platform.fullname" . }}-postgres-secrets
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "$(POSTGRES_USER)", "-d", "$(POSTGRES_DB)"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "$(POSTGRES_USER)", "-d", "$(POSTGRES_DB)"]
+            initialDelaySeconds: 15
+            periodSeconds: 20
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        {{- if .Values.postgres.storageClassName }}
+        storageClassName: {{ .Values.postgres.storageClassName | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.postgres.storage }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "grc-platform.fullname" . }}-postgres
+  labels:
+    {{- include "grc-platform.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  selector:
+    app: {{ include "grc-platform.fullname" . }}-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+{{- end }}

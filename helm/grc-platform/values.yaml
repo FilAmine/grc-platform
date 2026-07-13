@@ -1,0 +1,95 @@
+# Default values for the grc-platform chart. Override with -f or --set.
+# See helm/README.md for the full install sequence and what's unverified.
+
+backend:
+  image:
+    repository: ghcr.io/your-org/grc-backend
+    tag: latest # pin a real tag/digest before using this for anything real
+  replicas: 2
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits: { cpu: 500m, memory: 512Mi }
+
+celeryWorker:
+  replicas: 2 # safe to scale -- workers share a Redis queue
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits: { cpu: 500m, memory: 512Mi }
+
+celeryBeat:
+  # MUST stay 1 -- see templates/celery-beat-deployment.yaml's comment.
+  # Not exposed as a values knob on purpose, to make bumping it a
+  # deliberate values.yaml + template edit, not an easy `--set` mistake.
+  resources:
+    requests: { cpu: 50m, memory: 128Mi }
+    limits: { cpu: 200m, memory: 256Mi }
+
+frontend:
+  image:
+    repository: ghcr.io/your-org/grc-frontend
+    tag: latest # built with --build-arg VITE_API_BASE_URL matching ingress.apiHost below
+  replicas: 2
+  resources:
+    requests: { cpu: 50m, memory: 64Mi }
+    limits: { cpu: 200m, memory: 128Mi }
+
+postgres:
+  enabled: true # false if pointing at a managed Postgres instead -- see templates/postgres.yaml
+  image: postgres:16-alpine
+  storage: 10Gi
+  storageClassName: "" # empty = cluster default
+
+redis:
+  enabled: true
+  image: redis:7-alpine
+  storage: 2Gi
+  storageClassName: ""
+
+ingress:
+  enabled: true
+  className: nginx
+  frontendHost: grc.example.com
+  apiHost: api.grc.example.com
+  tls:
+    enabled: true
+    secretName: grc-platform-tls
+    clusterIssuer: letsencrypt-prod
+
+config:
+  appEnv: production
+  appName: "GRC Platform"
+  apiV1Prefix: /api/v1
+  accessTokenExpireMinutes: 30
+  refreshTokenExpireDays: 30
+  backendCorsOrigins: "https://grc.example.com"
+  backendBaseUrl: "https://api.grc.example.com"
+  frontendBaseUrl: "https://grc.example.com"
+  aiProvider: echo
+  openaiModel: gpt-4o-mini
+  ollamaBaseUrl: "http://ollama:11434"
+  ollamaModel: llama3
+
+# Real secrets -- DO NOT leave these as-is or commit real values here.
+# Prefer a separate, gitignored values-secret.yaml passed via
+# `helm install -f values-secret.yaml`, or a real secrets-manager
+# integration (see helm/README.md and k8s/secret.example.yaml's header
+# for why that's a stopgap, not attempted here).
+#
+# databaseUrl/redisUrl are deliberately NOT set here as pre-built
+# connection strings: values.yaml is plain data, not template-rendered,
+# so it can't reference the chart's release-name-derived service hostnames
+# (only files under templates/ go through Go templating). Instead
+# templates/secret.yaml builds both URLs at render time from
+# postgresPassword below plus the postgres/redis Service names this chart
+# defines -- see that template if you need to point at an external,
+# already-managed Postgres/Redis instead (set postgres.enabled/
+# redis.enabled to false above and override host/port here).
+secrets:
+  secretKey: "REPLACE_ME_GENERATE_A_REAL_SECRET_KEY"
+  openaiApiKey: ""
+  azureOpenaiEndpoint: ""
+  azureOpenaiApiKey: ""
+  azureOpenaiDeployment: ""
+  postgresDb: grc_platform
+  postgresUser: grc
+  postgresPassword: "REPLACE_ME_MATCH_DATABASE_URL_ABOVE"

@@ -57,32 +57,50 @@ mechanism in the Compose setup.
 
 ## Kubernetes
 
-`k8s/` has a drafted set of plain manifests (no Helm chart) mirroring this
-file's Docker Compose topology — see `k8s/README.md` for the full apply
-sequence, prerequisites, and what's deliberately not included (Helm/
-Terraform, autoscaling, network policies, a real secrets-manager
-integration). **They have not been applied to or validated against a real
+`k8s/` has a drafted set of plain manifests mirroring this file's Docker
+Compose topology, and `helm/grc-platform/` templates the same design into
+a proper Helm chart — see `k8s/README.md` and `helm/README.md` for the
+full apply sequence, prerequisites, and what each deliberately doesn't
+include (autoscaling, network policies, a real secrets-manager
+integration). **Neither has been applied to or validated against a real
 cluster** — no `kubectl`/`helm`/cluster was available where they were
-written; only YAML-syntax parsing was checked. Treat them as a solid draft
-to `--dry-run=server` and fix up, not a tested deployment artifact.
+written; only YAML-syntax parsing (and, for Helm, a brace-balance check on
+the Go-template files) was checked. Treat both as solid drafts to
+`--dry-run=server` (plain manifests) or `--dry-run --debug` (Helm) and fix
+up, not tested deployment artifacts.
 
-They do implement the three priorities this section used to list before
-they were drafted: secrets moved into a Kubernetes Secret
-(`k8s/secret.example.yaml` — still a stopgap, not a real secrets-manager
-integration; see its header), migrations run as a separate
-`k8s/migration-job.yaml` Job instead of in the app container's startup
-command, and `k8s/backend-deployment.yaml` has liveness/readiness probes on
-`/health`.
+Both implement the three priorities this section used to list before they
+were drafted: secrets moved into a Kubernetes Secret (still a stopgap, not
+a real secrets-manager integration — see `k8s/secret.example.yaml`'s or
+`helm/grc-platform/values.yaml`'s `secrets:` block header), migrations run
+as a separate Job instead of in the app container's startup command (the
+Helm chart does this as a proper `pre-install,pre-upgrade` hook, which
+blocks the rest of the release until it succeeds — a genuine improvement
+over the plain manifests' manual delete-then-apply-then-wait sequence),
+and liveness/readiness probes on `/health`.
 
-One related change needed regardless of Kubernetes: `frontend/Dockerfile`
+One related change needed regardless of which you use: `frontend/Dockerfile`
 now accepts a `VITE_API_BASE_URL` build arg (default unchanged, so existing
 Compose/local builds are unaffected) — the frontend bakes its API origin in
 at build time, not container runtime, and had no way to point at a
 non-`localhost` backend before this.
 
-Terraform is still not attempted — nothing in this repo needs it yet (no
-cloud-provider resources to provision beyond what `k8s/` already assumes
-exist: a cluster, an ingress controller, cert-manager).
+## Terraform (AWS)
+
+`terraform/aws/` provisions the cloud infrastructure the Kubernetes
+manifests/Helm chart need to run somewhere real: a VPC, an EKS cluster,
+managed Postgres (RDS), managed Redis (ElastiCache), and two ECR
+repositories. **AWS was picked as a default, not because anything else in
+this repo specifies a cloud provider** — see `terraform/aws/README.md` for
+that reasoning in full, plus the same unverified-status disclaimer as
+above (no `terraform` binary was available to `init`/`validate`/`plan` it;
+it leans on the standard `terraform-aws-modules/vpc` and
+`terraform-aws-modules/eks` registry modules specifically to reduce that
+risk, rather than hand-rolled resource blocks). Also not attempted:
+Terraform state backend configuration (uses local state as written), and
+a real secrets-manager wiring for the RDS master password (a plain,
+`sensitive`-flagged variable today — still stored in plaintext in
+Terraform state, same underlying gap the Kubernetes Secret stopgaps have).
 
 ## Health checks
 

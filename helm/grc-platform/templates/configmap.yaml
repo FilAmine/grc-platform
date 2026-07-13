@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grc-platform.fullname" . }}-config
+  labels:
+    {{- include "grc-platform.labels" . | nindent 4 }}
+data:
+  APP_ENV: {{ .Values.config.appEnv | quote }}
+  APP_NAME: {{ .Values.config.appName | quote }}
+  API_V1_PREFIX: {{ .Values.config.apiV1Prefix | quote }}
+  ACCESS_TOKEN_EXPIRE_MINUTES: {{ .Values.config.accessTokenExpireMinutes | quote }}
+  REFRESH_TOKEN_EXPIRE_DAYS: {{ .Values.config.refreshTokenExpireDays | quote }}
+  BACKEND_CORS_ORIGINS: {{ .Values.config.backendCorsOrigins | quote }}
+  BACKEND_BASE_URL: {{ .Values.config.backendBaseUrl | quote }}
+  FRONTEND_BASE_URL: {{ .Values.config.frontendBaseUrl | quote }}
+  AI_PROVIDER: {{ .Values.config.aiProvider | quote }}
+  OPENAI_MODEL: {{ .Values.config.openaiModel | quote }}
+  OLLAMA_BASE_URL: {{ .Values.config.ollamaBaseUrl | quote }}
+  OLLAMA_MODEL: {{ .Values.config.ollamaModel | quote }}

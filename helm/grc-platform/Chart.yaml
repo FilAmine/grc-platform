@@ -1,0 +1,11 @@
+apiVersion: v2
+name: grc-platform
+description: >
+  GRC Platform -- Helm chart mirroring docker-compose.yml's topology.
+  Templates the plain manifests originally drafted in k8s/ (see that
+  directory's README for the unverified-status disclaimer, which applies
+  equally here: no helm/cluster was available to `helm template`/`helm
+  lint`/`helm install --dry-run` this against).
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

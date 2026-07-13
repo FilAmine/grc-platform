@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grc-platform.fullname" . }}-celery-worker
+  labels:
+    {{- include "grc-platform.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.celeryWorker.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "grc-platform.fullname" . }}-celery-worker
+  template:
+    metadata:
+      labels:
+        app: {{ include "grc-platform.fullname" . }}-celery-worker
+    spec:
+      containers:
+        - name: celery-worker
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          command: ["celery", "-A", "backend.app.core.celery_app", "worker", "--loglevel=info"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "grc-platform.fullname" . }}-config
+            - secretRef:
+                name: {{ include "grc-platform.fullname" . }}-secrets
+          livenessProbe:
+            exec:
+              command: ["celery", "-A", "backend.app.core.celery_app", "inspect", "ping"]
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 10
+          resources:
+            {{- toYaml .Values.celeryWorker.resources | nindent 12 }}

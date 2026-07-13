@@ -229,16 +229,23 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   to reproduce, even paraphrased, without a license from ISO/PCI SSC/AICPA/CIS.
   See `docs/database.md` for the full rationale and the migration to extend if
   a license is ever obtained.
-- **Kubernetes/Helm/Terraform.** `k8s/` now has a drafted set of plain
-  manifests (no Helm chart, no Terraform) mirroring `docker-compose.yml`'s
-  topology, implementing the three priorities this bullet used to list:
-  secrets in a Kubernetes Secret, migrations as a separate Job, and
-  liveness/readiness probes on `/health`. Deliberately not called "Done"
-  above: no `kubectl`/`helm`/cluster was available to apply, render, or
-  schema-validate any of it against a real API server — only YAML-syntax
-  parsing was checked. See `docs/deployment.md` and `k8s/README.md` for the
-  full status and what's still missing (a real secrets-manager integration,
-  autoscaling, network policies, and any Terraform at all).
+- **Kubernetes/Helm/Terraform.** All three are now drafted: `k8s/` (plain
+  manifests), `helm/grc-platform/` (the same design as a proper Helm chart
+  — values-driven config, the migration Job as a real `pre-install`/
+  `pre-upgrade` hook instead of a manual delete-then-apply sequence), and
+  `terraform/aws/` (VPC + EKS + RDS Postgres + ElastiCache Redis + ECR,
+  targeting AWS as a reasonable default since nothing else in this repo
+  specifies a cloud provider — see that directory's README for why AWS
+  specifically, and what a GCP/Azure/on-prem target would need instead).
+  Deliberately **not** called "Done" above: no `kubectl`/`helm`/`terraform`
+  binary or real cluster/cloud account was available to apply, render, or
+  validate any of it — only YAML-syntax parsing (plain manifests),
+  Go-template brace-balance checks (Helm), and manual read-through
+  (Terraform HCL) were done. See `docs/deployment.md`, `k8s/README.md`,
+  `helm/README.md`, and `terraform/aws/README.md` for full status and
+  what's still missing in each (a real secrets-manager integration
+  everywhere, autoscaling/network policies for Kubernetes, remote
+  Terraform state).
 
 ## Suggested next milestone
 
@@ -247,10 +254,13 @@ public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded,
 SSO (OIDC), rate limiting/security headers/dependency scanning,
 departments/threats/vulnerabilities, incident management, the Tenant/Task
 modules, a real Celery worker, the Vite and FastAPI/starlette major-version
-upgrades, and — as of this pass — the **full 5-workshop EBIOS RM
-methodology** (structural linking through Workshop 5's treatment decision)
-are all in. What's left is either intentionally out of reach (licensed
-standards text — needs a license, not a code change) or its own
-substantial effort (Kubernetes's Helm chart and Terraform pieces — plain
-manifests are drafted but unverified, see above). Neither blocks
-day-to-day use of what's already built.
+upgrades, the **full 5-workshop EBIOS RM methodology** (structural linking
+through Workshop 5's treatment decision), and drafted (unverified)
+Kubernetes manifests, a Helm chart, and a Terraform AWS module are all in.
+The one remaining gap is intentionally out of reach: licensed standards
+text (ISO 27002/27005, CIS Controls, SOC 2, PCI DSS) needs an actual
+license from the standards body, not a code change — nothing left on this
+list is something more engineering effort alone can close. None of it
+blocks day-to-day use of what's already built; the infrastructure drafts
+specifically need a real cluster/cloud account and a `--dry-run`/`plan`
+review before they're trustworthy, not more code.

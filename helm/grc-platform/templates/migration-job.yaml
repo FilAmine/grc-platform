@@ -1,0 +1,38 @@
+# A genuine improvement over k8s/migration-job.yaml's plain-manifest
+# version: that one needed a manual `kubectl delete job/migrate --ignore-not-found`
+# before every re-apply, since a Job's spec is immutable. Helm's hook
+# annotations solve this natively -- `before-hook-creation` deletes any
+# previous run of this hook automatically before creating the new one, and
+# `hook-succeeded` cleans it up after a successful migration.
+#
+# `pre-install,pre-upgrade` (not post-*) is deliberate: Helm blocks the
+# rest of the release's resources (backend/celery Deployments included)
+# from being created/updated until pre-* hooks complete successfully, which
+# is exactly the ordering the plain-manifest README had to spell out
+# manually ("run the migration before the first rollout reaches real
+# traffic"). If this Job fails, `helm install`/`helm upgrade` fails too,
+# rather than rolling out a backend against un-migrated schema.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "grc-platform.fullname" . }}-migrate
+  labels:
+    {{- include "grc-platform.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          command: ["alembic", "upgrade", "head"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "grc-platform.fullname" . }}-config
+            - secretRef:
+                name: {{ include "grc-platform.fullname" . }}-secrets

@@ -2,6 +2,12 @@
 .env.*
 !.env.example
 k8s/secret.yaml
+helm/grc-platform/values-secret.yaml
+terraform/**/.terraform/
+terraform/**/*.tfstate
+terraform/**/*.tfstate.*
+terraform/**/*.tfvars
+!terraform/**/*.tfvars.example
 __pycache__/
 *.py[cod]
 *.pyo

@@ -84,9 +84,11 @@ by hand each time.
 
 ## What's deliberately not here
 
-- **Helm chart / Terraform.** These are plain manifests, not a chart or IaC
-  module — `docs/roadmap.md` groups Kubernetes/Helm/Terraform as one
-  open item; only the Kubernetes piece is drafted here.
+- **A Helm chart / Terraform** — now drafted separately, see
+  `helm/grc-platform/` and `terraform/aws/` (both with their own
+  unverified-status disclaimers). These plain manifests are still the
+  simplest option if you don't need Helm's templating or values-driven
+  config.
 - **HorizontalPodAutoscalers**, **NetworkPolicies**, **PodDisruptionBudgets** —
   none are provisioned. Reasonable next additions once this is actually
   running somewhere, but speculative without real traffic/capacity data.

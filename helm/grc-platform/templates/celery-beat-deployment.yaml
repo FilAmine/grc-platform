@@ -1,0 +1,34 @@
+# replicas is hardcoded to 1, not a values.yaml knob: celery-beat is a
+# scheduler, not a worker -- two copies would each independently fire
+# recompute_all_compliance_scores on its nightly crontab, double-recomputing
+# every IN_PROGRESS assessment's score instead of once. See k8s/celery-beat-deployment.yaml's
+# original comment for the full reasoning (identical here).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grc-platform.fullname" . }}-celery-beat
+  labels:
+    {{- include "grc-platform.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ include "grc-platform.fullname" . }}-celery-beat
+  template:
+    metadata:
+      labels:
+        app: {{ include "grc-platform.fullname" . }}-celery-beat
+    spec:
+      containers:
+        - name: celery-beat
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          command: ["celery", "-A", "backend.app.core.celery_app", "beat", "--loglevel=info"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "grc-platform.fullname" . }}-config
+            - secretRef:
+                name: {{ include "grc-platform.fullname" . }}-secrets
+          resources:
+            {{- toYaml .Values.celeryBeat.resources | nindent 12 }}

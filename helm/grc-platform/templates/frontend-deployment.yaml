@@ -1,0 +1,53 @@
+# No env vars: the frontend image bakes VITE_API_BASE_URL in at build time,
+# not container runtime -- see frontend/Dockerfile's ARG and
+# frontend/nginx.conf's comment. Rebuild the image with a different
+# --build-arg VITE_API_BASE_URL to point at a different API origin; a
+# values.yaml knob here would silently do nothing.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grc-platform.fullname" . }}-frontend
+  labels:
+    {{- include "grc-platform.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.frontend.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "grc-platform.fullname" . }}-frontend
+  template:
+    metadata:
+      labels:
+        app: {{ include "grc-platform.fullname" . }}-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "grc-platform.fullname" . }}-frontend
+  labels:
+    {{- include "grc-platform.labels" . | nindent 4 }}
+spec:
+  selector:
+    app: {{ include "grc-platform.fullname" . }}-frontend
+  ports:
+    - port: 80
+      targetPort: 80
