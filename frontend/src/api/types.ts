@@ -751,3 +751,26 @@ export type OperationalScenarioCreate = {
   mitre_technique_ids?: string[];
   technical_likelihood?: OperationalScenarioLikelihood;
 };
+
+// --- EBIOS RM Workshop 5: risk treatment -------------------------------------------
+
+export type RiskTreatmentDecision = 'avoid' | 'reduce' | 'transfer' | 'accept';
+export type RiskTreatmentResidualRisk = 'low' | 'medium' | 'high' | 'critical';
+
+export type RiskTreatment = {
+  id: string;
+  organization_id: string;
+  strategic_scenario_id: string;
+  decision: RiskTreatmentDecision;
+  justification: string;
+  residual_risk_level: RiskTreatmentResidualRisk;
+  created_at: string;
+  updated_at: string;
+};
+
+export type RiskTreatmentCreate = {
+  strategic_scenario_id: string;
+  decision: RiskTreatmentDecision;
+  justification?: string;
+  residual_risk_level?: RiskTreatmentResidualRisk;
+};

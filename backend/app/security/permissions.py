@@ -60,6 +60,8 @@ STRATEGIC_SCENARIOS_READ = "strategic_scenarios:read"
 STRATEGIC_SCENARIOS_MANAGE = "strategic_scenarios:manage"
 OPERATIONAL_SCENARIOS_READ = "operational_scenarios:read"
 OPERATIONAL_SCENARIOS_MANAGE = "operational_scenarios:manage"
+RISK_TREATMENTS_READ = "risk_treatments:read"
+RISK_TREATMENTS_MANAGE = "risk_treatments:manage"
 
 ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(ORGANIZATIONS_READ, "View organization settings"),
@@ -107,6 +109,8 @@ ALL_PERMISSIONS: tuple[PermissionDef, ...] = (
     PermissionDef(STRATEGIC_SCENARIOS_MANAGE, "Create strategic scenarios"),
     PermissionDef(OPERATIONAL_SCENARIOS_READ, "View EBIOS RM operational scenarios"),
     PermissionDef(OPERATIONAL_SCENARIOS_MANAGE, "Create operational scenarios"),
+    PermissionDef(RISK_TREATMENTS_READ, "View EBIOS RM risk treatment decisions"),
+    PermissionDef(RISK_TREATMENTS_MANAGE, "Record risk treatment decisions"),
 )
 
 # Default role -> permission-code mapping seeded for every new organization.
@@ -153,6 +157,8 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         STRATEGIC_SCENARIOS_MANAGE,
         OPERATIONAL_SCENARIOS_READ,
         OPERATIONAL_SCENARIOS_MANAGE,
+        RISK_TREATMENTS_READ,
+        RISK_TREATMENTS_MANAGE,
     ),
     "Auditor": (
         ORGANIZATIONS_READ,
@@ -179,6 +185,7 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         ECOSYSTEM_PARTIES_READ,
         STRATEGIC_SCENARIOS_READ,
         OPERATIONAL_SCENARIOS_READ,
+        RISK_TREATMENTS_READ,
     ),
     "Viewer": (
         ORGANIZATIONS_READ,
@@ -201,5 +208,6 @@ SYSTEM_ROLES: dict[str, tuple[str, ...] | None] = {
         ECOSYSTEM_PARTIES_READ,
         STRATEGIC_SCENARIOS_READ,
         OPERATIONAL_SCENARIOS_READ,
+        RISK_TREATMENTS_READ,
     ),
 }

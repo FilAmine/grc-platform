@@ -23,6 +23,7 @@ import { OperationalScenariosPage } from './pages/OperationalScenariosPage';
 import { RegisterOrganizationPage } from './pages/RegisterOrganizationPage';
 import { RiskOriginsPage } from './pages/RiskOriginsPage';
 import { RiskSourcesPage } from './pages/RiskSourcesPage';
+import { RiskTreatmentsPage } from './pages/RiskTreatmentsPage';
 import { RisksPage } from './pages/RisksPage';
 import { RolesPage } from './pages/RolesPage';
 import { SsoCallbackPage } from './pages/SsoCallbackPage';
@@ -67,6 +68,7 @@ export function App() {
           <Route path="/ecosystem-parties" element={<EcosystemPartiesPage />} />
           <Route path="/strategic-scenarios" element={<StrategicScenariosPage />} />
           <Route path="/operational-scenarios" element={<OperationalScenariosPage />} />
+          <Route path="/risk-treatments" element={<RiskTreatmentsPage />} />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
           <Route path="/assessments/:assessmentId" element={<AssessmentDetailPage />} />

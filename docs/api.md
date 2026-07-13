@@ -261,8 +261,23 @@ see the module's docstring for why) and its own `technical_likelihood`
 (low/medium/high/critical) — deliberately separate from the linked
 strategic scenario's `likelihood`, since one captures attacker motivation/
 targeting and the other technical feasibility. `strategic_scenario_id` is
-validated cross-tenant on `POST`. Workshop 5 (risk synthesis + treatment)
-isn't built (see `docs/roadmap.md`).
+validated cross-tenant on `POST`.
+
+## Risk Treatments
+
+| Method | Path |
+|---|---|
+| GET/POST | `/risk-treatments` |
+
+EBIOS RM Workshop 5's actual output, and the final workshop of the
+methodology: records a `decision` (avoid/reduce/transfer/accept — the
+standard ISO 27005/EBIOS RM 4-way treatment choice) for a
+`strategic_scenario_id` (required), plus a `justification` and the
+`residual_risk_level` left over after applying it. No uniqueness
+constraint on `strategic_scenario_id` — re-deciding a treatment means
+creating a new row (an append-only decision history), not updating one in
+place; there's no `PATCH`/update endpoint on this table at all, matching
+every other EBIOS RM module (list+create only).
 
 ## Tasks
 

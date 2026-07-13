@@ -104,8 +104,25 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   separate undertaking) and its own `technical_likelihood`, deliberately
   kept separate from the strategic scenario's `likelihood` (attacker
   motivation/targeting vs. technical feasibility — the two can diverge).
-  Workshop 5 (risk synthesis + treatment workflow) is still not attempted.
   See `docs/api.md` for the endpoints.
+- **EBIOS RM Workshop 5 (risk treatment) — the final workshop.**
+  `RiskTreatment` records the actual decision for a `StrategicScenario`:
+  `decision` (avoid/reduce/transfer/accept — the standard ISO 27005/EBIOS
+  RM 4-way choice), a `justification`, and the `residual_risk_level` left
+  over after applying it. Deliberately list+create only like every other
+  EBIOS RM module this session — no uniqueness constraint on
+  `strategic_scenario_id`, so re-deciding a treatment means inserting a new
+  row (an append-only decision history) rather than updating one in place.
+  **This closes out the full 5-workshop ANSSI EBIOS RM methodology** —
+  Workshop 1's structural linking, Workshop 2's risk sources + SR/OV
+  pairing, Workshop 3's ecosystem mapping + strategic scenarios, Workshop
+  4's operational/technical scenarios, and Workshop 5's treatment decision
+  are all real, tested, cross-tenant-validated modules with a frontend
+  page each. See `docs/api.md` for the endpoints and each workshop's own
+  bullet above for the specific simplifications made along the way (no
+  MITRE ATT&CK catalog validation, EBIOS RM's business-value/
+  supporting-asset tiers conflated into the CMDB `Asset`, etc. — none of
+  it hidden, all called out where it happens).
 - **Tenant entity + generic Task module**: a real `Tenant` entity now exists
   above `Organization` (a nullable `organizations.tenant_id`), letting a
   platform operator group several existing orgs under one record. This does
@@ -222,28 +239,18 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   parsing was checked. See `docs/deployment.md` and `k8s/README.md` for the
   full status and what's still missing (a real secrets-manager integration,
   autoscaling, network policies, and any Terraform at all).
-- **Full EBIOS RM methodology.** The structural linking (asset/threat/
-  vulnerability/feared-event), Workshop 2 (risk sources + SR/OV pairing),
-  Workshop 3 (ecosystem mapping + strategic scenarios), and Workshop 4
-  (operational/technical attack scenarios) are done — see "Done" above —
-  but Workshop 5 (risk synthesis + treatment workflow: positioning risks on
-  a severity/likelihood map and deciding avoid/reduce/transfer/accept) is
-  not attempted. It's the natural final piece, since it synthesizes the
-  strategic + operational scenarios already built.
 
 ## Suggested next milestone
 
 Frontend module coverage is complete (every backend module has a page), the
-public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded, and
+public-domain framework catalogs (NIST CSF, HIPAA, NIS2, DORA) are loaded,
 SSO (OIDC), rate limiting/security headers/dependency scanning,
-departments/threats/vulnerabilities, incident management, EBIOS-RM-flavored
-risk linking plus its Workshops 2-4 (risk sources + SR/OV pairing,
-ecosystem mapping + strategic scenarios, operational/technical attack
-scenarios), the Tenant/Task modules, a real Celery worker, and the Vite
-and FastAPI/starlette major-version upgrades are all in. What's left is
-either intentionally out of reach (licensed standards text — needs a
-license, not a code change) or its own substantial effort (Terraform,
-EBIOS RM Workshop 5). None of it blocks
-day-to-day use of what's already built;
-pick based on which specific gap
-actually matters for your next deployment target.
+departments/threats/vulnerabilities, incident management, the Tenant/Task
+modules, a real Celery worker, the Vite and FastAPI/starlette major-version
+upgrades, and — as of this pass — the **full 5-workshop EBIOS RM
+methodology** (structural linking through Workshop 5's treatment decision)
+are all in. What's left is either intentionally out of reach (licensed
+standards text — needs a license, not a code change) or its own
+substantial effort (Kubernetes's Helm chart and Terraform pieces — plain
+manifests are drafted but unverified, see above). Neither blocks
+day-to-day use of what's already built.

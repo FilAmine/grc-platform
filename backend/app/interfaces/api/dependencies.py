@@ -61,6 +61,8 @@ from backend.app.modules.risk_origins.repository import SqlAlchemyRiskOriginRepo
 from backend.app.modules.risk_origins.service import RiskOriginService
 from backend.app.modules.risk_sources.repository import SqlAlchemyRiskSourceRepository
 from backend.app.modules.risk_sources.service import RiskSourceService
+from backend.app.modules.risk_treatments.repository import SqlAlchemyRiskTreatmentRepository
+from backend.app.modules.risk_treatments.service import RiskTreatmentService
 from backend.app.modules.risks.repository import (
     SqlAlchemyRiskRepository,
 )
@@ -142,6 +144,10 @@ def get_operational_scenario_service(
     session: Session = Depends(get_session),
 ) -> OperationalScenarioService:
     return OperationalScenarioService(SqlAlchemyOperationalScenarioRepository(session))
+
+
+def get_risk_treatment_service(session: Session = Depends(get_session)) -> RiskTreatmentService:
+    return RiskTreatmentService(SqlAlchemyRiskTreatmentRepository(session))
 
 
 def get_control_service(session: Session = Depends(get_session)) -> ControlService:
