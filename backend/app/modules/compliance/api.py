@@ -25,6 +25,7 @@ from backend.app.modules.compliance.schemas import (
     FrameworkRead,
     FrameworkVersionCreate,
     FrameworkVersionRead,
+    RequirementBulkImportRequest,
     RequirementCreate,
     RequirementRead,
 )
@@ -37,7 +38,10 @@ from backend.app.modules.compliance.service import (
     CreateAssessmentCommand,
     CreateFrameworkCommand,
     CreateRequirementCommand,
+    Framework,
     FrameworkService,
+    FrameworkVersion,
+    RequirementImportRow,
 )
 from backend.app.modules.users.service import User
 from backend.app.security.permissions import (
@@ -109,6 +113,31 @@ def list_framework_versions(
     return [FrameworkVersionRead.model_validate(v) for v in service.list_versions(framework_id)]
 
 
+def _get_owned_custom_framework(
+    framework_id: UUID, current_user: User, service: FrameworkService
+) -> Framework:
+    """A framework proves "some row exists," not "this is your own, editable
+    framework" -- system/global catalog entries (organization_id NULL) must
+    stay read-only from every tenant's perspective, and another org's custom
+    framework must be invisible, same cross-tenant pattern used everywhere
+    else in this codebase. 404 (not 403) either way, so existence of another
+    org's framework isn't leaked."""
+    framework = service.get_framework(framework_id)
+    if framework is None or framework.is_system or framework.organization_id != current_user.organization_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="framework not found")
+    return framework
+
+
+def _get_owned_custom_framework_version(
+    framework_version_id: UUID, current_user: User, service: FrameworkService
+) -> FrameworkVersion:
+    version = service.get_version(framework_version_id)
+    if version is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="framework version not found")
+    _get_owned_custom_framework(version.framework_id, current_user, service)
+    return version
+
+
 @router.post(
     "/frameworks/{framework_id}/versions",
     response_model=FrameworkVersionRead,
@@ -118,8 +147,10 @@ def list_framework_versions(
 def create_framework_version(
     framework_id: UUID,
     payload: FrameworkVersionCreate,
+    current_user: User = Depends(get_current_user),
     service: FrameworkService = Depends(get_framework_service),
 ) -> FrameworkVersionRead:
+    _get_owned_custom_framework(framework_id, current_user, service)
     version = service.create_version(framework_id, payload.version, payload.published_at)
     return FrameworkVersionRead.model_validate(version)
 
@@ -145,12 +176,42 @@ def list_requirements(
 def create_requirement(
     framework_version_id: UUID,
     payload: RequirementCreate,
+    current_user: User = Depends(get_current_user),
     service: FrameworkService = Depends(get_framework_service),
 ) -> RequirementRead:
+    _get_owned_custom_framework_version(framework_version_id, current_user, service)
     requirement = service.create_requirement(
         CreateRequirementCommand(framework_version_id=framework_version_id, **payload.model_dump())
     )
     return RequirementRead.model_validate(requirement)
+
+
+@router.post(
+    "/framework-versions/{framework_version_id}/requirements/bulk",
+    response_model=list[RequirementRead],
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_permission(FRAMEWORKS_MANAGE))],
+)
+def bulk_import_requirements(
+    framework_version_id: UUID,
+    payload: RequirementBulkImportRequest,
+    current_user: User = Depends(get_current_user),
+    service: FrameworkService = Depends(get_framework_service),
+) -> list[RequirementRead]:
+    """Lets an organization that holds its own license to a standard (ISO
+    27002/27005, CIS Controls, SOC 2, PCI DSS, or anything else this platform
+    doesn't ship pre-loaded requirement text for -- see docs/roadmap.md)
+    import that text into its own custom framework in one request, instead of
+    one `POST .../requirements` call per row. This project never ships that
+    text itself; only the organization's own, separately-licensed copy goes
+    in here, into a framework only that organization can see."""
+    _get_owned_custom_framework_version(framework_version_id, current_user, service)
+    rows = [
+        RequirementImportRow(code=item.code, title=item.title, description=item.description)
+        for item in payload.items
+    ]
+    requirements = service.bulk_create_requirements(framework_version_id, rows)
+    return [RequirementRead.model_validate(r) for r in requirements]
 
 
 # --- Control <-> requirement mappings ------------------------------------------

@@ -62,6 +62,20 @@ class RequirementRead(ReadSchema):
     updated_at: datetime
 
 
+class RequirementImportRow(ReadSchema):
+    code: str = Field(min_length=1, max_length=50)
+    title: str = Field(min_length=2, max_length=255)
+    description: str = Field(default="", max_length=4000)
+
+
+class RequirementBulkImportRequest(ReadSchema):
+    # Bounded well above any realistic single standard (PCI DSS, the largest
+    # of the licensed ones this exists for, has well under 400 requirements)
+    # so a malformed/huge upload fails fast with a clear 422 instead of
+    # accepting an unbounded request body.
+    items: list[RequirementImportRow] = Field(min_length=1, max_length=1000)
+
+
 class ControlMappingRead(ReadSchema):
     id: UUID
     control_id: UUID

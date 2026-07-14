@@ -165,6 +165,10 @@ class SqlAlchemyFrameworkRepository:
         rows = self._session.scalars(statement).all()
         return [to_framework_version(row) for row in rows]
 
+    def get_version_by_id(self, framework_version_id: UUID) -> FrameworkVersion | None:
+        model = self._session.get(FrameworkVersionModel, framework_version_id)
+        return to_framework_version(model) if model else None
+
     def create_version(
         self, framework_id: UUID, version: str, published_at: date | None
     ) -> FrameworkVersion:

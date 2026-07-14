@@ -16,7 +16,12 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   named in the spec as catalog entries, with real requirement text loaded for
   the public-domain ones (NIST CSF, HIPAA, NIS2, DORA) and an illustrative
   ISO 27001 sample (see `docs/database.md` for exactly which frameworks have
-  real requirement text vs. catalog-only entries, and why).
+  real requirement text vs. catalog-only entries, and why). **Custom-framework
+  CSV import**: organizations with their own license to a standard can create
+  a custom framework/version and bulk-import its requirement rows from a CSV
+  (`POST /compliance/framework-versions/{id}/requirements/bulk`,
+  `FrameworksPage.tsx`'s import dialog) instead of one-by-one manual entry —
+  see the "Not done" section below for what this does and doesn't solve.
 - **Risk register, controls, audits** (planning/checklists/findings/corrective
   actions/report), **documents** (versioning + approval workflow, e-signature
   slot but no provider), **assets/CMDB** (CIA classification, lifecycle stages),
@@ -228,7 +233,15 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   rows: those are commercially licensed standards this project has no rights
   to reproduce, even paraphrased, without a license from ISO/PCI SSC/AICPA/CIS.
   See `docs/database.md` for the full rationale and the migration to extend if
-  a license is ever obtained.
+  a license is ever obtained. **What did ship**: any organization that already
+  holds its own license can now get that text into the platform itself —
+  create a custom framework/version (`POST /compliance/frameworks`, already
+  existed) and bulk-import the requirement rows from a CSV in one request
+  (`POST .../requirements/bulk`, `frontend/src/pages/FrameworksPage.tsx`'s
+  "Import CSV" dialog, client-side RFC4180 parsing via `papaparse`). This
+  doesn't close the underlying gap — the platform still ships zero licensed
+  requirement text of its own, by design — it just means a customer's own
+  license is no longer blocked on one-row-at-a-time manual entry.
 - **Kubernetes/Helm/Terraform.** All three are drafted: `k8s/` (plain
   manifests), `helm/grc-platform/` (the same design as a proper Helm
   chart — values-driven config, the migration Job as a `post-install`/
@@ -271,12 +284,14 @@ departments/threats/vulnerabilities, incident management, the Tenant/Task
 modules, a real Celery worker, the Vite and FastAPI/starlette major-version
 upgrades, the **full 5-workshop EBIOS RM methodology** (structural linking
 through Workshop 5's treatment decision), schema-validated Kubernetes
-manifests and a Terraform AWS module, and a Helm chart that's been
-installed and verified end to end on a real local cluster are all in. The
-one remaining gap is intentionally out of reach: licensed standards text
-(ISO 27002/27005, CIS Controls, SOC 2, PCI DSS) needs an actual license
-from the standards body, not a code change — nothing left on this list is
-something more engineering effort alone can close. None of it blocks
+manifests and a Terraform AWS module, a Helm chart that's been installed
+and verified end to end on a real local cluster, and a custom-framework
+CSV import flow (for organizations bringing their own license) are all in.
+The one remaining gap is intentionally out of reach: licensed standards
+text (ISO 27002/27005, CIS Controls, SOC 2, PCI DSS) shipped *by this
+platform* needs an actual license from the standards body, not a code
+change — nothing left on this list is something more engineering effort
+alone can close. None of it blocks
 day-to-day use of what's already built; a real cloud deployment
 specifically still needs your own AWS account for Terraform to actually
 provision anything — that's a deliberate stopping point (real

@@ -320,6 +320,23 @@ export type Requirement = {
   updated_at: string;
 };
 
+export type FrameworkCreate = {
+  code: string;
+  name: string;
+  description?: string;
+};
+
+export type FrameworkVersionCreate = {
+  version: string;
+  published_at?: string | null;
+};
+
+export type RequirementImportRow = {
+  code: string;
+  title: string;
+  description?: string;
+};
+
 export type Assessment = {
   id: string;
   organization_id: string;

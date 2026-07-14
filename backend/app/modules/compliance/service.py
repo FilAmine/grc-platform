@@ -146,6 +146,13 @@ class CreateRequirementCommand:
     category_id: UUID | None = None
 
 
+@dataclass(frozen=True)
+class RequirementImportRow:
+    code: str
+    title: str
+    description: str = ""
+
+
 class RequirementReader(Protocol):
     def list_requirements(self, framework_version_id: UUID) -> list[Requirement]:
         raise NotImplementedError
@@ -162,6 +169,9 @@ class FrameworkStore(Protocol):
         raise NotImplementedError
 
     def list_versions(self, framework_id: UUID) -> list[FrameworkVersion]:
+        raise NotImplementedError
+
+    def get_version_by_id(self, framework_version_id: UUID) -> FrameworkVersion | None:
         raise NotImplementedError
 
     def create_version(
@@ -204,6 +214,9 @@ class FrameworkService:
     def list_versions(self, framework_id: UUID) -> list[FrameworkVersion]:
         return self._frameworks.list_versions(framework_id)
 
+    def get_version(self, framework_version_id: UUID) -> FrameworkVersion | None:
+        return self._frameworks.get_version_by_id(framework_version_id)
+
     def create_version(
         self, framework_id: UUID, version: str, published_at: date | None
     ) -> FrameworkVersion:
@@ -220,6 +233,25 @@ class FrameworkService:
             title=command.title,
             description=command.description,
         )
+
+    def bulk_create_requirements(
+        self, framework_version_id: UUID, rows: list[RequirementImportRow]
+    ) -> list[Requirement]:
+        # One store call per row rather than a dedicated bulk-insert repository
+        # method: this runs once per framework import (an infrequent admin
+        # action), not a hot path, so the simplicity of reusing create_requirement
+        # as-is outweighs the minor cost of N commits -- see this codebase's
+        # general preference for the simplest thing that works.
+        return [
+            self._frameworks.create_requirement(
+                framework_version_id=framework_version_id,
+                category_id=None,
+                code=row.code,
+                title=row.title,
+                description=row.description,
+            )
+            for row in rows
+        ]
 
 
 class ControlMappingStore(Protocol):

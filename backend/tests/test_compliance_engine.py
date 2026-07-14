@@ -1,5 +1,7 @@
+from backend.app.modules.compliance.models import FrameworkModel, FrameworkVersionModel
 from backend.tests.conftest import auth_headers, register_organization
 from fastapi.testclient import TestClient
+from sqlalchemy.orm import Session
 
 
 def _build_framework_with_requirements(client: TestClient, access_token: str) -> tuple[str, list[str]]:
@@ -138,6 +140,126 @@ def test_control_mapping_and_evidence(client: TestClient) -> None:
     )
     assert evidence.status_code == 201
     assert evidence.json()["control_id"] == control["id"]
+
+
+def test_bulk_import_requirements(client: TestClient) -> None:
+    org = register_organization(client, slug="import-org", email="admin@import.example.com")
+    headers = auth_headers(org["access_token"])
+
+    framework = client.post(
+        "/api/v1/compliance/frameworks",
+        headers=headers,
+        json={"code": "custom-std", "name": "Customer's Licensed Standard"},
+    ).json()
+    version = client.post(
+        f"/api/v1/compliance/frameworks/{framework['id']}/versions",
+        headers=headers,
+        json={"version": "1.0"},
+    ).json()
+
+    response = client.post(
+        f"/api/v1/compliance/framework-versions/{version['id']}/requirements/bulk",
+        headers=headers,
+        json={
+            "items": [
+                {"code": "1.1", "title": "First requirement", "description": "details"},
+                {"code": "1.2", "title": "Second requirement"},
+            ]
+        },
+    )
+    assert response.status_code == 201
+    imported = response.json()
+    assert len(imported) == 2
+    assert {r["code"] for r in imported} == {"1.1", "1.2"}
+
+    listed = client.get(
+        f"/api/v1/compliance/framework-versions/{version['id']}/requirements", headers=headers
+    ).json()
+    assert len(listed) == 2
+
+
+def test_bulk_import_requirements_rejects_empty_items(client: TestClient) -> None:
+    org = register_organization(client, slug="import-empty-org", email="admin@import-empty.example.com")
+    headers = auth_headers(org["access_token"])
+
+    framework = client.post(
+        "/api/v1/compliance/frameworks", headers=headers, json={"code": "custom-std", "name": "Custom"}
+    ).json()
+    version = client.post(
+        f"/api/v1/compliance/frameworks/{framework['id']}/versions", headers=headers, json={"version": "1.0"}
+    ).json()
+
+    response = client.post(
+        f"/api/v1/compliance/framework-versions/{version['id']}/requirements/bulk",
+        headers=headers,
+        json={"items": []},
+    )
+    assert response.status_code == 422
+
+
+def test_bulk_import_requirements_rejects_cross_tenant_framework_version(client: TestClient) -> None:
+    org_a = register_organization(client, slug="import-scope-a", email="admin@import-scope-a.example.com")
+    org_b = register_organization(client, slug="import-scope-b", email="admin@import-scope-b.example.com")
+
+    headers_a = auth_headers(org_a["access_token"])
+    framework = client.post(
+        "/api/v1/compliance/frameworks", headers=headers_a, json={"code": "custom-std", "name": "Custom"}
+    ).json()
+    version = client.post(
+        f"/api/v1/compliance/frameworks/{framework['id']}/versions", headers=headers_a, json={"version": "1.0"}
+    ).json()
+
+    headers_b = auth_headers(org_b["access_token"])
+    response = client.post(
+        f"/api/v1/compliance/framework-versions/{version['id']}/requirements/bulk",
+        headers=headers_b,
+        json={"items": [{"code": "1.1", "title": "Should not import"}]},
+    )
+    assert response.status_code == 404
+
+    create_version_response = client.post(
+        f"/api/v1/compliance/frameworks/{framework['id']}/versions",
+        headers=headers_b,
+        json={"version": "2.0"},
+    )
+    assert create_version_response.status_code == 404
+
+    create_requirement_response = client.post(
+        f"/api/v1/compliance/framework-versions/{version['id']}/requirements",
+        headers=headers_b,
+        json={"code": "1.1", "title": "Should not create"},
+    )
+    assert create_requirement_response.status_code == 404
+
+
+def test_bulk_import_requirements_rejects_system_framework(client: TestClient, db_session: Session) -> None:
+    org = register_organization(client, slug="import-system-org", email="admin@import-system.example.com")
+    headers = auth_headers(org["access_token"])
+
+    # The real system catalog (ISO 27001, NIST CSF, ...) is seeded by an Alembic
+    # data migration, not by `Base.metadata.create_all` -- this test DB has none,
+    # so a minimal system framework/version is inserted directly to exercise the
+    # is_system rejection path.
+    system_framework = FrameworkModel(organization_id=None, code="sys-std", name="System Standard", is_system=True)
+    db_session.add(system_framework)
+    db_session.flush()
+    system_version = FrameworkVersionModel(framework_id=system_framework.id, version="1.0")
+    db_session.add(system_version)
+    db_session.commit()
+
+    response = client.post(
+        f"/api/v1/compliance/framework-versions/{system_version.id}/requirements/bulk",
+        headers=headers,
+        json={"items": [{"code": "1.1", "title": "Should not import"}]},
+    )
+    assert response.status_code == 404
+
+    create_version_response = client.post(
+        f"/api/v1/compliance/frameworks/{system_framework.id}/versions",
+        headers=headers,
+        json={"version": "9999"},
+    )
+    assert create_version_response.status_code == 404
 
 
 def test_assessment_is_scoped_to_organization(client: TestClient) -> None:

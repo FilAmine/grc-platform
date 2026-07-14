@@ -82,6 +82,7 @@ entry for the full picture.
 | GET/POST | `/compliance/frameworks` |
 | GET/POST | `/compliance/frameworks/{framework_id}/versions` |
 | GET/POST | `/compliance/framework-versions/{framework_version_id}/requirements` |
+| POST | `/compliance/framework-versions/{framework_version_id}/requirements/bulk` |
 | POST | `/compliance/controls/{control_id}/mappings/{requirement_id}` |
 | GET | `/compliance/controls/{control_id}/mappings` |
 | GET/POST | `/compliance/assessments` |
@@ -96,6 +97,16 @@ entry for the full picture.
 
 `GET /system/summary` is a backward-compatible alias for `/compliance/summary`
 only — it does not re-expose the rest of the compliance API.
+
+`POST .../versions`, `POST .../requirements`, and `POST .../requirements/bulk`
+all resolve their `framework_id`/`framework_version_id` up to the owning
+framework and 404 if it's a system catalog entry (`is_system=True`) or belongs
+to another organization — the same cross-tenant-plus-read-only-system pattern
+used elsewhere in this API. The bulk endpoint exists for organizations that
+hold their own license to a standard this platform doesn't ship pre-loaded
+requirement text for (see `docs/roadmap.md`'s licensed-standards note): create
+a custom framework/version, then `POST` up to 1000 `{code, title, description}`
+rows in one request instead of one `POST .../requirements` call per row.
 
 ## Audits
 

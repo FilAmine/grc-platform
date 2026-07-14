@@ -9,12 +9,20 @@ import type {
   Evidence,
   EvidenceCreate,
   Framework,
+  FrameworkCreate,
   FrameworkVersion,
+  FrameworkVersionCreate,
   Requirement,
+  RequirementImportRow,
 } from './types';
 
 export async function getFrameworks(): Promise<Framework[]> {
   const { data } = await api.get<Framework[]>('/compliance/frameworks');
+  return data;
+}
+
+export async function createFramework(payload: FrameworkCreate): Promise<Framework> {
+  const { data } = await api.post<Framework>('/compliance/frameworks', payload);
   return data;
 }
 
@@ -23,8 +31,27 @@ export async function getFrameworkVersions(frameworkId: string): Promise<Framewo
   return data;
 }
 
+export async function createFrameworkVersion(
+  frameworkId: string,
+  payload: FrameworkVersionCreate,
+): Promise<FrameworkVersion> {
+  const { data } = await api.post<FrameworkVersion>(`/compliance/frameworks/${frameworkId}/versions`, payload);
+  return data;
+}
+
 export async function getRequirements(frameworkVersionId: string): Promise<Requirement[]> {
   const { data } = await api.get<Requirement[]>(`/compliance/framework-versions/${frameworkVersionId}/requirements`);
+  return data;
+}
+
+export async function bulkImportRequirements(
+  frameworkVersionId: string,
+  items: RequirementImportRow[],
+): Promise<Requirement[]> {
+  const { data } = await api.post<Requirement[]>(
+    `/compliance/framework-versions/${frameworkVersionId}/requirements/bulk`,
+    { items },
+  );
   return data;
 }
 
