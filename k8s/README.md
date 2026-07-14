@@ -7,18 +7,30 @@ header), migrations as a Job instead of the backend container's startup
 command (`migration-job.yaml`), and liveness/readiness probes on `/health`
 (`backend-deployment.yaml`).
 
-## Status: drafted, not verified against a real cluster
+## Status: schema-validated, not yet applied to a real cluster
 
-No `kubectl`, `helm`, or Kubernetes cluster is available in the environment
-these were written in, so nothing here has been applied, rendered, or
-schema-validated against a real API server — the only check performed was
-parsing every file with a plain YAML parser to catch syntax errors. Treat
-this as a solid starting draft, not a tested deployment artifact: run
-`kubectl apply --dry-run=server -k k8s/` (or equivalent) against a real
-cluster before trusting it, and expect to fix at least minor issues (exact
-probe timings, resource requests/limits for your actual traffic, storage
-class names for the PVCs in `postgres.yaml`/`redis.yaml`, which aren't set
-here and will fall back to your cluster's default StorageClass).
+Updated: `kubectl`, `helm`, and `terraform` are now installed in the
+environment these are maintained from (via `winget`), which allowed real
+validation beyond the original plain-YAML-parsing pass:
+
+- `kubectl kustomize k8s/` builds the full manifest set with no errors.
+- [`kubeconform`](https://github.com/yannh/kubeconform) (real Kubernetes
+  OpenAPI schemas, no cluster needed) validates every resource — both the
+  individual files and the built Kustomize output — with **0 errors, 0
+  invalid** across all 14 real Kubernetes resources here (`kustomization.yaml`
+  itself has no schema to check against; it's a Kustomize config file, not
+  a K8s API object).
+
+**Still not applied to or exercised against a real cluster** — no live
+`kubectl apply`, no pods actually scheduled, no real Postgres/Redis/ingress
+controller interaction. Schema validity doesn't catch everything a live
+apply would (a probe timing that's too aggressive for your actual startup
+time, a StorageClass that doesn't exist in your cluster, an ingress
+controller version quirk) — treat this as "the YAML is structurally
+correct Kubernetes," not "this is a tested deployment." Run
+`kubectl apply --dry-run=server -k k8s/` (needs real cluster API access,
+still short of a full apply) or just apply it to a real cluster before
+trusting it in production.
 
 ## Before applying anything
 

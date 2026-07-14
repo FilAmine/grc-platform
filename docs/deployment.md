@@ -62,12 +62,16 @@ Compose topology, and `helm/grc-platform/` templates the same design into
 a proper Helm chart — see `k8s/README.md` and `helm/README.md` for the
 full apply sequence, prerequisites, and what each deliberately doesn't
 include (autoscaling, network policies, a real secrets-manager
-integration). **Neither has been applied to or validated against a real
-cluster** — no `kubectl`/`helm`/cluster was available where they were
-written; only YAML-syntax parsing (and, for Helm, a brace-balance check on
-the Go-template files) was checked. Treat both as solid drafts to
-`--dry-run=server` (plain manifests) or `--dry-run --debug` (Helm) and fix
-up, not tested deployment artifacts.
+integration). Both are now **schema-validated** — `kubectl kustomize`,
+`helm lint`/`helm template`, and [`kubeconform`](https://github.com/yannh/kubeconform)
+(real Kubernetes OpenAPI schemas, no cluster needed) all pass clean, 0
+errors across every resource in both. **Neither has been applied to a
+real cluster**, though — no live `kubectl apply`/`helm install`, no pods
+actually scheduled. Schema validity doesn't catch everything a live apply
+would (probe timing tuned for real startup time, a StorageClass that
+exists in your actual cluster, real ingress-controller/cert-manager
+interaction). See each directory's README for the exact commands run and
+what a full apply would still need to confirm.
 
 Both implement the three priorities this section used to list before they
 were drafted: secrets moved into a Kubernetes Secret (still a stopgap, not
@@ -92,15 +96,19 @@ manifests/Helm chart need to run somewhere real: a VPC, an EKS cluster,
 managed Postgres (RDS), managed Redis (ElastiCache), and two ECR
 repositories. **AWS was picked as a default, not because anything else in
 this repo specifies a cloud provider** — see `terraform/aws/README.md` for
-that reasoning in full, plus the same unverified-status disclaimer as
-above (no `terraform` binary was available to `init`/`validate`/`plan` it;
-it leans on the standard `terraform-aws-modules/vpc` and
-`terraform-aws-modules/eks` registry modules specifically to reduce that
-risk, rather than hand-rolled resource blocks). Also not attempted:
-Terraform state backend configuration (uses local state as written), and
-a real secrets-manager wiring for the RDS master password (a plain,
-`sensitive`-flagged variable today — still stored in plaintext in
-Terraform state, same underlying gap the Kubernetes Secret stopgaps have).
+that reasoning in full. `terraform init` (resolves the AWS provider and
+both `terraform-aws-modules/vpc`/`terraform-aws-modules/eks` registry
+modules cleanly) and `terraform validate` (real schema-level HCL
+validation against the AWS provider) both now pass; `terraform plan` was
+also attempted and fails exactly where expected — missing AWS credentials,
+not a config bug — confirming this module is structurally sound right up
+to the point a real AWS account becomes mandatory. **No AWS account,
+credentials, cost, or real infrastructure were involved at any point.**
+Also not attempted: Terraform state backend configuration (uses local
+state as written), and a real secrets-manager wiring for the RDS master
+password (a plain, `sensitive`-flagged variable today — still stored in
+plaintext in Terraform state, same underlying gap the Kubernetes Secret
+stopgaps have).
 
 ## Health checks
 

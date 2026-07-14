@@ -5,7 +5,7 @@ manifests) needs to run somewhere real: a VPC, an EKS cluster, managed
 Postgres (RDS) and Redis (ElastiCache), and two ECR repositories for the
 backend/frontend images.
 
-## Status: drafted, unverified, and a real judgment call
+## Status: init + validate clean, no real AWS account exercised
 
 Unlike `k8s/` and `helm/` — which only needed *a* Kubernetes cluster,
 generically — Terraform inherently means committing to a specific cloud
@@ -17,17 +17,38 @@ codebase. If your actual target is GCP, Azure, or on-prem, this module
 isn't directly useful beyond illustrating the shape of what's needed
 (VPC/cluster/managed DB/managed cache/image registries).
 
-No `terraform` binary was available where this was written, so **nothing
-here has been `terraform init`/`validate`/`plan`ed** — only manual
-read-through for obviously-wrong syntax. Treat this as a starting
-scaffold that needs a real AWS account, real `terraform plan` review, and
-probably some adjustment (instance sizing, the public EKS endpoint
-default, backup/retention policy) before it's applied anywhere, not a
-tested deployment artifact. Leans on the community
-`terraform-aws-modules/vpc` and `terraform-aws-modules/eks` registry
-modules rather than hand-rolled resource blocks specifically to reduce
-that risk — they're the de facto standard way to provision this, not a
-novel design.
+Updated: `terraform` is now installed (via `winget`), which allowed real
+checks beyond the original "no terraform binary available" state:
+
+- `terraform init` resolves and downloads the `hashicorp/aws` provider
+  (v5.100.0) and both `terraform-aws-modules/vpc`/`terraform-aws-modules/eks`
+  registry modules (plus their transitive `kms`/fargate-profile/node-group
+  submodules) with no errors — confirms every module source/version
+  constraint in `main.tf` is valid and resolvable. `.terraform.lock.hcl`,
+  the resulting provider version lock file, is now committed per
+  Terraform's own recommended practice.
+- `terraform validate` passes clean — confirms every resource block,
+  variable type, and reference across all 7 `.tf` files is syntactically
+  correct and matches the AWS provider's actual resource schemas (not
+  just "looks like HCL," genuine schema-level validation).
+- `terraform plan` was also attempted, and fails **exactly** where
+  expected — `Error: No valid credential sources found` — confirming the
+  failure boundary is "needs real AWS credentials," not a hidden config
+  bug. No AWS account, credentials, or real cloud resources were used or
+  created; nothing here has been `apply`d.
+
+**No cost was incurred and no real infrastructure was created or
+touched.** Treat this as a starting scaffold that needs a real AWS
+account, real `terraform plan` review against that account's actual
+state, and probably some adjustment (instance sizing, the public EKS
+endpoint default, backup/retention policy) before it's applied anywhere —
+schema-valid HCL is a real, meaningful bar cleared, but it's not the same
+as "this will provision correctly" (e.g. IAM permission requirements for
+the executing principal, real AZ availability in your chosen region,
+service quotas). Leans on the community `terraform-aws-modules/vpc` and
+`terraform-aws-modules/eks` registry modules rather than hand-rolled
+resource blocks specifically to reduce that risk — they're the de facto
+standard way to provision this, not a novel design.
 
 ## What this provisions
 

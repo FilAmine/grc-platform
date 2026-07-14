@@ -1,12 +1,30 @@
 # Helm chart
 
 Templates `k8s/`'s plain-manifest design (see that directory's own README
-for the underlying topology and status) into a proper Helm chart. Same
-status disclaimer applies here too: **not applied to or validated against
-a real cluster** — no `helm` binary was available where this was written,
-so nothing here has been `helm template`d, `helm lint`ed, or
-`helm install --dry-run`ed. Treat it as a solid draft, not a tested
-deployment artifact.
+for the underlying topology and status) into a proper Helm chart.
+
+## Status: lint + schema-validated, not yet applied to a real cluster
+
+Updated: `helm` is now installed (via `winget`), which allowed real
+checks beyond the original "no helm binary available" state:
+
+- `helm lint helm/grc-platform` passes (one cosmetic `Chart.yaml: icon is
+  recommended` info note, nothing else).
+- `helm template` renders the full chart with default `values.yaml`
+  (exit 0, 509 lines, all 15 resources) — confirms every Go-template
+  expression, `values.yaml` reference, and `include`/`toYaml` call in
+  `templates/*.yaml` and `_helpers.tpl` actually resolves.
+- The rendered output validated clean against real Kubernetes OpenAPI
+  schemas via [`kubeconform`](https://github.com/yannh/kubeconform) — **0
+  errors, 0 invalid** across all 15 resources.
+
+**Still not applied to or exercised against a real cluster** — no
+`helm install`/`helm upgrade` against a live API server, so the
+`pre-install,pre-upgrade` migration hook's actual blocking behavior, real
+probe timings, and interaction with a real ingress controller/cert-manager
+are all unverified in practice, only structurally. Run
+`helm install --dry-run --debug` against a real cluster (closer to a full
+apply than anything checkable here) before trusting this in production.
 
 ## What Helm gets you over the plain `k8s/` manifests
 
