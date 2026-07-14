@@ -229,27 +229,34 @@ real by reading every module. "Done" means: real persistence, a tested API, and
   to reproduce, even paraphrased, without a license from ISO/PCI SSC/AICPA/CIS.
   See `docs/database.md` for the full rationale and the migration to extend if
   a license is ever obtained.
-- **Kubernetes/Helm/Terraform.** All three are now drafted and
-  schema-validated: `k8s/` (plain manifests), `helm/grc-platform/` (the
-  same design as a proper Helm chart — values-driven config, the
-  migration Job as a real `pre-install`/`pre-upgrade` hook instead of a
-  manual delete-then-apply sequence), and `terraform/aws/` (VPC + EKS +
-  RDS Postgres + ElastiCache Redis + ECR, targeting AWS as a reasonable
-  default since nothing else in this repo specifies a cloud provider —
-  see that directory's README for why AWS specifically, and what a
-  GCP/Azure/on-prem target would need instead). `kubectl`, `helm`, and
-  `terraform` are now installed and were actually run:
-  [`kubeconform`](https://github.com/yannh/kubeconform) validates every
-  Kubernetes resource (both `k8s/`'s files and Helm's rendered output)
+- **Kubernetes/Helm/Terraform.** All three are drafted: `k8s/` (plain
+  manifests), `helm/grc-platform/` (the same design as a proper Helm
+  chart — values-driven config, the migration Job as a `post-install`/
+  `post-upgrade` hook with its own Postgres-readiness wait), and
+  `terraform/aws/` (VPC + EKS + RDS Postgres + ElastiCache Redis + ECR,
+  targeting AWS as a reasonable default since nothing else in this repo
+  specifies a cloud provider). `kubectl`, `helm`, `terraform`, and
+  `kubeconform` are installed and actually used: every Kubernetes
+  resource (both `k8s/`'s files and Helm's rendered output) validates
   against real Kubernetes OpenAPI schemas with 0 errors; `terraform init`
   + `validate` resolve and schema-check the AWS provider and both
-  registry modules cleanly, and `terraform plan` fails at exactly the
-  expected point (missing AWS credentials, not a config bug). Still
-  deliberately **not** called fully "Done": none of it has been applied
-  to a real cluster or AWS account (that needs your own cluster/cloud
-  account and credentials — not something to provision without your
-  explicit go-ahead on cost, which is why it stopped at schema
-  validation). See `docs/deployment.md`, `k8s/README.md`,
+  registry modules cleanly, with `terraform plan` failing at exactly the
+  expected point (missing AWS credentials, not a config bug). **The Helm
+  chart has gone one step further and actually been installed on a real
+  (local) cluster** — Docker Desktop + a local `kind` cluster, free, no
+  AWS account needed. That live install caught a real bug schema
+  validation couldn't: the migration Job's original `pre-install` hook
+  type meant it ran before its own ConfigMap/Secret existed. Fixed (see
+  `helm/README.md`'s status section), and a second live install
+  succeeded completely — every pod Ready, the migration genuinely
+  applied against a real Postgres instance (verified via `psql`,
+  `alembic_version` at the true head), and the backend/frontend Services
+  answered real HTTP requests through `kubectl port-forward`. Test
+  release and cluster torn down afterward. Still not fully "Done": no
+  AWS account/credentials were used (real cost, needs your explicit
+  go-ahead), and `k8s/`'s plain manifests haven't had the same live-cluster
+  pass (no specific reason to expect the same class of bug, since they
+  don't use Helm hooks). See `docs/deployment.md`, `k8s/README.md`,
   `helm/README.md`, and `terraform/aws/README.md` for the exact commands
   run and what's still missing in each (a real secrets-manager
   integration everywhere, autoscaling/network policies for Kubernetes,
@@ -263,14 +270,15 @@ SSO (OIDC), rate limiting/security headers/dependency scanning,
 departments/threats/vulnerabilities, incident management, the Tenant/Task
 modules, a real Celery worker, the Vite and FastAPI/starlette major-version
 upgrades, the **full 5-workshop EBIOS RM methodology** (structural linking
-through Workshop 5's treatment decision), and schema-validated Kubernetes
-manifests, a Helm chart, and a Terraform AWS module are all in. The one
-remaining gap is intentionally out of reach: licensed standards text (ISO
-27002/27005, CIS Controls, SOC 2, PCI DSS) needs an actual license from
-the standards body, not a code change — nothing left on this list is
+through Workshop 5's treatment decision), schema-validated Kubernetes
+manifests and a Terraform AWS module, and a Helm chart that's been
+installed and verified end to end on a real local cluster are all in. The
+one remaining gap is intentionally out of reach: licensed standards text
+(ISO 27002/27005, CIS Controls, SOC 2, PCI DSS) needs an actual license
+from the standards body, not a code change — nothing left on this list is
 something more engineering effort alone can close. None of it blocks
-day-to-day use of what's already built; the infrastructure drafts
-specifically still need your own real cluster/cloud account for a live
-apply — that's a deliberate stopping point (real infrastructure spend
-needs your explicit go-ahead, not something to provision autonomously),
-not a gap in the code.
+day-to-day use of what's already built; a real cloud deployment
+specifically still needs your own AWS account for Terraform to actually
+provision anything — that's a deliberate stopping point (real
+infrastructure spend needs your explicit go-ahead, not something to
+provision autonomously), not a gap in the code.

@@ -5,13 +5,31 @@
 # previous run of this hook automatically before creating the new one, and
 # `hook-succeeded` cleans it up after a successful migration.
 #
-# `pre-install,pre-upgrade` (not post-*) is deliberate: Helm blocks the
-# rest of the release's resources (backend/celery Deployments included)
-# from being created/updated until pre-* hooks complete successfully, which
-# is exactly the ordering the plain-manifest README had to spell out
-# manually ("run the migration before the first rollout reaches real
-# traffic"). If this Job fails, `helm install`/`helm upgrade` fails too,
-# rather than rolling out a backend against un-migrated schema.
+# This was originally a `pre-install,pre-upgrade` hook, on the theory that
+# it would block the rest of the release until migrations succeeded. Live
+# testing against a real cluster (a local `kind` cluster) caught the real
+# bug in that: Helm fires pre-install hooks BEFORE creating *any* of the
+# chart's regular resources -- not just Postgres, but the ConfigMap and
+# Secret this Job's `envFrom` depends on too. The Job failed immediately
+# with `CreateContainerConfigError: configmap "...-config" not found`,
+# something no amount of `helm lint`/`helm template`/schema validation
+# could have caught, since those never actually execute the release.
+#
+# Fixed by moving to `post-install,post-upgrade` (regular resources exist
+# by then) plus an initContainer that waits for Postgres to actually
+# accept TCP connections before `alembic upgrade head` runs -- Helm always
+# waits for a Job hook to complete, but does NOT wait for regular
+# resources (the Postgres StatefulSet) to become *ready* before firing
+# post-install hooks unless the release itself is installed with `--wait`,
+# so a fixed retry loop here makes the Job robust regardless of that flag.
+#
+# One tradeoff accepted, not solved: backend/celery Deployments are
+# regular (non-hook) resources created in the same wave as Postgres/Redis,
+# so they could theoretically start and serve a request against
+# un-migrated schema for the brief window before this hook completes --
+# the same category of best-effort ordering caveat already documented for
+# docker-compose's `depends_on` and the plain k8s manifests'
+# `depends_on`-equivalent, not a new problem this introduces.
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -19,7 +37,7 @@ metadata:
   labels:
     {{- include "grc-platform.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
@@ -27,6 +45,25 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      initContainers:
+        - name: wait-for-postgres
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          envFrom:
+            - secretRef:
+                name: {{ include "grc-platform.fullname" . }}-secrets
+          command: ["sh", "-c"]
+          args:
+            - |
+              i=0
+              until python -c "import os,socket
+              from urllib.parse import urlparse
+              u = urlparse(os.environ['DATABASE_URL'].replace('+psycopg', ''))
+              socket.create_connection((u.hostname, u.port or 5432), timeout=2).close()" 2>/dev/null; do
+                i=$((i+1))
+                if [ "$i" -ge 30 ]; then echo "Postgres never became reachable after 60s"; exit 1; fi
+                echo "waiting for postgres... ($i/30)"
+                sleep 2
+              done
       containers:
         - name: migrate
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"

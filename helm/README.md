@@ -3,38 +3,62 @@
 Templates `k8s/`'s plain-manifest design (see that directory's own README
 for the underlying topology and status) into a proper Helm chart.
 
-## Status: lint + schema-validated, not yet applied to a real cluster
+## Status: actually installed and verified on a real (local) cluster
 
-Updated: `helm` is now installed (via `winget`), which allowed real
-checks beyond the original "no helm binary available" state:
+Updated twice now. First pass: `helm lint`/`helm template` plus
+[`kubeconform`](https://github.com/yannh/kubeconform) schema validation,
+all clean — but that never *executes* a release, so it couldn't catch
+ordering bugs. Second pass: Docker Desktop + a local
+[`kind`](https://kind.sigs.k8s.io/) cluster (free, no AWS account) let this
+chart actually be `helm install`ed for real, and it caught a real bug the
+static checks never could have:
 
-- `helm lint helm/grc-platform` passes (one cosmetic `Chart.yaml: icon is
-  recommended` info note, nothing else).
-- `helm template` renders the full chart with default `values.yaml`
-  (exit 0, 509 lines, all 15 resources) — confirms every Go-template
-  expression, `values.yaml` reference, and `include`/`toYaml` call in
-  `templates/*.yaml` and `_helpers.tpl` actually resolves.
-- The rendered output validated clean against real Kubernetes OpenAPI
-  schemas via [`kubeconform`](https://github.com/yannh/kubeconform) — **0
-  errors, 0 invalid** across all 15 resources.
+**The migration Job was originally a `pre-install,pre-upgrade` hook.**
+Helm fires `pre-install` hooks *before* creating any of the chart's
+regular resources — not just Postgres, but the ConfigMap and Secret the
+Job's `envFrom` depends on too. The first live install failed immediately:
+`CreateContainerConfigError: configmap "...-config" not found`. Fixed by
+moving the hook to `post-install,post-upgrade` and adding a
+`wait-for-postgres` initContainer (a plain TCP-reachability retry loop
+using the already-injected `DATABASE_URL`, no extra tooling needed) so the
+migration doesn't race a Postgres pod that's created but not yet ready —
+see `templates/migration-job.yaml`'s header comment for the full story.
 
-**Still not applied to or exercised against a real cluster** — no
-`helm install`/`helm upgrade` against a live API server, so the
-`pre-install,pre-upgrade` migration hook's actual blocking behavior, real
-probe timings, and interaction with a real ingress controller/cert-manager
-are all unverified in practice, only structurally. Run
-`helm install --dry-run --debug` against a real cluster (closer to a full
-apply than anything checkable here) before trusting this in production.
+After the fix, a real `helm install` against the local `kind` cluster
+(locally built `grc-backend:local`/`grc-frontend:local` images, loaded via
+`kind load docker-image`, `ingress.enabled=false` since `kind` has no
+ingress controller) succeeded end to end and was verified live:
+
+- All 6 pods (backend, celery-worker, celery-beat, frontend, postgres,
+  redis) reached `Running`/`1/1 Ready`.
+- The migration Job actually ran `alembic upgrade head` against the real
+  Postgres pod — confirmed by `psql`-ing in and checking `alembic_version`
+  (`202607180001`, the true head) and `\dt` (every table, including all 5
+  EBIOS RM workshops' tables, genuinely present).
+- `kubectl port-forward` to the backend Service and a real `curl` got
+  `{"status":"ok","service":"GRC Platform"}` from `/health`, `200` from
+  `/api/v1/openapi.json`, and `200` with the real page title from the
+  frontend Service.
+
+The test release and cluster were torn down afterward
+(`helm uninstall` + `kind delete cluster`) — nothing was left running.
+**Still not exercised**: a real ingress controller/cert-manager
+interaction (this test disabled ingress entirely, since `kind` has none by
+default), and anything at real-world scale/traffic. If you want to
+reproduce this yourself: `kind create cluster`, build+`kind load
+docker-image` the two images, then `helm install` with `ingress.enabled:
+false` and real `secrets.secretKey`/`secrets.postgresPassword` values.
 
 ## What Helm gets you over the plain `k8s/` manifests
 
 - **Values-driven config** instead of hand-editing placeholder domains/image
   tags across a dozen files — see `values.yaml`.
-- **The migration Job is a proper `pre-install,pre-upgrade` hook**
-  (`templates/migration-job.yaml`), so `helm install`/`helm upgrade` blocks
-  on it automatically and fails the whole release if it fails, rather than
-  needing the manual `kubectl delete job/migrate && kubectl apply && kubectl wait`
-  sequence `k8s/README.md` documents.
+- **The migration Job is a proper `post-install,post-upgrade` hook**
+  (`templates/migration-job.yaml`) with its own Postgres-readiness wait,
+  so `helm install`/`helm upgrade` blocks on it automatically and fails the
+  whole release if it fails, rather than needing the manual
+  `kubectl delete job/migrate && kubectl apply && kubectl wait` sequence
+  `k8s/README.md` documents.
 - **Release-scoped resource names** (`{{ .Release.Name }}-grc-platform-*`),
   so multiple releases (e.g. staging + prod, or two customers) can coexist
   in one cluster without name collisions — the plain manifests use fixed
@@ -82,8 +106,10 @@ helm upgrade grc-platform ./helm/grc-platform \
   --set backend.image.tag=<new-tag>
 ```
 
-Run `--dry-run --debug` first on a real cluster before trusting this, per
-the unverified-status disclaimer above.
+Run `--dry-run --debug` first against your real target cluster before
+trusting this — a local `kind` cluster confirmed the chart installs
+cleanly (see the status section above), but every cluster's ingress
+controller, StorageClass defaults, and available AZs/capacity differ.
 
 ## What's deliberately not here
 

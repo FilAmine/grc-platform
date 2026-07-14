@@ -62,26 +62,33 @@ Compose topology, and `helm/grc-platform/` templates the same design into
 a proper Helm chart — see `k8s/README.md` and `helm/README.md` for the
 full apply sequence, prerequisites, and what each deliberately doesn't
 include (autoscaling, network policies, a real secrets-manager
-integration). Both are now **schema-validated** — `kubectl kustomize`,
+integration). Both are **schema-validated** (`kubectl kustomize`,
 `helm lint`/`helm template`, and [`kubeconform`](https://github.com/yannh/kubeconform)
-(real Kubernetes OpenAPI schemas, no cluster needed) all pass clean, 0
-errors across every resource in both. **Neither has been applied to a
-real cluster**, though — no live `kubectl apply`/`helm install`, no pods
-actually scheduled. Schema validity doesn't catch everything a live apply
-would (probe timing tuned for real startup time, a StorageClass that
-exists in your actual cluster, real ingress-controller/cert-manager
-interaction). See each directory's README for the exact commands run and
-what a full apply would still need to confirm.
+all pass clean, 0 errors), and the **Helm chart has additionally been
+installed for real** against a local `kind` cluster (Docker Desktop, free,
+no AWS account) — this caught and fixed a genuine bug (the migration
+Job's hook type meant it ran before its own ConfigMap/Secret existed;
+see `helm/README.md`'s status section for the full story) that no
+schema-only check could have found. After the fix, a live install
+succeeded end to end: every pod reached Ready, the migration genuinely
+ran against a real Postgres instance (confirmed via `psql`), and
+`curl`ing the backend/frontend Services through `kubectl port-forward`
+got real 200 responses. The test release and cluster were torn down
+afterward. `k8s/`'s plain manifests haven't had the same live-install
+pass yet (no reason to expect the same bug — they don't use Helm hooks,
+and their documented apply order already creates ConfigMap/Secret/
+Postgres before the migration Job runs).
 
 Both implement the three priorities this section used to list before they
 were drafted: secrets moved into a Kubernetes Secret (still a stopgap, not
 a real secrets-manager integration — see `k8s/secret.example.yaml`'s or
 `helm/grc-platform/values.yaml`'s `secrets:` block header), migrations run
 as a separate Job instead of in the app container's startup command (the
-Helm chart does this as a proper `pre-install,pre-upgrade` hook, which
-blocks the rest of the release until it succeeds — a genuine improvement
-over the plain manifests' manual delete-then-apply-then-wait sequence),
-and liveness/readiness probes on `/health`.
+Helm chart does this as a proper `post-install,post-upgrade` hook with its
+own Postgres-readiness wait, which blocks the rest of the release until it
+succeeds — a genuine improvement over the plain manifests' manual
+delete-then-apply-then-wait sequence), and liveness/readiness probes on
+`/health`.
 
 One related change needed regardless of which you use: `frontend/Dockerfile`
 now accepts a `VITE_API_BASE_URL` build arg (default unchanged, so existing
