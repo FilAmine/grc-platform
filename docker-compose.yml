@@ -116,6 +116,16 @@ services:
     depends_on:
       - backend
 
+  # Standalone training app: no backend/database dependency, no auth --
+  # content is bundled at build time and progress lives in the browser's
+  # localStorage. Runs independently of the rest of the stack.
+  grc-academy:
+    build:
+      context: grc-academy
+      dockerfile: Dockerfile
+    ports:
+      - "3100:80"
+
 volumes:
   postgres_data:
   redis_data:

@@ -8,12 +8,15 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material'
-import { course } from '../content/course'
+import { findCourse } from '../content/catalog'
 import { lessonKey, useProgress } from '../hooks/useProgress'
 
 export default function Sidebar() {
-  const { moduleSlug, lessonSlug } = useParams()
+  const { courseSlug, moduleSlug, lessonSlug } = useParams()
   const { isCompleted } = useProgress()
+
+  const course = courseSlug ? findCourse(courseSlug) : undefined
+  if (!course) return null
 
   return (
     <Box sx={{ width: 300, flexShrink: 0, overflowY: 'auto', height: '100%', borderRight: 1, borderColor: 'divider' }}>
@@ -29,13 +32,13 @@ export default function Sidebar() {
           </Typography>
           <List dense disablePadding>
             {mod.lessons.map((lesson) => {
-              const key = lessonKey(mod.slug, lesson.slug)
+              const key = lessonKey(course.slug, mod.slug, lesson.slug)
               const selected = mod.slug === moduleSlug && lesson.slug === lessonSlug
               return (
                 <ListItemButton
                   key={lesson.slug}
                   component={Link}
-                  to={`/lecon/${mod.slug}/${lesson.slug}`}
+                  to={`/cours/${course.slug}/lecon/${mod.slug}/${lesson.slug}`}
                   selected={selected}
                   sx={{ pl: 3, py: 0.25 }}
                 >

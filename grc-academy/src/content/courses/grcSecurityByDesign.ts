@@ -1,45 +1,24 @@
-import m0l1 from './lessons/m0-l1-introduction.md?raw'
-import m1l1 from './lessons/m1-l1-gouvernance.md?raw'
-import m1l2 from './lessons/m1-l2-gestion-des-risques.md?raw'
-import m1l3 from './lessons/m1-l3-conformite.md?raw'
-import m2l1 from './lessons/m2-l1-iso27001.md?raw'
-import m2l2 from './lessons/m2-l2-nist-csf.md?raw'
-import m2l3 from './lessons/m2-l3-soc2.md?raw'
-import m2l4 from './lessons/m2-l4-rgpd.md?raw'
-import m2l5 from './lessons/m2-l5-comparatif.md?raw'
-import m3l1 from './lessons/m3-l1-principes-sbd.md?raw'
-import m3l2 from './lessons/m3-l2-defense-en-profondeur.md?raw'
-import m4l1 from './lessons/m4-l1-privacy-by-design.md?raw'
-import m4l2 from './lessons/m4-l2-privacy-rgpd-pratique.md?raw'
-import m5l1 from './lessons/m5-l1-responsabilite-partagee.md?raw'
-import m5l2 from './lessons/m5-l2-iam-chiffrement-reseau.md?raw'
-import m5l3 from './lessons/m5-l3-referentiels-cloud.md?raw'
-import m6l1 from './lessons/m6-l1-boucle-retroaction.md?raw'
-import m6l2 from './lessons/m6-l2-feuille-de-route.md?raw'
+import type { Course } from '../types'
+import m0l1 from '../lessons/grc-security-by-design/m0-l1-introduction.md?raw'
+import m1l1 from '../lessons/grc-security-by-design/m1-l1-gouvernance.md?raw'
+import m1l2 from '../lessons/grc-security-by-design/m1-l2-gestion-des-risques.md?raw'
+import m1l3 from '../lessons/grc-security-by-design/m1-l3-conformite.md?raw'
+import m2l1 from '../lessons/grc-security-by-design/m2-l1-iso27001.md?raw'
+import m2l2 from '../lessons/grc-security-by-design/m2-l2-nist-csf.md?raw'
+import m2l3 from '../lessons/grc-security-by-design/m2-l3-soc2.md?raw'
+import m2l4 from '../lessons/grc-security-by-design/m2-l4-rgpd.md?raw'
+import m2l5 from '../lessons/grc-security-by-design/m2-l5-comparatif.md?raw'
+import m3l1 from '../lessons/grc-security-by-design/m3-l1-principes-sbd.md?raw'
+import m3l2 from '../lessons/grc-security-by-design/m3-l2-defense-en-profondeur.md?raw'
+import m4l1 from '../lessons/grc-security-by-design/m4-l1-privacy-by-design.md?raw'
+import m4l2 from '../lessons/grc-security-by-design/m4-l2-privacy-rgpd-pratique.md?raw'
+import m5l1 from '../lessons/grc-security-by-design/m5-l1-responsabilite-partagee.md?raw'
+import m5l2 from '../lessons/grc-security-by-design/m5-l2-iam-chiffrement-reseau.md?raw'
+import m5l3 from '../lessons/grc-security-by-design/m5-l3-referentiels-cloud.md?raw'
+import m6l1 from '../lessons/grc-security-by-design/m6-l1-boucle-retroaction.md?raw'
+import m6l2 from '../lessons/grc-security-by-design/m6-l2-feuille-de-route.md?raw'
 
-export interface Lesson {
-  slug: string
-  title: string
-  minutes: number
-  content: string
-}
-
-export interface Module {
-  slug: string
-  title: string
-  description: string
-  lessons: Lesson[]
-}
-
-export interface Course {
-  slug: string
-  title: string
-  subtitle: string
-  description: string
-  modules: Module[]
-}
-
-export const course: Course = {
+export const grcSecurityByDesign: Course = {
   slug: 'grc-security-by-design',
   title: 'Fondamentaux GRC & Security by Design',
   subtitle: 'Gouvernance, risque, conformité — et sécurité dès la conception (privacy, cloud)',
@@ -115,34 +94,3 @@ export const course: Course = {
     },
   ],
 }
-
-export interface FlatLesson {
-  moduleSlug: string
-  moduleTitle: string
-  lesson: Lesson
-  index: number
-}
-
-export function flattenLessons(c: Course): FlatLesson[] {
-  const flat: FlatLesson[] = []
-  let index = 0
-  for (const mod of c.modules) {
-    for (const lesson of mod.lessons) {
-      flat.push({ moduleSlug: mod.slug, moduleTitle: mod.title, lesson, index })
-      index += 1
-    }
-  }
-  return flat
-}
-
-export function findLesson(c: Course, moduleSlug: string, lessonSlug: string) {
-  const mod = c.modules.find((m) => m.slug === moduleSlug)
-  const lesson = mod?.lessons.find((l) => l.slug === lessonSlug)
-  return mod && lesson ? { module: mod, lesson } : undefined
-}
-
-export const totalMinutes = (c: Course) =>
-  c.modules.reduce((sum, m) => sum + m.lessons.reduce((s, l) => s + l.minutes, 0), 0)
-
-export const totalLessons = (c: Course) =>
-  c.modules.reduce((sum, m) => sum + m.lessons.length, 0)

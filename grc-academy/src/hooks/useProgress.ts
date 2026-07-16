@@ -19,8 +19,8 @@ function writeCompleted(set: Set<string>) {
   }
 }
 
-export function lessonKey(moduleSlug: string, lessonSlug: string) {
-  return `${moduleSlug}/${lessonSlug}`
+export function lessonKey(courseSlug: string, moduleSlug: string, lessonSlug: string) {
+  return `${courseSlug}/${moduleSlug}/${lessonSlug}`
 }
 
 export function useProgress() {

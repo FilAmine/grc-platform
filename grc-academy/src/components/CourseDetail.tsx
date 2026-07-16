@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import {
   Box,
+  Breadcrumbs,
   Button,
   Card,
   CardContent,
@@ -17,21 +18,35 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
-import { course, flattenLessons, totalLessons, totalMinutes } from '../content/course'
+import { findCourse } from '../content/catalog'
+import { flattenLessons, totalLessons, totalMinutes } from '../content/types'
 import { lessonKey, useProgress } from '../hooks/useProgress'
 
-export default function CourseHome() {
+export default function CourseDetail() {
+  const { courseSlug } = useParams()
   const { isCompleted } = useProgress()
+
+  if (!courseSlug) return <Navigate to="/" replace />
+  const course = findCourse(courseSlug)
+  if (!course) return <Navigate to="/" replace />
+
   const flat = flattenLessons(course)
   const total = totalLessons(course)
-  const completedCount = flat.filter((f) => isCompleted(lessonKey(f.moduleSlug, f.lesson.slug))).length
-  const nextLesson = flat.find((f) => !isCompleted(lessonKey(f.moduleSlug, f.lesson.slug))) ?? flat[0]
+  const completedCount = flat.filter((f) => isCompleted(lessonKey(course.slug, f.moduleSlug, f.lesson.slug))).length
+  const nextLesson = flat.find((f) => !isCompleted(lessonKey(course.slug, f.moduleSlug, f.lesson.slug))) ?? flat[0]
   const progressPct = total === 0 ? 0 : Math.round((completedCount / total) * 100)
 
   return (
     <Box sx={{ height: '100%', overflowY: 'auto', bgcolor: 'background.default' }}>
       <Container maxWidth="md" sx={{ py: 6 }}>
-        <Chip label="Parcours pilote" color="secondary" size="small" sx={{ mb: 2, fontWeight: 600 }} />
+        <Breadcrumbs sx={{ mb: 2 }}>
+          <Typography component={Link} to="/" variant="body2" sx={{ color: 'text.secondary', textDecoration: 'none' }}>
+            Catalogue
+          </Typography>
+          <Typography variant="body2" color="text.secondary">{course.title}</Typography>
+        </Breadcrumbs>
+
+        <Chip label="Parcours" color="secondary" size="small" sx={{ mb: 2, fontWeight: 600 }} />
         <Typography variant="h3" gutterBottom sx={{ fontSize: { xs: '2rem', sm: '2.5rem' } }}>
           {course.title}
         </Typography>
@@ -58,7 +73,7 @@ export default function CourseHome() {
 
         <Button
           component={Link}
-          to={`/lecon/${nextLesson.moduleSlug}/${nextLesson.lesson.slug}`}
+          to={`/cours/${course.slug}/lecon/${nextLesson.moduleSlug}/${nextLesson.lesson.slug}`}
           variant="contained"
           size="large"
           startIcon={<PlayCircleOutlineIcon />}
@@ -82,12 +97,12 @@ export default function CourseHome() {
                 </Typography>
                 <List dense disablePadding>
                   {mod.lessons.map((lesson) => {
-                    const done = isCompleted(lessonKey(mod.slug, lesson.slug))
+                    const done = isCompleted(lessonKey(course.slug, mod.slug, lesson.slug))
                     return (
                       <ListItemButton
                         key={lesson.slug}
                         component={Link}
-                        to={`/lecon/${mod.slug}/${lesson.slug}`}
+                        to={`/cours/${course.slug}/lecon/${mod.slug}/${lesson.slug}`}
                         sx={{ borderRadius: 1 }}
                       >
                         <ListItemIcon sx={{ minWidth: 32 }}>

@@ -14,24 +14,28 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import Sidebar from './Sidebar'
-import { course, findLesson, flattenLessons } from '../content/course'
+import { findCourse } from '../content/catalog'
+import { findLesson, flattenLessons } from '../content/types'
 import { lessonKey, useProgress } from '../hooks/useProgress'
 
 export default function LessonPage() {
-  const { moduleSlug, lessonSlug } = useParams()
+  const { courseSlug, moduleSlug, lessonSlug } = useParams()
   const { isCompleted, toggle } = useProgress()
 
-  if (!moduleSlug || !lessonSlug) return <Navigate to="/" replace />
+  if (!courseSlug || !moduleSlug || !lessonSlug) return <Navigate to="/" replace />
+
+  const course = findCourse(courseSlug)
+  if (!course) return <Navigate to="/" replace />
 
   const found = findLesson(course, moduleSlug, lessonSlug)
-  if (!found) return <Navigate to="/" replace />
+  if (!found) return <Navigate to={`/cours/${courseSlug}`} replace />
 
   const { module: mod, lesson } = found
   const flat = flattenLessons(course)
   const currentIndex = flat.findIndex((f) => f.moduleSlug === moduleSlug && f.lesson.slug === lessonSlug)
   const prev = currentIndex > 0 ? flat[currentIndex - 1] : undefined
   const next = currentIndex < flat.length - 1 ? flat[currentIndex + 1] : undefined
-  const key = lessonKey(moduleSlug, lessonSlug)
+  const key = lessonKey(course.slug, moduleSlug, lessonSlug)
 
   return (
     <Box sx={{ display: 'flex', height: '100%' }}>
@@ -40,6 +44,9 @@ export default function LessonPage() {
         <Container maxWidth="md" sx={{ py: 5 }}>
           <Breadcrumbs sx={{ mb: 2 }}>
             <Typography component={Link} to="/" variant="body2" sx={{ color: 'text.secondary', textDecoration: 'none' }}>
+              Catalogue
+            </Typography>
+            <Typography component={Link} to={`/cours/${course.slug}`} variant="body2" sx={{ color: 'text.secondary', textDecoration: 'none' }}>
               {course.title}
             </Typography>
             <Typography variant="body2" color="text.secondary">{mod.title}</Typography>
@@ -79,7 +86,7 @@ export default function LessonPage() {
             {prev ? (
               <Button
                 component={Link}
-                to={`/lecon/${prev.moduleSlug}/${prev.lesson.slug}`}
+                to={`/cours/${course.slug}/lecon/${prev.moduleSlug}/${prev.lesson.slug}`}
                 startIcon={<ArrowBackIcon />}
               >
                 {prev.lesson.title}
@@ -90,14 +97,14 @@ export default function LessonPage() {
             {next ? (
               <Button
                 component={Link}
-                to={`/lecon/${next.moduleSlug}/${next.lesson.slug}`}
+                to={`/cours/${course.slug}/lecon/${next.moduleSlug}/${next.lesson.slug}`}
                 endIcon={<ArrowForwardIcon />}
                 variant="contained"
               >
                 {next.lesson.title}
               </Button>
             ) : (
-              <Button component={Link} to="/" variant="contained">
+              <Button component={Link} to={`/cours/${course.slug}`} variant="contained">
                 Terminer le parcours
               </Button>
             )}
