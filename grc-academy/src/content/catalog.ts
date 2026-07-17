@@ -6,8 +6,9 @@ import { soc2 } from './courses/soc2'
 import { rgpd } from './courses/rgpd'
 import { nistRmf } from './courses/nistRmf'
 import { cisControls } from './courses/cisControls'
+import { nis2 } from './courses/nis2'
 
-export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls]
+export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2]
 
 export function findCourse(courseSlug: string): Course | undefined {
   return courses.find((c) => c.slug === courseSlug)
