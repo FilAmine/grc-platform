@@ -26,7 +26,7 @@ Ouvre http://localhost:3100 (service défini dans le `docker-compose.yml` racine
 
 Le catalogue de parcours est défini dans [`src/content/catalog.ts`](src/content/catalog.ts), qui assemble les
 cours de [`src/content/courses/*.ts`](src/content/courses). Chaque cours référence des leçons Markdown dans
-[`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons). Cinq parcours à ce jour :
+[`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons). Six parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -46,6 +46,10 @@ cours de [`src/content/courses/*.ts`](src/content/courses). Chaque cours référ
   le rôle du DPO, la sécurité du traitement et la notification des violations (72h), le registre des traitements
   et l'AIPD, les transferts internationaux (Schrems I/II, Data Privacy Framework), la gouvernance des autorités
   de contrôle et les sanctions.
+- **NIST RMF en profondeur** (7 modules, 12 leçons) — origines dans la FISMA, les sept étapes du processus
+  d'autorisation (Prepare, Categorize, Select, Implement, Assess, Authorize, Monitor), le catalogue de contrôles
+  SP 800-53 et ses familles clés, les rôles nommément désignés (Authorizing Official, ISSO, SAISO...), FedRAMP,
+  et l'intégration de la vie privée et de la gestion des risques de la chaîne d'approvisionnement.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 qui les assemble en `Course`, et l'ajouter au tableau `courses` de `catalog.ts`.
