@@ -26,7 +26,7 @@ Ouvre http://localhost:3100 (service défini dans le `docker-compose.yml` racine
 
 Le catalogue de parcours est défini dans [`src/content/catalog.ts`](src/content/catalog.ts), qui assemble les
 cours de [`src/content/courses/*.ts`](src/content/courses). Chaque cours référence des leçons Markdown dans
-[`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons). Trois parcours à ce jour :
+[`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons). Quatre parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -37,6 +37,10 @@ cours de [`src/content/courses/*.ts`](src/content/courses). Chaque cours référ
   de l'Annexe A 2022 organisés par thème (organisationnels, personnes, physiques, technologiques), la Déclaration
   d'Applicabilité, le processus de certification (Stage 1/2, surveillance, recertification) et le maintien du
   SMSI dans la durée.
+- **SOC 2 en profondeur** (8 modules, 11 leçons) — les Common Criteria (CC1 à CC9) alignés sur le référentiel
+  COSO, les cinq catégories de Trust Services Criteria (Sécurité, Disponibilité, Intégrité de traitement,
+  Confidentialité, Vie privée), le déroulement de l'audit et les types d'opinion, l'anatomie complète du rapport,
+  la préparation d'un audit, et la distinction avec SOC 1/SOC 3.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 qui les assemble en `Course`, et l'ajouter au tableau `courses` de `catalog.ts`.
