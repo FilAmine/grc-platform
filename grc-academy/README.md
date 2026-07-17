@@ -26,7 +26,7 @@ Ouvre http://localhost:3100 (service défini dans le `docker-compose.yml` racine
 
 Le catalogue de parcours est défini dans [`src/content/catalog.ts`](src/content/catalog.ts), qui assemble les
 cours de [`src/content/courses/*.ts`](src/content/courses). Chaque cours référence des leçons Markdown dans
-[`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons). Six parcours à ce jour :
+[`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons). Sept parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -50,6 +50,10 @@ cours de [`src/content/courses/*.ts`](src/content/courses). Chaque cours référ
   d'autorisation (Prepare, Categorize, Select, Implement, Assess, Authorize, Monitor), le catalogue de contrôles
   SP 800-53 et ses familles clés, les rôles nommément désignés (Authorizing Official, ISSO, SAISO...), FedRAMP,
   et l'intégration de la vie privée et de la gestion des risques de la chaîne d'approvisionnement.
+- **CIS Controls en profondeur** (6 modules, 11 leçons) — origines (Consensus Audit Guidelines, SANS Top 20), les
+  18 contrôles et leurs 153 Safeguards, le système de priorisation par Implementation Groups (IG1/IG2/IG3),
+  l'écosystème CIS (Benchmarks, CIS RAM), le mapping avec les autres référentiels, et une feuille de route de
+  première adoption.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 qui les assemble en `Course`, et l'ajouter au tableau `courses` de `catalog.ts`.

@@ -1,0 +1,27 @@
+# Les Implementation Groups : le système de priorisation intégré
+
+## Une innovation qui répond directement à un angle mort des autres référentiels
+
+Aucun des référentiels déjà étudiés dans cette plateforme n'intègre, dans sa structure même, un mécanisme de priorisation aussi direct que les **Implementation Groups (IG1, IG2, IG3)** des CIS Controls. ISO 27001 renvoie la priorisation à l'analyse de risque propre de chaque organisation (la Déclaration d'Applicabilité, développée dans le parcours dédié) ; le NIST CSF renvoie à la comparaison entre Current Profile et Target Profile (développée dans le parcours dédié) ; SP 800-53 renvoie aux bases de référence liées à la catégorisation FIPS 199 (développée dans le parcours NIST RMF). Les CIS Controls, à l'inverse, proposent directement, **au sein même du référentiel**, trois profils de priorisation prédéfinis, immédiatement utilisables sans construire au préalable une méthodologie de risque propre à l'organisation — un choix de conception pensé explicitement pour les organisations qui ne disposent pas des ressources ou de l'expertise nécessaires pour mener cette analyse de risque de zéro.
+
+## IG1 — l'hygiène cyber essentielle
+
+Le premier groupe de mise en œuvre, comptant environ **56 Safeguards**, est explicitement défini par le CIS comme le socle d'**hygiène cyber essentielle** que toute organisation, quelle que soit sa taille ou sa maturité, devrait mettre en œuvre en priorité absolue. Il cible les organisations disposant de ressources et d'une expertise en cybersécurité limitées, dont la donnée traitée n'est généralement pas hautement sensible, et dont l'objectif premier est de se prémunir contre les attaques opportunistes et non ciblées les plus courantes (rançongiciels génériques, hameçonnage de masse) plutôt que contre un adversaire sophistiqué et déterminé.
+
+Les Safeguards IG1 se concentrent presque exclusivement sur les six premiers contrôles du référentiel (inventaire des actifs et logiciels, protection des données de base, configuration sécurisée, gestion des comptes et des accès), déjà développés au module 1 — une confirmation directe que ces fondations constituent, aux yeux du CIS lui-même, le point de départ non négociable pour toute organisation.
+
+## IG2 — pour les organisations à ressources modérées
+
+Le deuxième groupe, cumulatif par rapport à IG1, ajoute environ **74 Safeguards supplémentaires** (soit environ 130 Safeguards au total pour un profil IG2 complet). Il cible des organisations disposant d'une expertise en sécurité dédiée, gérant et protégeant des infrastructures informatiques plus complexes, réparties entre plusieurs départements avec des profils de risque différents, et traitant potentiellement des données sensibles pour le compte de clients — un profil qui correspond largement aux organisations de taille moyenne à grande, déjà engagées dans une démarche de certification ISO 27001 ou un programme SOC 2 comparable à ceux développés dans les parcours dédiés de cette plateforme.
+
+## IG3 — pour les organisations à forte exposition
+
+Le troisième groupe, cumulatif par rapport à IG1 et IG2, ajoute les **23 Safeguards restants** (soit l'intégralité des 153 Safeguards pour un profil IG3 complet). Il cible des organisations employant des spécialistes de la sécurité dédiés à des fonctions spécifiques (gestion des risques, tests d'intrusion, sécurité applicative), dont les actifs et les données constituent des cibles de choix pour des adversaires sophistiqués, motivés et bien financés (acteurs étatiques, groupes de cybercriminalité organisée), et pour lesquelles une atteinte à la disponibilité, la confidentialité ou l'intégrité des systèmes aurait un impact grave sur la sécurité publique ou la stabilité économique — un profil qui recoupe largement les organisations susceptibles de relever d'un cadre réglementaire renforcé (opérateurs d'importance vitale, secteur financier soumis à DORA, infrastructures critiques relevant de NIS2).
+
+## Comment un Safeguard peut appartenir à plusieurs groupes
+
+Un même Safeguard peut être marqué comme appartenant simultanément à IG1, IG2 et IG3 — cela signifie simplement qu'il est jugé essentiel dès le niveau de maturité le plus basique, et qu'il reste, sans surprise, également exigé aux niveaux supérieurs. Un Safeguard marqué uniquement IG3, à l'inverse, n'est attendu que des organisations les plus matures et les plus exposées, reconnaissant implicitement qu'il exigerait un effort disproportionné pour une organisation IG1 sans bénéfice de risque suffisant au regard de son profil de menace réel.
+
+## Le lien avec l'appétence au risque déjà développée dans cette plateforme
+
+Ce système de groupes prédéfinis ne dispense pas totalement de l'exercice de gestion des risques propre à chaque organisation, développé dès le premier parcours de cette plateforme — il offre plutôt un **point de départ raisonnable et documenté**, construit collectivement par consensus d'experts plutôt que réinventé de zéro par chaque organisation. Une organisation peut légitimement choisir de compléter son profil IG1 ou IG2 par des Safeguards spécifiques d'un niveau supérieur, si son analyse de risque propre (module 1 du premier parcours de cette plateforme) révèle une exposition particulière que le profil générique ne couvrirait pas — un ajustement comparable, dans son esprit, au tailoring des bases de référence de contrôles du RMF, déjà développé dans le parcours dédié de cette plateforme.
