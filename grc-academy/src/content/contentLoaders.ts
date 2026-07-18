@@ -18,4 +18,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   hipaa: () => import('./courses/content/hipaaContent'),
   'ebios-rm': () => import('./courses/content/ebiosRmContent'),
   itil: () => import('./courses/content/itilContent'),
+  sox: () => import('./courses/content/soxContent'),
 }

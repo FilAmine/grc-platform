@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Quatorze parcours à ce jour :
+Quinze parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -99,6 +99,14 @@ Quatorze parcours à ce jour :
   des services et les flux de valeur, les 34 pratiques (gestion des incidents/problèmes, centre de services,
   gestion des demandes), la facilitation des changements (Change Enablement, CAB), la gestion des niveaux de
   service, le modèle d'amélioration continue, et le mapping avec COBIT/ISO 20000/DevOps.
+- **SOX en profondeur** (8 modules, 11 leçons) — le Sarbanes-Oxley Act américain né des scandales Enron/WorldCom et
+  la création du PCAOB, la certification personnelle et pénale des dirigeants (sections 302 et 906), la section
+  404 et l'évaluation du contrôle interne sur le reporting financier (ICFR) structurée par le référentiel COSO,
+  les quatre domaines de contrôles généraux informatiques (ITGC) et la séparation des tâches, la classification
+  des déficiences de contrôle (déficience/déficience significative/faiblesse matérielle), les rôles de gouvernance
+  (comité d'audit, audit interne, auditeur externe, PCAOB, protection des lanceurs d'alerte), le rôle des rapports
+  SOC 1 pour les processus financiers externalisés, et le mapping avec COBIT/ISO 27001/ITIL et le régime de
+  sanctions (civiles, pénales, disciplinaires).
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
