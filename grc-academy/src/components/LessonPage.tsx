@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -5,6 +6,7 @@ import {
   Box,
   Breadcrumbs,
   Button,
+  CircularProgress,
   Container,
   FormControlLabel,
   Checkbox,
@@ -15,12 +17,26 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import Sidebar from './Sidebar'
 import { findCourse } from '../content/catalog'
+import { contentLoaders } from '../content/contentLoaders'
 import { findLesson, flattenLessons } from '../content/types'
 import { lessonKey, useProgress } from '../hooks/useProgress'
 
 export default function LessonPage() {
   const { courseSlug, moduleSlug, lessonSlug } = useParams()
   const { isCompleted, toggle } = useProgress()
+  const [content, setContent] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!courseSlug || !moduleSlug || !lessonSlug) return
+    let cancelled = false
+    setContent(null)
+    contentLoaders[courseSlug]?.().then((mod) => {
+      if (!cancelled) setContent(mod.default[moduleSlug]?.[lessonSlug] ?? null)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [courseSlug, moduleSlug, lessonSlug])
 
   if (!courseSlug || !moduleSlug || !lessonSlug) return <Navigate to="/" replace />
 
@@ -30,7 +46,7 @@ export default function LessonPage() {
   const found = findLesson(course, moduleSlug, lessonSlug)
   if (!found) return <Navigate to={`/cours/${courseSlug}`} replace />
 
-  const { module: mod, lesson } = found
+  const { module: mod } = found
   const flat = flattenLessons(course)
   const currentIndex = flat.findIndex((f) => f.moduleSlug === moduleSlug && f.lesson.slug === lessonSlug)
   const prev = currentIndex > 0 ? flat[currentIndex - 1] : undefined
@@ -73,7 +89,13 @@ export default function LessonPage() {
               '& code': { bgcolor: 'action.hover', px: 0.5, borderRadius: 0.5 },
             }}
           >
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{lesson.content}</ReactMarkdown>
+            {content === null ? (
+              <Stack alignItems="center" sx={{ py: 8 }}>
+                <CircularProgress size={28} />
+              </Stack>
+            ) : (
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+            )}
           </Box>
 
           <FormControlLabel

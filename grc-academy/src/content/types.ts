@@ -2,7 +2,6 @@ export interface Lesson {
   slug: string
   title: string
   minutes: number
-  content: string
 }
 
 export interface Module {
@@ -19,6 +18,11 @@ export interface Course {
   description: string
   modules: Module[]
 }
+
+// moduleSlug -> lessonSlug -> raw Markdown content, loaded lazily per course
+// (see content/contentLoaders.ts) so a course's lesson text isn't bundled
+// until someone actually opens one of its lessons.
+export type CourseContent = Record<string, Record<string, string>>
 
 export interface FlatLesson {
   moduleSlug: string
