@@ -9,8 +9,9 @@ import { cisControls } from './courses/cisControls'
 import { nis2 } from './courses/nis2'
 import { dora } from './courses/dora'
 import { pciDss } from './courses/pciDss'
+import { cobit } from './courses/cobit'
 
-export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss]
+export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss, cobit]
 
 export function findCourse(courseSlug: string): Course | undefined {
   return courses.find((c) => c.slug === courseSlug)
