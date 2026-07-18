@@ -1,0 +1,31 @@
+# PCI DSS en profondeur : introduction et repères
+
+## Un référentiel d'une nature radicalement différente de tout ce qui a été étudié jusqu'ici
+
+Les neuf parcours précédents de cette plateforme ont couvert des normes volontaires (ISO 27001, NIST CSF, CIS Controls), des rapports d'attestation (SOC 2), et des textes de loi (RGPD, NIS2, DORA, avec le NIST RMF comme processus fédéral américain). **PCI DSS** (Payment Card Industry Data Security Standard) introduit une quatrième nature de référentiel, encore jamais rencontrée dans cette plateforme : une exigence **contractuelle imposée par un consortium d'acteurs privés**, sans aucune base légale gouvernementale — une distinction qui a des conséquences concrètes développées tout au long de ce parcours, notamment sur le régime de sanctions (module 6).
+
+## Le Conseil des normes de sécurité PCI
+
+PCI DSS est développé et maintenu par le **PCI Security Standards Council (PCI SSC)**, un organisme fondé en 2006 par les cinq grandes marques de cartes de paiement : **Visa, Mastercard, American Express, Discover et JCB**. Contrairement à un régulateur public, le PCI SSC n'a aucun pouvoir légal direct — son autorité découle entièrement des **contrats** que les marques de cartes imposent à leurs banques acquéreuses, lesquelles répercutent ces mêmes exigences contractuelles sur les commerçants et prestataires de services avec lesquels elles travaillent. Un commerçant qui accepte les paiements par carte Visa ou Mastercard se trouve ainsi contractuellement tenu de respecter PCI DSS, sans qu'aucune loi nationale ou européenne ne le lui impose directement — une chaîne contractuelle qui remplace, dans ce référentiel, la chaîne d'autorité légale déjà rencontrée dans les parcours RGPD, NIS2 et DORA de cette plateforme.
+
+## Les versions du référentiel
+
+- **PCI DSS v3.2.1** (2018), retirée en mars 2024.
+- **PCI DSS v4.0** (mars 2022), avec une mise à jour mineure **v4.0.1** (juin 2024) — la version actuellement en vigueur, pleinement applicable depuis le **31 mars 2025**, date à laquelle les nouvelles exigences introduites par la v4.0 (initialement classées comme "bonnes pratiques" avec une date d'entrée en vigueur différée, notamment l'authentification multifacteur étendue développée au module 1) sont devenues obligatoires. Cette échéance étant désormais passée, l'ensemble du référentiel développé dans ce parcours est aujourd'hui pleinement applicable.
+
+## Qui est concerné : bien au-delà des seuls grands commerçants
+
+PCI DSS s'applique à toute entité qui **stocke, traite ou transmet des données de titulaires de carte (Cardholder Data — CHD)** ou des données d'authentification sensibles (Sensitive Authentication Data — SAD) — un périmètre qui couvre aussi bien un petit commerce en ligne traitant quelques centaines de transactions par an qu'une grande banque acquéreuse ou un prestataire de services de paiement traitant des millions de transactions. Ce périmètre englobe deux grandes catégories d'entités, aux régimes de validation différenciés développés au module 4 : les **commerçants (merchants)**, qui acceptent des paiements par carte pour leurs propres produits ou services, et les **prestataires de services (service providers)**, qui stockent, traitent ou transmettent des données de cartes pour le compte d'autres entités — une distinction qui recoupe, dans son principe, celle déjà rencontrée entre responsable de traitement et sous-traitant dans le parcours RGPD de cette plateforme, bien que les deux qualifications ne se superposent pas nécessairement.
+
+## L'environnement des données de titulaires de cartes (CDE)
+
+Le concept central pour déterminer le périmètre d'application concret de PCI DSS est l'**environnement des données de titulaires de cartes (Cardholder Data Environment — CDE)** : l'ensemble des personnes, processus et technologies qui stockent, traitent ou transmettent des données de titulaires de cartes ou des données d'authentification sensibles, ainsi que tout système connecté à cet environnement ou susceptible d'affecter sa sécurité. Ce concept de périmètre, développé en détail au module 2, joue pour PCI DSS un rôle comparable à celui du domaine d'application d'un SMSI ISO 27001 ou du périmètre d'autorisation du NIST RMF, déjà développés dans les parcours dédiés de cette plateforme — avec cette différence notable que la **segmentation réseau**, bien que non formellement exigée par PCI DSS, constitue en pratique le levier le plus puissant pour réduire ce périmètre et donc l'ampleur de l'effort de conformité.
+
+## Les données de titulaires de cartes (CHD) et les données d'authentification sensibles (SAD) : une distinction cruciale
+
+- Les **données de titulaires de cartes (CHD)** incluent le numéro de compte principal (Primary Account Number — PAN, l'élément central sans lequel aucune autre donnée n'est considérée comme CHD), le nom du titulaire, la date d'expiration, et le code de service. Ces données **peuvent être stockées**, à condition d'être protégées de manière appropriée (développé au module 5).
+- Les **données d'authentification sensibles (SAD)** incluent les données de piste complète, les codes de vérification (CAV2/CVC2/CVV2/CID, le code à 3 ou 4 chiffres au dos ou au recto de la carte), et les codes PIN ou blocs de PIN. Ces données **ne doivent jamais être stockées après autorisation de la transaction**, même sous forme chiffrée — une règle nettement plus stricte que celle applicable aux CHD, développée en détail au module 5.
+
+## Ce que ce parcours couvre
+
+Huit modules structurent ce parcours : les douze exigences du référentiel organisées en six objectifs de contrôle (module 1), le scoping et la segmentation réseau (module 2), les niveaux de validation de conformité et les questionnaires d'auto-évaluation — SAQ (module 3), le processus d'évaluation par un auditeur qualifié — QSA et les scans de vulnérabilité externes — ASV (module 3 également), l'approche personnalisée introduite par la version 4.0 (module 4), la protection des données sensibles en détail (module 5), le régime de sanctions contractuelles et l'articulation avec les autres référentiels déjà étudiés dans cette plateforme (module 6), et une feuille de route de mise en conformité (module 7).

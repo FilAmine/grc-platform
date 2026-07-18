@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Neuf parcours à ce jour :
+Dix parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -70,6 +70,12 @@ Neuf parcours à ce jour :
   (TLPT, héritage de TIBER-EU), la gestion des risques liés aux prestataires tiers et le régime de supervision
   directe des prestataires TIC critiques (Lead Overseer, astreintes), le partage d'informations et les sanctions
   (renvoyées au droit national), et le mapping avec NIS2 (lex specialis), le RGPD et ISO 27001/NIST CSF.
+- **PCI DSS en profondeur** (8 modules, 11 leçons) — origine contractuelle (PCI SSC, marques de cartes) plutôt que
+  légale, les douze exigences en détail, le scoping et la segmentation réseau comme leviers de réduction de
+  périmètre, les niveaux de validation et types de SAQ, le rôle du QSA et des scans ASV, l'approche personnalisée
+  et l'analyse de risque ciblée (v4.0), la protection du PAN et l'interdiction de conservation des SAD, et le
+  régime de sanctions contractuelles (sans plafond réglementaire, jusqu'à la révocation du droit d'accepter les
+  paiements).
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`

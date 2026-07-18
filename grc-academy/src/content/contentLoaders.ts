@@ -13,4 +13,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   'cis-controls': () => import('./courses/content/cisControlsContent'),
   nis2: () => import('./courses/content/nis2Content'),
   dora: () => import('./courses/content/doraContent'),
+  'pci-dss': () => import('./courses/content/pciDssContent'),
 }
