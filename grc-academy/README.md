@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Seize parcours à ce jour :
+Dix-sept parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -114,6 +114,14 @@ Seize parcours à ce jour :
   mensuelle et la gestion du POA&M, le FedRAMP Marketplace et le principe de réciprocité, les programmes
   apparentés (StateRAMP, les niveaux d'impact du Department of Defense), et le mapping avec le NIST RMF/ISO
   27001/SOC 2.
+- **TISAX en profondeur** (8 modules, 11 leçons) — le dispositif contractuel de l'industrie automobile européenne
+  (VDA, ENX Association) né de la volonté de mutualiser les audits entre OEM et fournisseurs : le catalogue VDA
+  ISA et son modèle de maturité à six niveaux (0 à 5), les niveaux d'évaluation (AL1/AL2/AL3) et les trois
+  objectifs d'évaluation modulaires (sécurité de l'information, protection des prototypes, protection des
+  données), le rôle des Audit Providers accrédités par l'ENX Association, le partage des labels par consentement
+  explicite et leur validité triennale, le module unique de protection des prototypes, l'absence de sanction
+  légale directe compensée par la sanction commerciale de la perte d'accès au marché, et le mapping avec ISO
+  27001/PCI DSS/RGPD.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
