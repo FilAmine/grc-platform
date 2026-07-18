@@ -25,8 +25,13 @@ Ouvre http://localhost:3100 (service défini dans le `docker-compose.yml` racine
 ## Contenu
 
 Le catalogue de parcours est défini dans [`src/content/catalog.ts`](src/content/catalog.ts), qui assemble les
-cours de [`src/content/courses/*.ts`](src/content/courses). Chaque cours référence des leçons Markdown dans
-[`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons). Huit parcours à ce jour :
+métadonnées des cours de [`src/content/courses/*.ts`](src/content/courses) (titres, structure des modules/leçons —
+statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
+[`src/content/courses/content/*Content.ts`](src/content/courses/content), qui importe les fichiers
+[`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
+[`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
+séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
+Neuf parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -59,9 +64,16 @@ cours de [`src/content/courses/*.ts`](src/content/courses). Chaque cours référ
   personnelle des organes de direction (article 20), la notification des incidents en plusieurs paliers
   (24h/72h/1 mois), le régime différencié de supervision et les sanctions, la coopération européenne, et le
   mapping avec le RGPD, DORA et les référentiels techniques.
+- **DORA en profondeur** (7 modules, 11 leçons) — règlement vs directive, le cadre de gestion des risques liés aux
+  TIC aligné sur le NIST CSF et la responsabilité de l'organe de direction (article 5), la classification et la
+  notification des incidents majeurs, les tests de résilience dont les tests de pénétration fondés sur la menace
+  (TLPT, héritage de TIBER-EU), la gestion des risques liés aux prestataires tiers et le régime de supervision
+  directe des prestataires TIC critiques (Lead Overseer, astreintes), le partage d'informations et les sanctions
+  (renvoyées au droit national), et le mapping avec NIS2 (lex specialis), le RGPD et ISO 27001/NIST CSF.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
-qui les assemble en `Course`, et l'ajouter au tableau `courses` de `catalog.ts`.
+avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
+avec les imports `?raw` et la table `CourseContent`, puis l'enregistrer dans `catalog.ts` et `contentLoaders.ts`.
 
 La progression (leçons marquées comme terminées) est stockée en local (`localStorage`, clé par cours/module/leçon),
 sans backend ni compte utilisateur.

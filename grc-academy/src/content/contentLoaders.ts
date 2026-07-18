@@ -12,4 +12,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   'nist-rmf': () => import('./courses/content/nistRmfContent'),
   'cis-controls': () => import('./courses/content/cisControlsContent'),
   nis2: () => import('./courses/content/nis2Content'),
+  dora: () => import('./courses/content/doraContent'),
 }
