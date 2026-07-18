@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Dix-sept parcours à ce jour :
+Dix-huit parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -122,6 +122,13 @@ Dix-sept parcours à ce jour :
   explicite et leur validité triennale, le module unique de protection des prototypes, l'absence de sanction
   légale directe compensée par la sanction commerciale de la perte d'accès au marché, et le mapping avec ISO
   27001/PCI DSS/RGPD.
+- **ISO 22301 en profondeur** (8 modules, 11 leçons) — le système de management de la continuité d'activité, né de
+  BS 25999 et partageant la High Level Structure d'ISO 27001 : les clauses 4 à 7 propres au SMCA, l'analyse
+  d'impact sur l'activité (BIA) et ses métriques clés (MTPD, RTO, RPO), l'appréciation des risques propre à la
+  continuité, les stratégies de continuité (sites, systèmes, personnes, fournisseurs) et les plans opérationnels,
+  la structure de gestion de crise, le programme d'exercices (du tabletop à l'exercice grandeur nature), les
+  clauses 9 et 10 d'évaluation et d'amélioration continue, le processus de certification, et le mapping avec ISO
+  27001/DORA/ITIL.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`

@@ -21,4 +21,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   sox: () => import('./courses/content/soxContent'),
   fedramp: () => import('./courses/content/fedrampContent'),
   tisax: () => import('./courses/content/tisaxContent'),
+  'iso-22301': () => import('./courses/content/iso22301Content'),
 }

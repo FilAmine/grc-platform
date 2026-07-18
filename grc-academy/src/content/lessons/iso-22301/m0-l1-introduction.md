@@ -1,0 +1,25 @@
+# ISO 22301 en profondeur : introduction et repères
+
+## De la reprise après sinistre à un système de management à part entière
+
+Avant la publication d'ISO 22301, la gestion de la continuité d'activité restait, dans de nombreuses organisations, une discipline largement informelle — un plan de reprise après sinistre (disaster recovery plan) rédigé une fois, rarement testé, et souvent obsolète au moment où un incident survenait réellement. La norme **BS 25999**, publiée par le British Standards Institution en 2006, a constitué la première tentative sérieuse de structurer cette discipline selon une logique de système de management plutôt que de simple document technique — une logique reprise et internationalisée par l'**ISO 22301**, publiée pour la première fois en 2012 par l'Organisation internationale de normalisation, puis révisée en 2019 dans sa version actuellement en vigueur.
+
+## Une structure commune héritée de la High Level Structure
+
+Le parcours ISO 27001 de cette plateforme a déjà signalé, dans sa leçon consacrée à la certification, qu'ISO 27001, ISO 9001, ISO 22301 et ISO 14001 partagent une architecture commune de clauses 4 à 10 — la **High Level Structure (HLS)**, définie par l'Annexe SL des directives ISO, qui structure tout système de management selon la même logique de contexte, leadership, planification, support, fonctionnement, évaluation des performances et amélioration. Cette parenté structurelle, développée plus en détail au module 1 de ce parcours, permet à une organisation déjà certifiée ISO 27001 de transposer directement une part significative de sa gouvernance de système de management à ISO 22301, plutôt que de repartir d'une architecture entièrement nouvelle.
+
+## Ce qui distingue fondamentalement la continuité d'activité de la sécurité de l'information
+
+Si la structure des clauses 4 à 10 est largement partagée entre ISO 27001 et ISO 22301, le contenu de la clause 8 — le fonctionnement opérationnel du système de management — diverge radicalement entre les deux normes : là où ISO 27001 s'appuie sur l'appréciation des risques de sécurité et l'Annexe A des contrôles, développées dans le parcours dédié de cette plateforme, ISO 22301 s'appuie sur l'**analyse d'impact sur l'activité (Business Impact Analysis — BIA)**, développée au module 2 de ce parcours, et sur l'élaboration de stratégies et de plans de continuité, développés aux modules 3 et 4. La sécurité de l'information vise à protéger la confidentialité, l'intégrité et la disponibilité de l'information ; la continuité d'activité vise, plus largement, à garantir que l'organisation continue de délivrer ses produits et services essentiels quelle que soit la nature de la perturbation subie — un incendie, une panne informatique majeure, une pandémie, ou la défaillance d'un fournisseur critique.
+
+## Une discipline qui recoupe, sans s'y substituer, plusieurs référentiels déjà étudiés
+
+La continuité d'activité au sens d'ISO 22301 recoupe directement plusieurs préoccupations déjà rencontrées dans cette plateforme sous des angles plus spécifiques : la fonction Recover du NIST CSF 2.0, développée dans le parcours dédié ; les tests de résilience opérationnelle numérique de DORA, notamment les tests de pénétration fondés sur la menace (TLPT), développés dans le parcours dédié ; ou encore la pratique de gestion de la continuité des services développée dans le parcours ITIL de cette plateforme. ISO 22301 se distingue de chacune de ces approches par son caractère de système de management à part entière, certifiable par un organisme tiers accrédité selon un processus directement comparable à celui d'ISO 27001, développé au module 6 de ce parcours — plutôt qu'une simple fonction ou pratique intégrée à un référentiel plus large.
+
+## Qui adopte ISO 22301, et pourquoi
+
+ISO 22301 est adoptée aussi bien par des organisations soumises à des exigences réglementaires explicites de continuité d'activité (le secteur financier, où DORA impose déjà un cadre de résilience opérationnelle, développé dans le parcours dédié de cette plateforme) que par des organisations répondant à une exigence contractuelle de leurs propres clients (un donneur d'ordre exigeant de ses fournisseurs stratégiques une preuve de capacité à maintenir leur activité en cas de perturbation majeure) — une double origine, réglementaire et contractuelle, qui rappelle celle déjà rencontrée pour plusieurs référentiels de cette plateforme, notamment SOC 2 et ISO 27001 eux-mêmes.
+
+## Ce que ce parcours couvre
+
+Ce parcours développe les clauses 4 à 7 du système de management de la continuité d'activité (module 1), l'analyse d'impact sur l'activité et l'appréciation des risques propre à la continuité (module 2), les stratégies et les plans de continuité ainsi que la structure de gestion de crise (module 3), le programme d'exercices et de tests (module 4), les clauses 9 et 10 relatives à l'évaluation des performances et à l'amélioration continue (module 5), le processus de certification (module 6), et enfin le mapping avec les autres référentiels déjà étudiés dans cette plateforme ainsi qu'une feuille de route de mise en œuvre (module 7).
