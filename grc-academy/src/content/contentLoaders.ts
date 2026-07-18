@@ -15,4 +15,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   dora: () => import('./courses/content/doraContent'),
   'pci-dss': () => import('./courses/content/pciDssContent'),
   cobit: () => import('./courses/content/cobitContent'),
+  hipaa: () => import('./courses/content/hipaaContent'),
 }

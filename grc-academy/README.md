@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Onze parcours à ce jour :
+Douze parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -81,6 +81,13 @@ Onze parcours à ce jour :
   cinq domaines et quarante objectifs (EDM/APO/BAI/DSS/MEA), les sept composants génériques, les facteurs de
   conception et Focus Areas, le modèle de niveaux de capacité aligné sur CMMI, et la position de COBIT comme
   cadre-cible au-dessus d'ISO 27001/ITIL/PMI et des autres référentiels déjà étudiés.
+- **HIPAA en profondeur** (7 modules, 11 leçons) — la loi fédérale américaine sur les données de santé : entités
+  couvertes/Business Associates, la Privacy Rule (triptyque Treatment/Payment/Healthcare Operations, minimum
+  nécessaire, droits des patients), la Security Rule (sauvegardes administratives/physiques/techniques, l'analyse
+  de risque comme exigence la plus citée par l'OCR, le mécanisme Required/Addressable), le contrat obligatoire
+  avec les Business Associates (BAA), la Breach Notification Rule (évaluation en quatre facteurs, délai de 60
+  jours), les sanctions civiles graduées et pénales, les méthodes de dé-identification (Safe Harbor, Expert
+  Determination), et le mapping avec le RGPD et les référentiels techniques.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
