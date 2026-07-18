@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Douze parcours à ce jour :
+Treize parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -88,6 +88,12 @@ Douze parcours à ce jour :
   avec les Business Associates (BAA), la Breach Notification Rule (évaluation en quatre facteurs, délai de 60
   jours), les sanctions civiles graduées et pénales, les méthodes de dé-identification (Safe Harbor, Expert
   Determination), et le mapping avec le RGPD et les référentiels techniques.
+- **ANSSI et EBIOS RM en profondeur** (8 modules, 11 leçons) — l'agence française de cybersécurité (missions,
+  CERT-FR, le régime OIV/LPM comme précurseur de NIS2) et sa méthode de gestion des risques par scénarios : les
+  cinq ateliers d'EBIOS RM (cadrage/valeurs métier/socle de sécurité, sources de risque et objectifs visés,
+  scénarios stratégiques et cartographie de l'écosystème comme vecteur d'attaque, scénarios opérationnels,
+  traitement du risque et PACS), l'écosystème de qualifications ANSSI (PASSI, PDIS, PRIS, SecNumCloud, CSPN), et
+  le mapping avec ISO 31000/27005 et le NIST RMF.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
