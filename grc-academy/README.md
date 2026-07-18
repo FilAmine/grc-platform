@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Treize parcours à ce jour :
+Quatorze parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -94,6 +94,11 @@ Treize parcours à ce jour :
   scénarios stratégiques et cartographie de l'écosystème comme vecteur d'attaque, scénarios opérationnels,
   traitement du risque et PACS), l'écosystème de qualifications ANSSI (PASSI, PDIS, PRIS, SecNumCloud, CSPN), et
   le mapping avec ISO 31000/27005 et le NIST RMF.
+- **ITIL en profondeur** (8 modules, 11 leçons) — complément opérationnel naturel de COBIT : le Service Value
+  System et les quatre dimensions de la gestion des services, les sept principes directeurs, la chaîne de valeur
+  des services et les flux de valeur, les 34 pratiques (gestion des incidents/problèmes, centre de services,
+  gestion des demandes), la facilitation des changements (Change Enablement, CAB), la gestion des niveaux de
+  service, le modèle d'amélioration continue, et le mapping avec COBIT/ISO 20000/DevOps.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
