@@ -1,0 +1,25 @@
+# FedRAMP en profondeur : introduction et repères
+
+## Un programme né d'un problème très concret : la duplication des audits cloud
+
+Avant 2011, chaque agence fédérale américaine souhaitant utiliser un service cloud devait faire réaliser sa propre évaluation de sécurité de ce service, selon ses propres critères et son propre calendrier — un fournisseur cloud proposant ses services à plusieurs dizaines d'agences se retrouvait ainsi soumis à des dizaines d'audits redondants, portant très largement sur les mêmes contrôles techniques, avec un coût et un délai qui freinaient directement l'adoption du cloud par le gouvernement fédéral américain. Le **Federal Risk and Authorization Management Program (FedRAMP)**, lancé en 2011 sous l'impulsion de l'Office of Management and Budget (OMB) dans le cadre de l'initiative fédérale "Cloud First", répond directement à ce problème par un principe fondateur résumé dans sa devise officieuse : **"do once, use many times"** — autoriser une fois, réutiliser de nombreuses fois.
+
+## Le principe de réciprocité comme cœur du programme
+
+Ce principe de réutilisation n'est pas une nouveauté isolée : le parcours NIST RMF de cette plateforme a déjà développé la notion de **réciprocité entre autorisations**, par laquelle une agence fédérale peut s'appuyer sur le dossier d'autorisation produit pour une autre agence plutôt que de reconduire intégralement son propre processus d'évaluation. FedRAMP porte ce principe de réciprocité à son niveau le plus abouti et le plus institutionnalisé parmi l'ensemble des dispositifs déjà étudiés dans cette plateforme : un fournisseur de services cloud (Cloud Service Provider — CSP) qui obtient une autorisation FedRAMP produit un unique dossier de preuves, publié au **FedRAMP Marketplace** (développé au module 5 de ce parcours), que chaque agence fédérale intéressée peut ensuite adopter avec un effort d'évaluation résiduel très réduit.
+
+## FedRAMP comme application du RMF au contexte cloud
+
+Le parcours NIST RMF de cette plateforme a déjà signalé, dans sa leçon de mapping, que FedRAMP applique directement les principes du RMF — les sept étapes Prepare/Categorize/Select/Implement/Assess/Authorize/Monitor, la catégorisation FIPS 199, le catalogue de contrôles SP 800-53 — au cas particulier des fournisseurs de services cloud souhaitant héberger des charges de travail d'agences fédérales américaines. Ce parcours dédié permet de développer, en profondeur, les adaptations et les acteurs propres à FedRAMP que le parcours RMF n'avait fait qu'esquisser : les bases de référence de contrôles spécifiques au cloud, les deux voies d'autorisation distinctes, le rôle central des organismes d'évaluation tiers accrédités (3PAO), le rythme de surveillance continue mensuel, et l'écosystème des programmes apparentés (StateRAMP, les niveaux d'impact du Department of Defense).
+
+## Un périmètre d'application désormais élargi
+
+Bien que conçu à l'origine pour les agences civiles fédérales, le champ d'application de FedRAMP s'est progressivement élargi : la loi **FedRAMP Authorization Act**, votée fin 2022 dans le cadre du National Defense Authorization Act, a inscrit le programme dans la loi (il reposait auparavant sur une simple politique de l'OMB), consolidé son statut de voie par défaut pour l'acquisition de services cloud par les agences fédérales, et créé un cadre légal explicite pour la reconnaissance d'évaluations tierces équivalentes — une évolution qui rappelle, par son mouvement de consolidation légale d'un dispositif né d'une politique administrative, celui déjà observé pour d'autres programmes développés dans cette plateforme.
+
+## Pourquoi ce parcours s'adresse directement aux fournisseurs cloud, mais aussi aux agences et à leurs partenaires
+
+Bien que FedRAMP cible en premier lieu les fournisseurs de services cloud souhaitant vendre au gouvernement fédéral américain, ce parcours intéresse également les agences fédérales elles-mêmes (qui doivent comprendre leurs propres obligations en tant qu'Authorizing Official ou agence sponsor), ainsi que toute organisation, y compris en dehors des États-Unis, qui évalue un fournisseur cloud américain dans le cadre de sa propre chaîne d'approvisionnement — un usage qui rappelle directement celui déjà développé pour l'évaluation des prestataires tiers critiques dans le parcours DORA de cette plateforme, ou pour les rapports SOC 1/SOC 2 déjà étudiés à plusieurs reprises.
+
+## Ce que ce parcours couvre
+
+Ce parcours développe la catégorisation par niveaux d'impact et les bases de référence de contrôles adaptées au cloud (module 1), les deux voies d'autorisation — agence et anciennement JAB, aujourd'hui le FedRAMP Board (module 2) —, les acteurs de l'écosystème et le rôle central du 3PAO (module 3), le dispositif de surveillance continue mensuelle et la gestion du POA&M (module 4), le FedRAMP Marketplace et le principe de réciprocité (module 5), les programmes apparentés comme StateRAMP et les niveaux d'impact du DoD (module 6), et enfin le mapping avec les autres référentiels déjà étudiés dans cette plateforme ainsi qu'une feuille de route de mise en conformité (module 7).

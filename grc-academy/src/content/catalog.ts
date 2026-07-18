@@ -14,8 +14,9 @@ import { hipaa } from './courses/hipaa'
 import { ebiosRm } from './courses/ebiosRm'
 import { itil } from './courses/itil'
 import { sox } from './courses/sox'
+import { fedramp } from './courses/fedramp'
 
-export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss, cobit, hipaa, ebiosRm, itil, sox]
+export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss, cobit, hipaa, ebiosRm, itil, sox, fedramp]
 
 export function findCourse(courseSlug: string): Course | undefined {
   return courses.find((c) => c.slug === courseSlug)

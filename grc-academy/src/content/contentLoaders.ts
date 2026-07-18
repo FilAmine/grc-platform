@@ -19,4 +19,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   'ebios-rm': () => import('./courses/content/ebiosRmContent'),
   itil: () => import('./courses/content/itilContent'),
   sox: () => import('./courses/content/soxContent'),
+  fedramp: () => import('./courses/content/fedrampContent'),
 }

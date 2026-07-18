@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Quinze parcours à ce jour :
+Seize parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -107,6 +107,13 @@ Quinze parcours à ce jour :
   (comité d'audit, audit interne, auditeur externe, PCAOB, protection des lanceurs d'alerte), le rôle des rapports
   SOC 1 pour les processus financiers externalisés, et le mapping avec COBIT/ISO 27001/ITIL et le régime de
   sanctions (civiles, pénales, disciplinaires).
+- **FedRAMP en profondeur** (8 modules, 11 leçons) — le programme fédéral américain d'autorisation des fournisseurs
+  cloud né du principe « do once, use many times » : la catégorisation par niveaux d'impact (Faible/Modéré/Élevé/
+  LI-SaaS) et les bases de référence de contrôles adaptées au cloud, les deux voies d'autorisation (Agence et
+  FedRAMP Board avec sa P-ATO), les acteurs de l'écosystème et le rôle central du 3PAO, la surveillance continue
+  mensuelle et la gestion du POA&M, le FedRAMP Marketplace et le principe de réciprocité, les programmes
+  apparentés (StateRAMP, les niveaux d'impact du Department of Defense), et le mapping avec le NIST RMF/ISO
+  27001/SOC 2.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
