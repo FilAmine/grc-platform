@@ -18,8 +18,9 @@ import { fedramp } from './courses/fedramp'
 import { tisax } from './courses/tisax'
 import { iso22301 } from './courses/iso22301'
 import { swiftCsp } from './courses/swiftCsp'
+import { nistPrivacy } from './courses/nistPrivacy'
 
-export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss, cobit, hipaa, ebiosRm, itil, sox, fedramp, tisax, iso22301, swiftCsp]
+export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss, cobit, hipaa, ebiosRm, itil, sox, fedramp, tisax, iso22301, swiftCsp, nistPrivacy]
 
 export function findCourse(courseSlug: string): Course | undefined {
   return courses.find((c) => c.slug === courseSlug)

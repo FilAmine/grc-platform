@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Dix-neuf parcours à ce jour :
+Vingt parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -136,6 +136,13 @@ Dix-neuf parcours à ce jour :
   d'auto-attestation KYC-SA et les deux voies de corroboration (audit interne ou évaluateur externe), le KYC
   Registry et le partage entre correspondants bancaires, la double sanction commerciale et quasi réglementaire,
   l'évolution annuelle du catalogue, et le mapping avec ISO 27001/TISAX/PCI DSS/DORA.
+- **NIST Privacy Framework en profondeur** (8 modules, 11 leçons) — le compagnon du NIST CSF dédié à la vie privée :
+  la distinction fondamentale entre risque vie privée et risque de sécurité, la chaîne data action / problematic
+  data action / préjudice et sa méthodologie d'appréciation centrée sur l'individu, les cinq fonctions du Core
+  (Govern-P, Identify-P, Control-P, Communicate-P, et Protect-P comme pont explicite vers le NIST CSF), les
+  Profils et les Implementation Tiers, la gestion des risques de l'écosystème de traitement des données,
+  l'ingénierie de la vie privée comme aboutissement opérationnel du Privacy by Design, et le mapping avec le NIST
+  CSF/RGPD/ISO 27701.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`

@@ -23,4 +23,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   tisax: () => import('./courses/content/tisaxContent'),
   'iso-22301': () => import('./courses/content/iso22301Content'),
   'swift-csp': () => import('./courses/content/swiftCspContent'),
+  'nist-privacy': () => import('./courses/content/nistPrivacyContent'),
 }
