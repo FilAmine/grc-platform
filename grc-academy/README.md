@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Vingt-sept parcours à ce jour :
+Vingt-huit parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -197,6 +197,14 @@ Vingt-sept parcours à ce jour :
   Plan of Action and Milestones strictement encadré, la cascade contractuelle (flow-down) à travers la chaîne
   d'approvisionnement et le Supplier Performance Risk System, la clause DFARS 252.204-7012 et la notification des
   incidents en 72 heures, et le mapping avec le NIST RMF/FedRAMP/ISO 27001.
+- **ISO/IEC 20000 en profondeur** (8 modules, 11 leçons) — le système de management des services, refermant la
+  trilogie COBIT/ITIL/ISO 20000 : les clauses 4 à 7 alignées sur la High Level Structure (y compris les services
+  fournis par des tiers dans le périmètre du SMS), la planification des services et le catalogue de services, les
+  processus de relation avec les clients et les fournisseurs (dont le Service Integration and Management en
+  environnement multi-fournisseurs), la gestion des changements et la transition des services, la distinction
+  entre incidents, problèmes et demandes de service, les trois piliers de l'assurance du service (disponibilité,
+  continuité, sécurité de l'information), le processus de certification, et le mapping avec ITIL/COBIT/ISO
+  27001/ISO 22301.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
