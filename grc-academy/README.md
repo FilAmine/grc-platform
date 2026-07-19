@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Vingt parcours à ce jour :
+Vingt-et-un parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -143,6 +143,14 @@ Vingt parcours à ce jour :
   Profils et les Implementation Tiers, la gestion des risques de l'écosystème de traitement des données,
   l'ingénierie de la vie privée comme aboutissement opérationnel du Privacy by Design, et le mapping avec le NIST
   CSF/RGPD/ISO 27701.
+- **NIST AI RMF en profondeur** (8 modules, 11 leçons) — le troisième cadre volontaire du NIST après le CSF et le
+  Privacy Framework, dédié au risque des systèmes d'intelligence artificielle : la nature sociotechnique et
+  émergente du risque IA, le cycle de vie étendu (données d'entraînement, construction du modèle, déploiement,
+  surveillance) et les sept caractéristiques de l'IA digne de confiance, la fonction transversale Govern, la
+  fonction Map (établissement du contexte et catégorisation), la fonction Measure (métriques désagrégées, tests
+  d'équité, équipes TEVV, surveillance post-déploiement), la fonction Manage (atténuer/transférer/éviter/accepter
+  le risque), les Profils AI RMF et l'absence délibérée de Tiers, et le mapping avec le NIST CSF/Privacy
+  Framework/RGPD/règlement européen sur l'IA.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
