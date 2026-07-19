@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Vingt-cinq parcours à ce jour :
+Vingt-six parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -182,6 +182,13 @@ Vingt-cinq parcours à ce jour :
   risques et ses sept options, la surveillance, l'enregistrement et la communication, et un mapping explicite
   reliant ce processus générique à ses applications déjà étudiées (EBIOS RM, NIST RMF, NIST AI RMF, ISO 22301, et
   les autres normes certifiables de cette plateforme).
+- **COSO ERM en profondeur** (8 modules, 11 leçons) — la gestion des risques d'entreprise intégrée à la stratégie
+  et à la performance (2017), un second référentiel COSO distinct de COSO Internal Control déjà étudié dans les
+  parcours SOC 2 et SOX : la distinction fondamentale entre les deux référentiels, la composante Gouvernance et
+  culture, la composante Stratégie et fixation des objectifs (appétence/tolérance/capacité de risque, évaluation
+  de stratégies alternatives), la composante Performance (identification, sévérité, priorisation, réponses au
+  risque, et la vue de portefeuille), la composante Révision, la composante Information, communication et
+  reporting, et le mapping avec ISO 31000/SOX/DORA.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
