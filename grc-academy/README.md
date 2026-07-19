@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Vingt-quatre parcours à ce jour :
+Vingt-cinq parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -174,6 +174,14 @@ Vingt-quatre parcours à ce jour :
   droits des personnes et au Privacy by Design, les obligations propres aux sous-traitants, le partage, le
   transfert international et la sous-traitance ultérieure, le processus de certification combinée avec ISO 27001,
   et le mapping avec le RGPD/NIST Privacy Framework/ISO 42001.
+- **ISO 31000 en profondeur** (8 modules, 11 leçons) — le référentiel générique de management du risque qui
+  sous-tend, sans toujours être nommé, la quasi-totalité des vingt-quatre autres parcours de cette plateforme : les
+  huit principes d'une gestion des risques efficace, le cadre organisationnel en six composantes (direction,
+  intégration, conception, mise en œuvre, évaluation, amélioration), l'établissement du contexte, des critères de
+  risque et de l'appétence, l'appréciation des risques (identification, analyse, évaluation), le traitement des
+  risques et ses sept options, la surveillance, l'enregistrement et la communication, et un mapping explicite
+  reliant ce processus générique à ses applications déjà étudiées (EBIOS RM, NIST RMF, NIST AI RMF, ISO 22301, et
+  les autres normes certifiables de cette plateforme).
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
