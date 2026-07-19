@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Vingt-et-un parcours à ce jour :
+Vingt-deux parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -151,6 +151,15 @@ Vingt-et-un parcours à ce jour :
   d'équité, équipes TEVV, surveillance post-déploiement), la fonction Manage (atténuer/transférer/éviter/accepter
   le risque), les Profils AI RMF et l'absence délibérée de Tiers, et le mapping avec le NIST CSF/Privacy
   Framework/RGPD/règlement européen sur l'IA.
+- **Le règlement européen sur l'IA (AI Act) en profondeur** (8 modules, 11 leçons) — le premier texte légal
+  horizontal au monde sur l'intelligence artificielle : la pyramide des niveaux de risque et les pratiques
+  interdites (article 5), les obligations substantielles des systèmes à haut risque (système de gestion des
+  risques directement inspiré du NIST AI RMF, gouvernance des données, documentation, journalisation, transparence,
+  contrôle humain, robustesse), les acteurs et la chaîne de responsabilité (fournisseur/déployeur/importateur/
+  distributeur), l'évaluation de conformité et le marquage CE, le régime spécifique aux modèles d'IA à usage
+  général (GPAI), la gouvernance institutionnelle (AI Office, AI Board, autorités nationales), le calendrier
+  d'application échelonné (2025-2027) et les amendes à trois paliers (jusqu'à 35 M€ ou 7 % du CA mondial), et le
+  mapping avec le NIST AI RMF/RGPD/référentiels de sécurité.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`

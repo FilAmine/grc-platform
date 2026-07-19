@@ -25,4 +25,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   'swift-csp': () => import('./courses/content/swiftCspContent'),
   'nist-privacy': () => import('./courses/content/nistPrivacyContent'),
   'nist-ai-rmf': () => import('./courses/content/nistAiRmfContent'),
+  'ai-act': () => import('./courses/content/aiActContent'),
 }
