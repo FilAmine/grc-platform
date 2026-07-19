@@ -21,8 +21,9 @@ import { swiftCsp } from './courses/swiftCsp'
 import { nistPrivacy } from './courses/nistPrivacy'
 import { nistAiRmf } from './courses/nistAiRmf'
 import { aiAct } from './courses/aiAct'
+import { iso42001 } from './courses/iso42001'
 
-export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss, cobit, hipaa, ebiosRm, itil, sox, fedramp, tisax, iso22301, swiftCsp, nistPrivacy, nistAiRmf, aiAct]
+export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss, cobit, hipaa, ebiosRm, itil, sox, fedramp, tisax, iso22301, swiftCsp, nistPrivacy, nistAiRmf, aiAct, iso42001]
 
 export function findCourse(courseSlug: string): Course | undefined {
   return courses.find((c) => c.slug === courseSlug)

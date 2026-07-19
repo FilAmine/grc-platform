@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Vingt-deux parcours à ce jour :
+Vingt-trois parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -160,6 +160,13 @@ Vingt-deux parcours à ce jour :
   général (GPAI), la gouvernance institutionnelle (AI Office, AI Board, autorités nationales), le calendrier
   d'application échelonné (2025-2027) et les amendes à trois paliers (jusqu'à 35 M€ ou 7 % du CA mondial), et le
   mapping avec le NIST AI RMF/RGPD/référentiels de sécurité.
+- **ISO/IEC 42001 en profondeur** (8 modules, 11 leçons) — la première norme internationale certifiable de système
+  de management de l'intelligence artificielle, refermant la trilogie NIST AI RMF/AI Act/ISO 42001 : les clauses 4
+  à 7 propres au SGIA, l'appréciation d'impact des systèmes d'IA et ses dimensions de confiance directement
+  héritées du NIST AI RMF, l'Annexe A organisée par thème (politiques, organisation, ressources, cycle de vie,
+  données, tiers), les clauses 9 et 10 d'évaluation et d'amélioration continue, le processus de certification et
+  son rôle comme élément de preuve pour l'AI Act, le défi du maintien dans la durée face à un domaine en évolution
+  rapide, et le mapping avec le NIST AI RMF/AI Act/ISO 27001.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`

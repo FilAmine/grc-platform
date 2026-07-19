@@ -26,4 +26,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   'nist-privacy': () => import('./courses/content/nistPrivacyContent'),
   'nist-ai-rmf': () => import('./courses/content/nistAiRmfContent'),
   'ai-act': () => import('./courses/content/aiActContent'),
+  'iso-42001': () => import('./courses/content/iso42001Content'),
 }
