@@ -1,0 +1,25 @@
+# ISO/IEC 27701 en profondeur : introduction et repères
+
+## La voie certifiable qui referme la trilogie de la gouvernance de la vie privée
+
+Publiée en 2019, **ISO/IEC 27701** constitue la norme certifiable de référence pour la gestion de la vie privée, et referme, dans cette plateforme, une trilogie déjà largement développée pour la vie privée : le **RGPD**, texte légal européen contraignant assorti d'un régime de sanctions, déjà développé en détail dans le parcours dédié de cette plateforme ; le **NIST Privacy Framework**, cadre volontaire américain fondé sur un Core à cinq fonctions, également développé dans le parcours dédié ; et désormais ISO/IEC 27701, qui permet à une organisation d'obtenir un **certificat délivré par un organisme accrédité**, attestant publiquement la maturité de son système de gestion de la vie privée — une trilogie directement comparable, dans sa structure, à celle déjà développée pour la gouvernance de l'intelligence artificielle à travers le NIST AI RMF, l'AI Act et ISO/IEC 42001, développés dans les parcours dédiés de cette plateforme.
+
+## Une singularité structurelle : une extension plutôt qu'une norme autonome
+
+Contrairement à ISO 27001, ISO 22301 ou ISO/IEC 42001, toutes trois développées dans les parcours dédiés de cette plateforme comme des normes autonomes fondées sur leur propre jeu de clauses 4 à 10 selon la High Level Structure, **ISO/IEC 27701 ne constitue pas une norme indépendante** — c'est une **extension** d'ISO 27001, qui amende et complète les clauses existantes du système de management de la sécurité de l'information (SMSI) plutôt que d'en créer un nouveau. Cette architecture d'extension, développée en détail au module 1 de ce parcours, implique qu'une organisation ne peut **jamais** se certifier ISO/IEC 27701 seule — elle doit nécessairement disposer d'un SMSI ISO 27001 déjà établi, ou l'établir simultanément, pour l'étendre en un **système de management de l'information relative à la vie privée (Privacy Information Management System — PIMS)**.
+
+## Pourquoi cette architecture d'extension plutôt qu'une norme entièrement nouvelle
+
+Ce choix de conception répond directement à un constat déjà établi à de multiples reprises dans cette plateforme : la sécurité de l'information et la protection de la vie privée se recoupent largement sur le plan technique (contrôle d'accès, chiffrement, gestion des incidents), tout en poursuivant des finalités distinctes, développées en détail dans le parcours NIST Privacy Framework de cette plateforme à travers la distinction entre risque de sécurité et risque vie privée. Plutôt que de dupliquer l'intégralité de la structure de gouvernance déjà exigée par ISO 27001 (clauses 4 à 10, revue de direction, audit interne), ISO/IEC 27701 ajoute uniquement ce qui est réellement spécifique à la vie privée — une stratégie de mapping plutôt que de duplication déjà rencontrée à de multiples reprises dans cette plateforme, notamment pour la fonction Protect-P du NIST Privacy Framework, directement empruntée à la fonction Protect du NIST CSF.
+
+## Les deux Annexes propres à ISO/IEC 27701, reflet direct du RGPD
+
+ISO/IEC 27701 ajoute deux Annexes de contrôles spécifiques à la vie privée, développées en détail aux modules 3 et 4 de ce parcours — l'**Annexe A**, applicable aux organisations agissant en tant que **responsables de traitement (PII Controllers)**, et l'**Annexe B**, applicable aux organisations agissant en tant que **sous-traitants (PII Processors)** — une distinction directement héritée de celle déjà développée entre responsable de traitement et sous-traitant dans le parcours RGPD de cette plateforme, développée en détail au module 2 de ce parcours.
+
+## Une correspondance officielle et documentée avec le RGPD
+
+ISO/IEC 27701 publie, en annexe informative, des tables de correspondance directe entre ses propres contrôles et les articles du RGPD déjà développé dans le parcours dédié de cette plateforme — une organisation certifiée ISO/IEC 27701 dispose ainsi d'une cartographie précise lui permettant de démontrer, contrôle par contrôle, comment sa certification répond concrètement à des obligations légales spécifiques du RGPD, sans que la certification ne s'y substitue jamais légalement, un principe déjà établi à de multiples reprises dans cette plateforme pour la relation entre normes certifiables et textes légaux contraignants.
+
+## Ce que ce parcours couvre
+
+Ce parcours développe le mécanisme d'extension d'ISO 27001 et l'appréciation des risques spécifique à la vie privée (module 1), la distinction entre responsable de traitement et sous-traitant (module 2), les contrôles de l'Annexe A applicables aux responsables de traitement (module 3), les contrôles de l'Annexe B applicables aux sous-traitants (module 4), le partage, le transfert et la divulgation des données à des tiers (module 5), le processus de certification combinée avec ISO 27001 (module 6), et enfin le mapping avec le RGPD, le NIST Privacy Framework et ISO 27001 déjà étudiés dans cette plateforme ainsi qu'une feuille de route de mise en œuvre (module 7).
