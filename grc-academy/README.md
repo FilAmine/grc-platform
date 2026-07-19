@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Dix-huit parcours à ce jour :
+Dix-neuf parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -129,6 +129,13 @@ Dix-huit parcours à ce jour :
   la structure de gestion de crise, le programme d'exercices (du tabletop à l'exercice grandeur nature), les
   clauses 9 et 10 d'évaluation et d'amélioration continue, le processus de certification, et le mapping avec ISO
   27001/DORA/ITIL.
+- **SWIFT CSP en profondeur** (8 modules, 11 leçons) — le Customer Security Programme de la coopérative financière
+  SWIFT, né de l'incident de la banque centrale du Bangladesh : les types d'architecture (A1/A2/A3/B) qui
+  déterminent le périmètre de contrôles applicables, le Customer Security Controls Framework (CSCF) et ses trois
+  objectifs (sécuriser l'environnement, connaître et limiter les accès, détecter et réagir), le processus
+  d'auto-attestation KYC-SA et les deux voies de corroboration (audit interne ou évaluateur externe), le KYC
+  Registry et le partage entre correspondants bancaires, la double sanction commerciale et quasi réglementaire,
+  l'évolution annuelle du catalogue, et le mapping avec ISO 27001/TISAX/PCI DSS/DORA.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
