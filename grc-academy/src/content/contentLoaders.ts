@@ -30,4 +30,5 @@ export const contentLoaders: Record<string, () => Promise<{ default: CourseConte
   'iso-27701': () => import('./courses/content/iso27701Content'),
   'iso-31000': () => import('./courses/content/iso31000Content'),
   'coso-erm': () => import('./courses/content/cosoErmContent'),
+  cmmc: () => import('./courses/content/cmmcContent'),
 }

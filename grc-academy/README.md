@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Vingt-six parcours à ce jour :
+Vingt-sept parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -189,6 +189,14 @@ Vingt-six parcours à ce jour :
   de stratégies alternatives), la composante Performance (identification, sévérité, priorisation, réponses au
   risque, et la vue de portefeuille), la composante Révision, la composante Information, communication et
   reporting, et le mapping avec ISO 31000/SOX/DORA.
+- **CMMC en profondeur** (8 modules, 11 leçons) — la Cybersecurity Maturity Model Certification du ministère
+  américain de la Défense pour sa base industrielle, née de l'échec du modèle d'auto-attestation pure face à des
+  pertes majeures d'informations sensibles : les trois niveaux (Foundational/FCI, Advanced-Expert/CUI), le
+  catalogue NIST SP 800-171 (quatorze familles, 110 exigences) et les pratiques renforcées de SP 800-172, les
+  voies d'évaluation (auto-évaluation avec affirmation signée, C3PAO, évaluation gouvernementale par le DIBCAC), le
+  Plan of Action and Milestones strictement encadré, la cascade contractuelle (flow-down) à travers la chaîne
+  d'approvisionnement et le Supplier Performance Risk System, la clause DFARS 252.204-7012 et la notification des
+  incidents en 72 heures, et le mapping avec le NIST RMF/FedRAMP/ISO 27001.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`
