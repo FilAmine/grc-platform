@@ -32,6 +32,12 @@ Un employé souhaitant accéder à une application métier sensible depuis son o
 | Policy Administrator (PA) | Exécute la décision, établit ou interrompt la communication | Plan de contrôle |
 | Policy Enforcement Point (PEP) | Point de contrôle effectif du transit des communications | Plan de données |
 
+## Un exemple concret : à quoi ces trois composants correspondent chez AWS et Microsoft Azure
+
+Ces composants logiques restent abstraits tant qu'ils ne sont pas rattachés à des services réellement disponibles chez les grands fournisseurs cloud. Chez **Microsoft Azure**, **Microsoft Entra ID** (anciennement Azure AD) joue directement le rôle de Policy Engine et de Policy Administrator à travers sa fonctionnalité de **Conditional Access** : pour chaque tentative de connexion, un moteur de décision évalue en temps réel des signaux tels que la conformité de l'équipement (via Intune), le niveau de risque du compte (via Entra ID Protection) et la localisation de la connexion, puis autorise, bloque, ou exige une authentification multifacteur supplémentaire — la décision étant ensuite appliquée par les applications et services Azure eux-mêmes, qui jouent le rôle de Policy Enforcement Point.
+
+Chez **AWS**, **AWS Verified Access** (disponible depuis 2023) applique une logique directement comparable : chaque requête vers une application interne est évaluée en continu par un moteur de politiques s'appuyant sur des signaux provenant d'AWS IAM Identity Center pour l'identité et d'outils de gestion d'appareils tiers pour la posture de sécurité de l'équipement, sans jamais exposer l'application elle-même sur un réseau accessible sans cette vérification préalable — une implémentation concrète du principe d'invisibilité par défaut déjà développé au module 3 de ce parcours à travers le périmètre défini par logiciel. Dans les deux cas, aucune confiance n'est jamais accordée du seul fait qu'une requête provient d'un réseau d'entreprise ou d'un VPN déjà établi, conformément au deuxième principe fondamental développé au module 1 de ce parcours.
+
 ## Le lien avec la leçon suivante
 
 La décision prise par le Policy Engine s'appuie sur un algorithme de confiance précis, alimenté par de multiples sources d'information — développé en détail à la leçon suivante de ce parcours.
