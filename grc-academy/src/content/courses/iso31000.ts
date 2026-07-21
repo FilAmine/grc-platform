@@ -52,10 +52,11 @@ export const iso31000: Course = {
     {
       slug: 'traitement',
       title: 'Module 5 — Le traitement des risques',
-      description: 'Les sept options de traitement, le plan de traitement et le risque résiduel.',
+      description: 'Les sept options de traitement, le plan de traitement et le risque résiduel, et des études de cas réels.',
       lessons: [
-        { slug: 'options-traitement', title: 'Le traitement des risques (1/2) : les sept options', minutes: 13 },
-        { slug: 'plan-traitement-risque-residuel', title: 'Le traitement des risques (2/2) : le plan de traitement et le risque résiduel', minutes: 12 },
+        { slug: 'options-traitement', title: 'Le traitement des risques (1/3) : les sept options', minutes: 13 },
+        { slug: 'plan-traitement-risque-residuel', title: 'Le traitement des risques (2/3) : le plan de traitement et le risque résiduel', minutes: 12 },
+        { slug: 'etudes-de-cas-reelles', title: 'Le traitement des risques (3/3) : études de cas réels', minutes: 14 },
       ],
     },
     {

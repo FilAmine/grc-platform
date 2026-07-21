@@ -43,11 +43,12 @@ export const cosoErm: Course = {
     {
       slug: 'performance',
       title: 'Module 4 — Performance',
-      description: 'Identification et sévérité, priorisation et réponses, et la vue de portefeuille des risques.',
+      description: 'Identification et sévérité, priorisation et réponses, la vue de portefeuille des risques, et des études de cas réels.',
       lessons: [
-        { slug: 'identification-severite', title: 'Performance (1/3) : identifier les risques et évaluer leur sévérité', minutes: 12 },
-        { slug: 'priorisation-reponses', title: 'Performance (2/3) : prioriser les risques et choisir les réponses', minutes: 12 },
-        { slug: 'vue-portefeuille', title: 'Performance (3/3) : la vue de portefeuille des risques', minutes: 12 },
+        { slug: 'identification-severite', title: 'Performance (1/4) : identifier les risques et évaluer leur sévérité', minutes: 12 },
+        { slug: 'priorisation-reponses', title: 'Performance (2/4) : prioriser les risques et choisir les réponses', minutes: 12 },
+        { slug: 'vue-portefeuille', title: 'Performance (3/4) : la vue de portefeuille des risques', minutes: 12 },
+        { slug: 'etudes-de-cas-reelles', title: 'Performance (4/4) : études de cas réels de réponses au risque', minutes: 14 },
       ],
     },
     {
