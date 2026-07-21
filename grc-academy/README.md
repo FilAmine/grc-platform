@@ -31,7 +31,7 @@ statique, léger). Le texte de chaque leçon vit dans un fichier séparé sous
 [`src/content/lessons/<slug-du-cours>/*.md`](src/content/lessons) et est chargé à la demande via
 [`src/content/contentLoaders.ts`](src/content/contentLoaders.ts) — chaque cours n'ajoute ainsi qu'un chunk JS
 séparé, chargé uniquement à l'ouverture d'une de ses leçons, plutôt que de faire grossir le bundle principal.
-Vingt-huit parcours à ce jour :
+Vingt-neuf parcours à ce jour :
 
 - **Fondamentaux GRC & Security by Design** (7 modules, 18 leçons) — gouvernance/risque/conformité, ISO 27001,
   NIST CSF, SOC 2, RGPD, Security by Design, Privacy by Design, sécurité cloud.
@@ -205,6 +205,14 @@ Vingt-huit parcours à ce jour :
   entre incidents, problèmes et demandes de service, les trois piliers de l'assurance du service (disponibilité,
   continuité, sécurité de l'information), le processus de certification, et le mapping avec ITIL/COBIT/ISO
   27001/ISO 22301.
+- **L'architecture Zero Trust (NIST SP 800-207) en profondeur** (8 modules, 11 leçons) — une architecture technique
+  de référence plutôt qu'un nouveau schéma de certification, rompant avec le modèle périmétrique traditionnel
+  ("château fort et douves") : les sept principes fondamentaux ("ne jamais faire confiance, toujours vérifier"),
+  l'architecture logique à trois composants (Policy Engine, Policy Administrator, Policy Enforcement Point) et
+  l'algorithme de confiance, les quatre approches de déploiement (agent/passerelle, enclave, portail de ressources,
+  isolation applicative), la micro-segmentation et le périmètre défini par logiciel (SDP), la migration progressive
+  depuis un modèle périmétrique existant, les menaces propres à l'architecture elle-même, le modèle de maturité de
+  la CISA à cinq piliers, et le mapping avec le NIST CSF/CIS Controls/FedRAMP/CMMC/DORA.
 
 Pour ajouter un nouveau parcours : créer un dossier de leçons Markdown, un fichier `src/content/courses/monCours.ts`
 avec les métadonnées (`Course` sans texte de leçon), un fichier `src/content/courses/content/monCoursContent.ts`

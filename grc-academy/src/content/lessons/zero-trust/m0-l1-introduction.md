@@ -1,0 +1,25 @@
+# L'architecture Zero Trust (NIST SP 800-207) : introduction et repères
+
+## Un changement de nature, plutôt qu'un nouveau schéma de certification
+
+Ce parcours diffère sensiblement des vingt-huit précédents de cette plateforme dans sa nature même — il ne s'agit ni d'un cadre de gestion des risques, ni d'un règlement, ni d'une norme certifiable, mais d'une **architecture technique de référence** : NIST SP 800-207, publiée en août 2020, décrit comment structurer concrètement la sécurité d'un système d'information autour d'un principe simple mais profondément différent de l'approche traditionnelle — ne jamais accorder de confiance implicite à un utilisateur ou à un équipement du seul fait de sa localisation réseau, et vérifier systématiquement chaque accès plutôt que de considérer un réseau interne comme intrinsèquement sûr.
+
+## L'échec du modèle périmétrique traditionnel
+
+Le modèle de sécurité traditionnel, souvent qualifié de "château fort et douves" (castle-and-moat), repose sur une distinction binaire entre un réseau interne considéré comme fiable et un réseau externe considéré comme hostile — une fois franchi le périmètre (par un pare-feu, un VPN), un utilisateur ou un équipement bénéficie d'une confiance largement implicite pour accéder aux ressources internes. Ce modèle s'est révélé structurellement inadapté à plusieurs évolutions majeures déjà esquissées à travers cette plateforme : la généralisation du travail à distance, l'adoption massive de services cloud hébergés hors du périmètre traditionnel de l'organisation (développée dans le parcours FedRAMP de cette plateforme), et surtout la réalité que la plupart des intrusions majeures exploitent précisément la confiance excessive accordée à un attaquant une fois celui-ci parvenu à franchir le périmètre, par le vol d'identifiants ou l'exploitation d'une vulnérabilité initiale.
+
+## Le principe directeur : "ne jamais faire confiance, toujours vérifier"
+
+L'architecture Zero Trust renverse ce modèle : **aucun** utilisateur, équipement ou charge de travail ne bénéficie d'une confiance implicite du seul fait de sa localisation réseau ou de la propriété de l'équipement utilisé — chaque demande d'accès à une ressource fait l'objet d'une vérification explicite, tenant compte du contexte au moment précis de la demande, plutôt que d'une autorisation accordée une fois pour toutes après une authentification initiale. Ce principe rejoint directement, dans sa logique de vérification continue plutôt que ponctuelle, celui déjà développé pour la surveillance continue de FedRAMP ou pour le suivi post-déploiement du NIST AI RMF, tous deux développés dans les parcours dédiés de cette plateforme — mais appliqué ici à chaque accès individuel plutôt qu'à un système entier évalué périodiquement.
+
+## Une architecture plutôt qu'un produit ou une technologie unique
+
+NIST SP 800-207 insiste explicitement sur le fait que Zero Trust ne désigne jamais un produit commercial unique que l'on pourrait simplement acheter et déployer, mais une **architecture** — un ensemble de principes directeurs et de composants logiques, développés en détail au module 2 de ce parcours, que chaque organisation doit adapter à son propre contexte, ses systèmes existants et sa trajectoire de migration, développée au module 4. Cette précision rappelle directement celle déjà développée pour la distinction entre un cadre de bonnes pratiques et un produit ou un service précis, à travers de nombreux parcours de cette plateforme.
+
+## Un complément architectural aux référentiels de gouvernance déjà étudiés
+
+Zero Trust ne remplace jamais les référentiels de gouvernance et de gestion des risques déjà développés dans cette plateforme — le NIST CSF, ISO 27001 ou les CIS Controls continuent de structurer la gouvernance globale de la sécurité d'une organisation, tandis que Zero Trust fournit une réponse architecturale précise à la question technique de savoir **comment** structurer concrètement le contrôle d'accès et la segmentation réseau pour satisfaire les objectifs que ces référentiels de gouvernance définissent à un niveau plus général. Cette complémentarité entre gouvernance et architecture technique rappelle directement celle déjà développée entre COBIT (gouvernance) et ITIL (pratiques opérationnelles) dans les parcours dédiés de cette plateforme.
+
+## Ce que ce parcours couvre
+
+Ce parcours développe les sept principes fondamentaux (tenets) de l'architecture Zero Trust (module 1), l'architecture logique à trois composants — Policy Engine, Policy Administrator, Policy Enforcement Point — et l'algorithme de confiance qui oriente leurs décisions (module 2), les approches de déploiement et la micro-segmentation (module 3), la migration depuis un modèle périmétrique traditionnel (module 4), les menaces propres à l'architecture Zero Trust elle-même (module 5), le modèle de maturité de la CISA (module 6), et enfin le mapping avec le NIST CSF, les CIS Controls et les autres référentiels déjà étudiés dans cette plateforme ainsi qu'une feuille de route de mise en œuvre (module 7).

@@ -27,8 +27,9 @@ import { iso31000 } from './courses/iso31000'
 import { cosoErm } from './courses/cosoErm'
 import { cmmc } from './courses/cmmc'
 import { iso20000 } from './courses/iso20000'
+import { zeroTrust } from './courses/zeroTrust'
 
-export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss, cobit, hipaa, ebiosRm, itil, sox, fedramp, tisax, iso22301, swiftCsp, nistPrivacy, nistAiRmf, aiAct, iso42001, iso27701, iso31000, cosoErm, cmmc, iso20000]
+export const courses: Course[] = [grcSecurityByDesign, nistCsf, iso27001, soc2, rgpd, nistRmf, cisControls, nis2, dora, pciDss, cobit, hipaa, ebiosRm, itil, sox, fedramp, tisax, iso22301, swiftCsp, nistPrivacy, nistAiRmf, aiAct, iso42001, iso27701, iso31000, cosoErm, cmmc, iso20000, zeroTrust]
 
 export function findCourse(courseSlug: string): Course | undefined {
   return courses.find((c) => c.slug === courseSlug)
